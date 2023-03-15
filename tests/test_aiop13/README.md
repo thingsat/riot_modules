@@ -122,4 +122,4 @@ Sunlight footprint map coordinates:
 
 * [ ] tle_command shell command (list, set name <name>, set line1 <line1>, set line2 <line2> ...)
 * [ ] observer_command shell command (set lat lon alt)
-* [ ] add TFT pushImage and draw if device HAS_SCREEN like in https://github.com/dl9sec/AioP13/blob/master/examples/PredictISS_TFT/PredictISS_TFT.ino
+* [ ] add TFT pushImage and draw if device such as [STM32F769I-DISCO](https://www.st.com/en/evaluation-tools/32f469idiscovery.html) HAS_SCREEN like in https://github.com/dl9sec/AioP13/blob/master/examples/PredictISS_TFT/PredictISS_TFT.ino
