@@ -1,0 +1,29 @@
+/**
+ * @defgroup pkg_aiop13 AioP13 library
+ * @ingroup  pkg
+ * @brief    Provides the AioP13 ("Another implementation of PLAN-13" library)
+ * library
+ * @see https://github.com/dl9sec/AioP13
+ *
+ * # AioP13 
+ *
+ * AioP13 ("Another implementation of PLAN-13" library) is a set of C++ methods for predicting :
+ *  - the position (latittude, longitude, altitude) of a satellite 
+ *  - the elevation and the azimuth of a satellite with a position (latittude, longitude, altitude) on earth
+ *  - the sun's elevation and azimuth with a position (latittude, longitude, altitude) on earth
+ * for the TLE (Two Line Element Set https://en.wikipedia.org/wiki/Two-line_element_set) of them.
+ * 
+ * Satellites TLE catalog is maintained by the NORAD. Several website enables TLE searching into the NORAD database.
+ * (ie https://celestrak.org/satcat/table-satcat.php?NAME=STORK&PAYLOAD=1&MAX=500, https://celestrak.org/NORAD/elements/gp.php?CATNR=51087)
+ * # Usage
+ *
+ * Just add it as a package in your application's Makefile:
+ *
+ * ```makefile
+ * USEMODULE += aiop13
+ * EXTERNAL_MODULE_DIRS += ../../modules/aiop13
+ * FEATURES_REQUIRED += cpp # basic C++ support
+ * FEATURES_REQUIRED += libstdcpp # libstdc++ support (for #include <cstdio>)
+ * ```
+ *
+ */
