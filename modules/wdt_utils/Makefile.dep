@@ -1,0 +1,2 @@
+# Features
+FEATURES_REQUIRED += periph_wdt
