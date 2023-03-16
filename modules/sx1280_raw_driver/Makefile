@@ -1,4 +1,4 @@
-MODULE = sx1280_driver
+MODULE = sx1280_raw_driver
 
 CFLAGS += -Wno-error=unused-parameter -Wno-error=unused-function
 
