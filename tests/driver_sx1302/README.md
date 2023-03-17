@@ -55,18 +55,21 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [x] add RTC and timestamp into packet.
 * [x] add idle cmd for stopping the RX.
 * [ ] add temperature cmd for setting fake temperature.
-* [ ] add stts751 driver (see ).
+* [ ] add stts751 driver (available on the Corecell board : driver should be activated after corecell power on).
+* [ ] add SAUL temperature driver (see ).
+* [ ] print map of rssi correction (temp versus rssi)
 * [ ] improve stats (rx_ok, ...).
 * [ ] what is single_input_mode ?
 * [ ] add command for sending beacons
 * [ ] find the minimal size for THREAD_STACKSIZE_MAIN and LGW_LISTEN_STACKSIZE
-* [ ] add command for repeater (lgw repeater)
+* [ ] add command for repeater with filtering (lgw repeater) --> Thingsat mission scenario
+* [ ] add command for forwarder  (lgw forwarder) for boards with ethernet or wifi network interfaces
 * [ ] add command for transmit beacon (lgw beacon)
 * [ ] determine the end of the transmit !
 * [ ] avoid to received the TX when iq_invert is false (Try lgw bench 10 12 125 8 22 on true 64 1000 and lgw bench 10 12 125 8 22 on false 64 1000)
 * [ ] Mettre à jour le code par rapport à la nouvelle HAL :[loragw_spi.c (6291e62 Jul 2019)](https://github.com/Lora-net/sx1302_hal/blob/6291e62ef9a161ae41037a0df1a86e9943a907b9/libloragw/src/loragw_spi.c) VS [loragw_spi.c (master)](https://github.com/Lora-net/sx1302_hal/blob/master/libloragw/src/loragw_spi.c)
 * [ ] add RTC timestamp into TX frame payload
-* [ ] add GPS lat,lon,alt into TX frame payload
+* [ ] add GPS lat,lon,alt into TX frame payload (SAUL driver ?)
 * [ ] add temperature into TX frame payload
 * [ ] add fixed size into TX command (for beacon)
 * [ ] add timeout into rx_cmd and listen_cmd commands
@@ -117,7 +120,7 @@ lgw stat     : Get stats of the gateway
 lgw eui      : Get the concentrator EUI
 lgw rx       : Receive radio packet(s)
 lgw listen   : Receive radio packet(s) in background
-lgw idle     : Stop to receive radio packet(s) in background
+lgw idle     : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)
 lgw tx       : Transmit one radio packet
 lgw bench    : Transmit a sequence of radio packets
 lgw beacon   : Transmit a beacon packet
@@ -311,8 +314,6 @@ Most of the code come from Semtech's [sx1302_hal](https://github.com/Lora-net/sx
 
 ## Misc
 
-
-
 Un message est recu 2 fois sur les 2 rf_chain ? Est ce que c'est bien normal.
 ```
 ----- LoRa packet -----
@@ -350,4 +351,3 @@ Un message est recu 2 fois sur les 2 rf_chain ? Est ce que c'est bien normal.
 00 32 46 52 41 44 B2 18 00 A0 0C 02 00 00 B2 18 00 19 6B 92 F0 6D E1 
 Received 2 packets (total:4117)
 ```
-
