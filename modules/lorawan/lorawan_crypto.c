@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 Université Grenoble Alpes
+ * Copyright (C) 2020-2023 Université Grenoble Alpes
  */
 
 /*
@@ -210,7 +210,9 @@ bool lorawan_cmac_check_mic(const uint8_t *frame_buffer, uint16_t frame_size, co
 	LoRaMacComputeMic(frame_buffer, frame_size-LORAMAC_MIC_LEN, nwkskey, devaddr, dir, sequenceCounter, &mic);
 
 	printf("MIC: %08lx\n",mic);
-	return (mic == *(uint32_t*)(frame_buffer + (frame_size-LORAMAC_MIC_LEN)));
+    uint32_t mic_in_frame_buffer;
+    memcpy(&mic_in_frame_buffer, frame_buffer + (frame_size-LORAMAC_MIC_LEN), sizeof(mic_in_frame_buffer));
+	return (mic == mic_in_frame_buffer);
 }
 
 /*

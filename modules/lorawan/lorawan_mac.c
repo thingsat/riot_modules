@@ -31,7 +31,7 @@ static void lorawan_prepare_dataframe(
 
 
 	// No fOpt
-	const uint8_t foptlen = 0;
+	// const uint8_t foptlen = 0;
 
 	// Reset buffer
 	memset(frame_buffer, 0, 255); // TODO add constant instead of 255
