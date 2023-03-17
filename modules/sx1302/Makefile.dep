@@ -7,5 +7,7 @@ FEATURES_OPTIONAL += periph_spi_gpio_mode
 #USEMODULE += ztimer_msec
 USEMODULE += xtimer
 
+#USEMODULE += saul
+
 USEMODULE += lorawan
 EXTERNAL_MODULE_DIRS += ../../modules/lorawan

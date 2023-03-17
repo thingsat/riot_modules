@@ -1,6 +1,6 @@
 /*
  SX1302 LGW commands
- Copyright (c) 2021-2022 UGA CSUG LIG
+ Copyright (c) 2021-2023 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -1108,7 +1108,7 @@ static void _lgw_cmd_usage(char **argv) {
     printf("%s stat     : Get stats of the gateway\n", argv[0]);
     printf("%s eui      : Get the concentrator EUI\n", argv[0]);
     printf("%s rx       : Receive radio packet(s)\n", argv[0]);
-    printf("%s listen   : Receive radio packet(s) in background\n", argv[0]);
+    printf("%s listen   : Receive radio packet(s) in background Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
     printf("%s idle     : Stop to receive radio packet(s) in background\n", argv[0]);
     printf("%s tx       : Transmit one radio packet\n", argv[0]);
     printf("%s bench    : Transmit a sequence of radio packets\n", argv[0]);
