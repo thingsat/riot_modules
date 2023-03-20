@@ -19,6 +19,30 @@ CFLAGS += -DCORECELL_ON_NUCLEO=1
 # USEMODULE += stts751
 endif
 
+# https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf
+ifeq ($(IKS01A3),yes)
+# a3g4250d gyro and temperature
+USEMODULE += l3gxxxx
+USEMODULE += a3g4250d
+
+# HTS221 humidity and temperature sensor
+USEMODULE += hts221
+
+# LPS22HH pressure sensor
+USEMODULE += lpsxxx
+USEMODULE += lps22hh
+
+# LSM6DSO 3-axis accelerometer + 3-axis gyroscope
+
+# LIS2MDL 3-axis magnetometer
+
+# LIS2DW12 3-axis accelerometer
+
+# STTS751 temperature sensor
+
+endif 
+
+
 # Gateway is started after reboot and listens LoRa messages
 ifeq ($(NO_SHELL),1)
 CFLAGS += -DNO_SHELL=1

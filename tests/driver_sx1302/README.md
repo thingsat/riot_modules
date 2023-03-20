@@ -16,10 +16,25 @@ cd ~/github/thingsat/riot-modules
 cd app/driver_sx1302
 ```
 
+For Nucleo F446RE (default board)
+```bash
+gmake -j 8 flash
+```
+
+For Nucleo F429ZI
+```bash
+gmake BOARD=nucleo-f429zi -j 8 flash
+```
+
+For Nucleo F429ZI + [X-NUCLEO-IKS01A3 MEMS shield](https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf)
+```bash
+gmake BOARD=nucleo-f429zi IKS01A3=yes -j 8 flash
+```
+
 
 ## Wiring
 
-Using the SX1302 CoreCell Gateway Interface Board V1a, and a Nucleo-64:
+Using the SX1302 CoreCell Gateway Interface Board V1a, and a Nucleo-64 or Nucleo-144 with Shield:
 
 | Nucleo F446RE  | CN1 |
 | -------------- | --- |
@@ -40,6 +55,7 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 
 ## TODO
 
+
 * [x] Add ENABLE_FSK section  (for reducing module footprint)
 * [x] Add ENABLE_SX125X section (for reducing module footprint)
 * [x] add start and stop gateway
@@ -53,11 +69,11 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [x] add a command for stopping the rx thread (lgw idle).
 * [x] add RTC and timestamp into packet.
 * [x] add idle cmd for stopping the RX.
+* [x] test on nucleo-f429zi
 * [ ] add temperature cmd for setting fake temperature.
-* [ ] test on nucleo-f429zi
 * [ ] add documentation on I2C wires for STTS751 temperature sensor.
 * [ ] add stts751 driver (available on the Corecell board : driver should be activated after corecell power on).
-* [ ] add SAUL temperature driver (see ).
+* [ ] add SAUL temperature into the SX1302 driver (see ).
 * [ ] print map of rssi correction (temp versus rssi)
 * [ ] improve stats (rx_ok, ...).
 * [ ] what is single_input_mode ?
@@ -113,6 +129,20 @@ main(): This is RIOT! (Version: 2023.04-devel-682-gc4400)
 SX1302 Driver Test Application
 Copyright (c) 2021-2022 UGA CSUG LIG
 =========================================
+> saul
+ID      Class           Name
+#0      ACT_SWITCH      LD1(green)
+#1      ACT_SWITCH      LD2(blue)
+#2      ACT_SWITCH      LD3(red)
+#3      SENSE_BTN       B1(User button)
+#4      SENSE_TEMP      hts221
+#5      SENSE_HUM       hts221
+#6      SENSE_GYRO      l3gxxxx
+#7      SENSE_PRESS     lps22hh
+#8      SENSE_TEMP      lps22hh
+> saul read 8
+Reading from #8 (lps22hh|SENSE_TEMP)
+Data:             26.07 ?°C
 > rtc settime 2023-03-20 15:12:53
 > rtc gettime
 2023-03-20 15:13:02
