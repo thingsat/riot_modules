@@ -9,11 +9,10 @@ the configuration to your needs by copying an adapted version of
 `drivers/sx1302/include/sx1302_params.h` file to your application directory.
 
 ## Setup
+
 ```bash
-export RIOTBASE=~/gricad/thingsat/riot-board-2
-(cd $RIOTBASE; git checkout thingsat-board)
-cd ~/gricad/thingsat/thingsat-modules
-git checkout f4_app_with_sx1302
+export RIOTBASE=~/github/RIOT-OS/RIOT
+cd ~/github/thingsat/riot-modules
 cd app/driver_sx1302
 ```
 
@@ -22,7 +21,7 @@ cd app/driver_sx1302
 
 Using the SX1302 CoreCell Gateway Interface Board V1a, and a Nucleo-64:
 
-| Nucleo         | CN1 |
+| Nucleo F446RE  | CN1 |
 | -------------- | --- |
 | GND            | 39  |
 | 5V             | 2   |
@@ -38,6 +37,7 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 2 4 6 ...  
 
 
+
 ## TODO
 
 * [x] Add ENABLE_FSK section  (for reducing module footprint)
@@ -51,10 +51,11 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [x] set pa_gain and pwr_idx for TX according txpower (lgw tx and lgw bench)
 * [x] add a thread for receiving packet (lgw listen).
 * [x] add a command for stopping the rx thread (lgw idle).
-* [x] fix rtc settime command 2022-1-10 11:0:0
 * [x] add RTC and timestamp into packet.
 * [x] add idle cmd for stopping the RX.
 * [ ] add temperature cmd for setting fake temperature.
+* [ ] test on nucleo-f429zi
+* [ ] add documentation on I2C wires for STTS751 temperature sensor.
 * [ ] add stts751 driver (available on the Corecell board : driver should be activated after corecell power on).
 * [ ] add SAUL temperature driver (see ).
 * [ ] print map of rssi correction (temp versus rssi)
@@ -73,6 +74,8 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [ ] add temperature into TX frame payload
 * [ ] add fixed size into TX command (for beacon)
 * [ ] add timeout into rx_cmd and listen_cmd commands
+* [ ] add public operator name of the devaddr
+* [ ] test `eu433` configuration
 
 ## RX Thread Stack
 
@@ -105,29 +108,101 @@ This test application provides low level shell commands to interact with the SX1
 Once the board is flashed and you are connected via serial to the shell, use the help command to display the available commands:
 
 ```
+main(): This is RIOT! (Version: 2023.04-devel-682-gc4400)
+=========================================
+SX1302 Driver Test Application
+Copyright (c) 2021-2022 UGA CSUG LIG
+=========================================
+> rtc settime 2023-03-20 15:12:53
+> rtc gettime
+2023-03-20 15:13:02
 > help
 Command              Description
 ---------------------------------------
 lgw                  LoRa gateway commands
-reboot               Reboot the node
-version              Prints current RIOT_VERSION
 pm                   interact with layered PM subsystem
+ps                   Prints information about running threads.
+reboot               Reboot the node
 rtc                  control RTC peripheral interface
+version              Prints current RIOT_VERSION
 > lgw
+lgw reset    : Reset the SX1302
+lgw status   : Get the SX1302 status
 lgw start    : Start the gateway
 lgw stop     : Stop the gateway
 lgw stat     : Get stats of the gateway
 lgw eui      : Get the concentrator EUI
 lgw rx       : Receive radio packet(s)
-lgw listen   : Receive radio packet(s) in background
-lgw idle     : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)
+lgw listen   : Receive radio packet(s) in background Stop to receive radio packet(s) in background (remark: the)
+lgw idle     : Stop to receive radio packet(s) in background
 lgw tx       : Transmit one radio packet
 lgw bench    : Transmit a sequence of radio packets
-lgw beacon   : Transmit a beacon packet
-lgw repeater : Repeat received packet(s)
 lgw reg_test : Test writing and reading from registers
+> lgw reset
+Set power and reset
+> lgw start
+SX1302 Lib Version: 1.0.4; (RIOT port)
+Set power and reset
+RX frequency plan :
+CH0     Radio B         868.100MHz 
+CH1     Radio B         868.300MHz 
+CH2     Radio B         868.500MHz 
+CH3     Radio A         867.100MHz 
+CH4     Radio A         867.300MHz 
+CH5     Radio A         867.500MHz 
+CH6     Radio A         867.700MHz 
+CH7     Radio A         867.900MHz 
+CH8     Radio B         868.300MHz      250kHz (LoRa service band)
+INFO: Configuring SX1250_0 in single input mode
+INFO: Configuring SX1250_1 in single input mode
+Gateway started
+> lgw eui
+Concentrator EUI: 0x0016C00100002F4A
+> lgw start
+ERROR: the gateway is already started
+> lgw listen
+rxpkt buffer size is set to 4
+Waiting for packets...
+> 
+----- LoRa packet - TimeOnAir: 51 msec (2023-03-20 15:14:06) -----
+  count_us: 25756423 (delta: 0)
+  size:     21
+  chan:     1
+  status:   0x10 CRC_OK
+  datr:     7
+  codr:     1
+  rf_chain  1
+  freq_hz   868300000
+  snr_avg:  0.5
+  rssi_chan:-129.6
+  rssi_sig :-132.6
+  temp     :20.0
+  rssi_off :0.8
+  crc:      0x319E
+80 4B AC 00 FC 80 07 00 01 08 CB AD C4 02 D6 70 58 60 9C B1 ED 
+DTUP (CONFIRMED): devaddr=FC00AC4B fcnt=7 fport=177 adr=on mic=EDB19C60
+Received 1 packets (total:1)
 
-> rtc settime 2022-01-10 11:0:0
+----- LoRa packet - TimeOnAir: 51 msec (2023-03-20 15:14:09) -----
+  count_us: 28381455 (delta: 2625032)
+  size:     21
+  chan:     7
+  status:   0x10 CRC_OK
+  datr:     7
+  codr:     1
+  rf_chain  0
+  freq_hz   867900000
+  snr_avg:  -3.5
+  rssi_chan:-131.6
+  rssi_sig :-136.6
+  temp     :20.0
+  rssi_off :0.8
+  crc:      0x4083
+80 4B AC 00 FC 80 08 00 01 4B 2D 65 A7 F7 38 27 DB 9D BF B0 E2 
+DTUP (CONFIRMED): devaddr=FC00AC4B fcnt=8 fport=176 adr=on mic=E2B0BF9D
+Received 1 packets (total:2)
+
+
 
 > lgw start
 [sx1302_reset] set power and reset
@@ -267,6 +342,15 @@ Waiting 572 msec
 > lgw start
 > lgw listen
 > lgw stat
+
+----- stat (2023-03-20 15:17:39) -----
+  rx       : 5
+  rx_ok    : 5
+  rx_bad   : 0
+  rx_nocrc : 0
+  tx       : 1
+
+
 > lgw idle
 > lgw stat reset
 
