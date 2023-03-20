@@ -31,12 +31,12 @@ int main(void) {
 
 	puts("=========================================");
 	puts("SX1302 Driver Test Application");
-	puts("Copyright (c) 2021-2022 UGA CSUG LIG");
+	puts("Copyright (c) 2021-2023 UGA CSUG LIG");
 	puts("=========================================");
 
 #ifdef NO_SHELL
 	lgw_cmd(2, (char*[]){"lgw","start"});
-
+	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","listen"});
 #else
 	/* start the shell */
