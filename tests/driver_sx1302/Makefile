@@ -1,16 +1,31 @@
 #
-# Copyright (C) 2021-2022 Université Grenoble Alpes
+# Copyright (C) 2021-2023 Université Grenoble Alpes
 #
 
-APPLICATION=test_sx1302
+APPLICATION=test_driver_sx1302
 
 BOARD ?= nucleo-f446re
 
-BOARD_WHITELIST := thingsat-f4 nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f767zi nucleo-f722ze
+BOARD_WHITELIST := thingsat-f4 nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f767zi nucleo-f722ze
 
 ifeq ($(BOARD),nucleo-f446re)
 CFLAGS += -DCORECELL_ON_NUCLEO=1
+# USEMODULE += stts751
 endif
+
+
+ifeq ($(BOARD),nucleo-f429zi)
+CFLAGS += -DCORECELL_ON_NUCLEO=1
+# USEMODULE += stts751
+endif
+
+# Gateway is started after reboot and listens LoRa messages
+ifeq ($(NO_SHELL),1)
+CFLAGS += -DNO_SHELL=1
+endif
+
+# include and auto-initialize all available sensors
+USEMODULE += saul_default
 
 # -----------------------------
 # Debug
@@ -32,7 +47,8 @@ CFLAGS += -DDEBUG_ASSERT_VERBOSE=1
 # -----------------------------
 
 USEMODULE += shell
-# USEMODULE += shell_commands
+USEMODULE += shell_cmds_default
+
 USEMODULE += ps
 
 USEMODULE += fmt

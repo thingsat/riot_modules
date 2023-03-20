@@ -14,11 +14,8 @@
 #include <inttypes.h>
 
 #include "shell.h"
-//#include "shell_commands.h"
 
 #include "lgw_cmd.h"
-
-//#define NO_SHELL
 
 #ifndef NO_SHELL
 static const shell_command_t shell_commands[] = {
