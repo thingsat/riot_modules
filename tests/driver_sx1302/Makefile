@@ -6,18 +6,28 @@ APPLICATION=test_driver_sx1302
 
 BOARD ?= nucleo-f446re
 
-BOARD_WHITELIST := thingsat-f4 nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f767zi nucleo-f722ze
+BOARD_WHITELIST := thingsat-f4 nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
 
 ifeq ($(BOARD),nucleo-f446re)
 CFLAGS += -DCORECELL_ON_NUCLEO=1
 # USEMODULE += stts751
 endif
 
-
 ifeq ($(BOARD),nucleo-f429zi)
 CFLAGS += -DCORECELL_ON_NUCLEO=1
 # USEMODULE += stts751
 endif
+
+ifeq ($(BOARD),nucleo-f446ze)
+CFLAGS += -DCORECELL_ON_NUCLEO=1
+# USEMODULE += stts751
+endif
+
+ifeq ($(BOARD),nucleo-f746zg)
+CFLAGS += -DCORECELL_ON_NUCLEO=1
+# USEMODULE += stts751
+endif
+
 
 # https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf
 ifeq ($(IKS01A3),yes)

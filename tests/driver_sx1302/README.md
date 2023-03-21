@@ -31,6 +31,14 @@ For Nucleo F429ZI + [X-NUCLEO-IKS01A3 MEMS shield](https://www.st.com/resource/e
 gmake BOARD=nucleo-f429zi IKS01A3=yes -j 8 flash
 ```
 
+## Tested boards
+
+* [x] Nucleo F446RE (`BOARD=nucleo-f446re`)
+* [x] Nucleo F446ZE (`BOARD=nucleo-f446ze`)
+* [x] Nucleo F429ZI (`BOARD=nucleo-f429zi`)
+* [x] Nucleo F429ZI + X-NUCLEO-IKS01A3 MEMS shield (`BOARD=nucleo-f429zi IKS01A3=yes`)
+* [x] Nucleo F746ZG (`BOARD=nucleo-f746zg`)
+* [x] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
 
 ## Wiring
 
@@ -468,4 +476,5 @@ Received 2 packets (total:4117)
 
 ## Media
 
+![nucleo-f746zg+corecell](images/nucleo-f746zg+corecell.jpg)
 ![nucleo-f429zi+corecell+iks01a3](images/nucleo-f429zi+corecell+iks01a3.jpg)
