@@ -3,7 +3,9 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "europe"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -30,11 +32,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 0
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "svalbard"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -61,11 +66,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 1
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "cameroon"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -92,11 +100,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 2
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "french guiana"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -123,11 +134,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 3
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "french antillas"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -154,11 +168,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 4
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "wallis and futuna"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -185,11 +202,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 5
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "french polynesia"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -216,11 +236,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 6
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "french southern and antartic lands"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -247,11 +270,14 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 7
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "name": "antartica"
+      },
       "geometry": {
         "coordinates": [
           [
@@ -272,13 +298,283 @@
               -60
             ],
             [
-              -190,
+              -180,
               -90
             ]
           ]
         ],
         "type": "Polygon"
+      },
+      "id": 8
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -110.33577873852774,
+              11.158929203489024
+            ],
+            [
+              -110.33577873852774,
+              9.380110126755682
+            ],
+            [
+              -108.12687194617406,
+              9.380110126755682
+            ],
+            [
+              -108.12687194617406,
+              11.158929203489024
+            ],
+            [
+              -110.33577873852774,
+              11.158929203489024
+            ]
+          ]
+        ],
+        "type": "Polygon"
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "clipperton islands"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -113.37059811905155,
+              14.298850962740929
+            ],
+            [
+              -113.37059811905155,
+              6.294426847377537
+            ],
+            [
+              -105.340238114957,
+              6.294426847377537
+            ],
+            [
+              -105.340238114957,
+              14.298850962740929
+            ],
+            [
+              -113.37059811905155,
+              14.298850962740929
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 10
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "la reunion"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              53.85400083660349,
+              -19.300394597197354
+            ],
+            [
+              53.85400083660349,
+              -23.228586791794484
+            ],
+            [
+              56.899354454637745,
+              -23.228586791794484
+            ],
+            [
+              56.899354454637745,
+              -19.300394597197354
+            ],
+            [
+              53.85400083660349,
+              -19.300394597197354
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 11
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "new caledonia"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              161.31190835954152,
+              -18.175690696835773
+            ],
+            [
+              161.31190835954152,
+              -25.364533228842262
+            ],
+            [
+              170.13905417923087,
+              -25.364533228842262
+            ],
+            [
+              170.13905417923087,
+              -18.175690696835773
+            ],
+            [
+              161.31190835954152,
+              -18.175690696835773
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 12
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "artic polar"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              180,
+              84
+            ],
+            [
+              180,
+              90
+            ],
+            [
+              -180,
+              90
+            ],
+            [
+              -180,
+              84
+            ],
+            [
+              180,
+              84
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 13
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "saint pierre et miquelon"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -56.08840173017488,
+              47.19447758003585
+            ],
+            [
+              -57.919725234192,
+              47.19447758003585
+            ],
+            [
+              -57.919725234192,
+              45.85282589477555
+            ],
+            [
+              -56.08840173017488,
+              45.85282589477555
+            ],
+            [
+              -56.08840173017488,
+              47.19447758003585
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 14
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "canaria islands"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -13.106782497506686,
+              30.71454595074306
+            ],
+            [
+              -20.00585154174246,
+              30.71454595074306
+            ],
+            [
+              -20.00585154174246,
+              26.414507794716798
+            ],
+            [
+              -13.106782497506686,
+              26.414507794716798
+            ],
+            [
+              -13.106782497506686,
+              30.71454595074306
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 15
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "madere island"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -13.057772280096884,
+              35.30410747096391
+            ],
+            [
+              -20.071218562135527,
+              35.30410747096391
+            ],
+            [
+              -20.071218562135527,
+              30.719030141332638
+            ],
+            [
+              -13.057772280096884,
+              30.719030141332638
+            ],
+            [
+              -13.057772280096884,
+              35.30410747096391
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": 16
     }
   ]
 }
