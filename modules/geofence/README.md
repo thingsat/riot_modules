@@ -6,11 +6,18 @@ In the current version, the geofence is a array of rectangles. The array is into
 
 ## Generation
 
+
 The `geofence_rectangles.h` can be generated from the `geofence.csv` and `geofence.geojson` files.
 
 The `geofence.geojson` file can be edited with http://geojson.io/
+
+> REMARK: `lon` is before `lat` in GeoJSON, CSV and H files
+
 
 ## Usages
 
 * The geofence can be used for receiving / transmitting to/from earth regions into the whitelist.
 * The geofence can be used for disabling communications to/from earth regions into the blacklist.
+
+## TODO
+* [ ] test point_in_polygone.c

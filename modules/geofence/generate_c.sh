@@ -13,7 +13,7 @@ csv2c() {
 
     echo '#include "geofence.h"'
 
-    echo 'const static Area_t geofence_retangles[] = {'
+    echo 'static const Area_t geofence_retangles[] = {'
 
     while read -r line; do
         echo -e "\t{ $line },"

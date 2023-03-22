@@ -7,11 +7,13 @@
 // Remark: lat2 should be greater than lat1
 // Remark: lon2 should be greater than lon1
 
+// REMARK: lon is before lat in GeoJSON, CSV and C file
+
 struct Area {
-	float lat1;
 	float lon1;
-	float lat2;
+	float lat1;
 	float lon2;
+	float lat2;
 };
 
 typedef struct Area Area_t;
@@ -31,7 +33,14 @@ static int8_t check_location(float lat, float lon, const Area_t* areas, const ui
 
 	for(uint8_t i=0; i<areas_len; i++){
 		const Area_t* a = areas + i;
-		if((lat>=a->lat1 && lat<=a->lat2) && (lon>=a->lon1 && lon<=a->lon2)) {
+		float lat1, lat2, lon1, lon2;
+		lat1 = a->lat1;
+		lat2 = a->lat2;		
+		lon1 = a->lon1;
+		lon2 = a->lon2;
+		if(lat1>lat2) { lat1 = lat2; lat2 = a->lat1;}		
+		if(lon1>lon2) { lon1 = lon2; lon2 = a->lon1;}		
+		if((lat>=lat1 && lat<=lat2) && (lon>=lon1 && lon<=lon2)) {
 			return i;
 		}
 	}

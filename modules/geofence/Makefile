@@ -1,7 +1,4 @@
-MODULE = blacklist
-
-USEMODULE += aiop13
-EXTERNAL_MODULE_DIRS += ../../modules/aiop13
+MODULE = geofence
 
 include $(RIOTBASE)/Makefile.base
 
