@@ -38,7 +38,8 @@ gmake BOARD=nucleo-f429zi IKS01A3=yes -j 8 flash
 * [x] Nucleo F429ZI (`BOARD=nucleo-f429zi`)
 * [x] Nucleo F429ZI + X-NUCLEO-IKS01A3 MEMS shield (`BOARD=nucleo-f429zi IKS01A3=yes`)
 * [x] Nucleo F746ZG (`BOARD=nucleo-f746zg`)
-* [x] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
+* [ ] Nucleo F439ZI (`BOARD=nucleo-f439zi`)
+* [ ] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
 
 ## Wiring
 
