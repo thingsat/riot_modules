@@ -6,7 +6,7 @@ APPLICATION=test_driver_sx1302
 
 BOARD ?= nucleo-f446re
 
-BOARD_WHITELIST := thingsat-f4 nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
+BOARD_WHITELIST := thingsat-f4 nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f439zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
 
 ifeq ($(BOARD),nucleo-f446re)
 CFLAGS += -DCORECELL_ON_NUCLEO=1
@@ -25,6 +25,21 @@ endif
 
 ifeq ($(BOARD),nucleo-f746zg)
 CFLAGS += -DCORECELL_ON_NUCLEO=1
+# USEMODULE += stts751
+endif
+
+ifeq ($(BOARD),stm32f746g-disco)
+CFLAGS += -DCORECELL_ON_NUCLEO=1
+# https://os.mbed.com/platforms/ST-Discovery-F746NG/
+
+
+CFLAGS += -DNO_ARDUINO_BOARD_DEFINITION
+#CFLAGS += -DSX1302_PARAM_SPI=\(SPI_DEV\(0\)\)
+
+CFLAGS += -DARDUINO_PIN_10=GPIO_PIN\(PORT_A,8\)
+CFLAGS += -DARDUINO_PIN_9=GPIO_PIN\(PORT_A,15\)
+CFLAGS += -DARDUINO_PIN_8=GPIO_PIN\(PORT_I,1\)
+
 # USEMODULE += stts751
 endif
 
