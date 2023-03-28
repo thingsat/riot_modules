@@ -31,7 +31,9 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 
 // Pins are adapted to STM32 Nucleo-64 boards and ESP32 Wroom 32U/D
 
+#ifndef NO_ARDUINO_BOARD_DEFINITION
 #include "arduino_board.h"
+#endif
 
 #ifndef SX1302_PARAM_SPI
 #define SX1302_PARAM_SPI                    	(SPI_DEV(0))
