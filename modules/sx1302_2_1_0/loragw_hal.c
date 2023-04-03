@@ -30,22 +30,31 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include <stdbool.h>    /* bool type */
 #include <stdio.h>      /* printf fprintf */
 #include <string.h>     /* memcpy */
+#ifndef RIOTOS_PORT
 #include <unistd.h>     /* symlink, unlink */
+#endif
 #include <inttypes.h>
 
 #include "loragw_reg.h"
 #include "loragw_hal.h"
 #include "loragw_aux.h"
 #include "loragw_com.h"
+
+#ifndef RIOTOS_PORT
 #include "loragw_i2c.h"
 #include "loragw_lbt.h"
+#endif
 #include "loragw_sx1250.h"
 #include "loragw_sx125x.h"
+#ifndef RIOTOS_PORT
 #include "loragw_sx1261.h"
+#endif
 #include "loragw_sx1302.h"
 #include "loragw_sx1302_timestamp.h"
+#ifndef RIOTOS_PORT
 #include "loragw_stts751.h"
 #include "loragw_ad5338r.h"
+#endif
 #include "loragw_debug.h"
 
 /* -------------------------------------------------------------------------- */
@@ -1696,7 +1705,7 @@ int lgw_spectral_scan_get_results(int16_t levels_dbm[static LGW_SPECTRAL_SCAN_RE
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-int lgw_spectral_scan_abort() {
+int lgw_spectral_scan_abort(void) {
     return sx1261_spectral_scan_abort();
 }
 

@@ -589,7 +589,7 @@ int lgw_spectral_scan_get_results(int16_t levels_dbm[static LGW_SPECTRAL_SCAN_RE
 @brief Abort the current scan
 @return LGW_HAL_ERROR id the operation failed, LGW_HAL_SUCCESS else
 */
-int lgw_spectral_scan_abort();
+int lgw_spectral_scan_abort(void);
 
 #endif
 

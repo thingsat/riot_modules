@@ -254,9 +254,11 @@ int sx125x_cal_rx_image(uint8_t rf_chain, uint32_t freq_hz, bool use_loopback, u
     uint32_t tx_freq_int, tx_freq_frac;
     uint8_t rx_pll_locked, tx_pll_locked;
     uint8_t rx_threshold = 8; /* Used by AGC to set decimation gain to increase signal and its image: value is MSB => x * 256 */
-
+#ifndef RIOTOS_PORT
     printf("\n%s: rf_chain:%u, freq_hz:%u, loopback:%d, radio_type:%d\n", __FUNCTION__, rf_chain, freq_hz, use_loopback, radio_type);
-
+#else
+    printf("\n%s: rf_chain:%u, freq_hz:%lu, loopback:%d, radio_type:%d\n", __FUNCTION__, rf_chain, freq_hz, use_loopback, radio_type);
+#endif
     /* Indentify which radio is transmitting the test tone */
     rx = rf_chain;
     if (use_loopback == true) {
@@ -410,9 +412,11 @@ int sx125x_cal_tx_dc_offset(uint8_t rf_chain, uint32_t freq_hz, uint8_t dac_gain
     uint16_t reg;
     uint8_t tx_threshold = 64;
     int i;
-
+#ifndef RIOTOS_PORT
     printf("\n%s: rf_chain:%u, freq_hz:%u, dac_gain:%u, mix_gain:%u, radio_type:%d\n", __FUNCTION__, rf_chain, freq_hz, dac_gain, mix_gain, radio_type);
-
+#else
+    printf("\n%s: rf_chain:%u, freq_hz:%lu, dac_gain:%u, mix_gain:%u, radio_type:%d\n", __FUNCTION__, rf_chain, freq_hz, dac_gain, mix_gain, radio_type);
+#endif
     /* Set PLL frequencies */
     rx_freq_hz = freq_hz - CAL_TX_TONE_FREQ_HZ;
     tx_freq_hz = freq_hz;
