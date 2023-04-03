@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Université Grenoble Alpes
+ * Copyright (C) 2020-2023 Université Grenoble Alpes
  */
 
 #ifndef BANNER_UTILS_H

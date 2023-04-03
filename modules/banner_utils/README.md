@@ -26,7 +26,7 @@ dBP   dBP dBP dBP dBP dBP dBBBBBB dBBBBP'  dBBBBBBB dBP     \n\
   dBP      dBP  BB  dBP dBP    dB'.BP    dBP  BB  dBP dB'  \n\
  dBP      dBBBBBBB dBP dBBBBP dBBBBP    dBBBBBBB dBBBBB'   \n\
 \n\
-Copyright (c) 2020-2021 Universite Grenoble Alpes, CSUG\n\
+Copyright (c) 2020-2023 Universite Grenoble Alpes, CSUG\n\
 Contact: www.csug.fr\n\
 ========================================================================\n\n\n";
 ```
