@@ -1,0 +1,30 @@
+/*
+ * Copyright (C) 2020 Université Grenoble Alpes
+ *
+ * This file is subject to the terms and conditions of the GNU Lesser
+ * General Public License v2.1. See the file LICENSE in the top level
+ * directory for more details.
+ */
+
+/**
+@defgroup    drivers_stts751  STTS751 Temperature Sensor
+@ingroup     drivers_sensors
+@ingroup     drivers_saul
+@brief       Device Driver for ST STTS751 Temperature Sensors
+
+# Driver for STTS751 Temperature Sensors
+
+The driver is for the usage with [RIOT-OS](https://github.com/RIOT-OS/RIOT).
+It supports the [ST STTS751 temperature sensors](https://www.st.com/en/mems-and-sensors/stts751.html).
+
+The STTS751 temperature sensor is available on the [X-NUCLEO-IKS01A3 eval board for Nucleo](https://www.st.com/en/ecosystems/x-nucleo-iks01a3.html])
+
+
+## About the sensor
+
+STTS751 is a digital temperature sensor that use an I2C interface.
+The temperature is measured with a user-configurable resolution between 9 and 12 bits. At 9 bits, the smallest step size is 0.5 °C, and at 12 bits, it is 0.0625 °C. At the default resolution (10 bits, 0.25 °C/LSB), the conversion time is nominally 21 milliseconds.
+Pull-up resistor value allows single pin to select one of four slave addresses.
+
+## TODO
+* [ ] add saul
