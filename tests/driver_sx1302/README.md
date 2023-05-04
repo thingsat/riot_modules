@@ -399,7 +399,7 @@ with HackRFOne (`gqrx utility`)
  
 # Power consumption study
 
-With nRF PPK2 (Semtech Corecell Reference Design only)
+With [nRF PPK2](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_ppk2%2FUG%2Fppk%2FPPK_user_guide_Intro.html) for Semtech Corecell Reference Design only.
 
 ```
 lgw start
