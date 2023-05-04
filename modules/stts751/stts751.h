@@ -71,6 +71,15 @@ int stts751_init(stts751_t *dev, const stts751_params_t *params);
  */
 double stts751_get_temperature(const stts751_t *dev);
 
+/**
+ * @brief Get the temperature
+ * 
+ * @param[in] dev       Device descriptor of the STTS751
+ * 
+ * @return the temperature in Celcius
+ */
+uint16_t stts751_get_temperature_uint(const stts751_t *dev);
+
 #ifdef __cplusplus
 }
 #endif

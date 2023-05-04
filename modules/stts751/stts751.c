@@ -96,3 +96,10 @@ double stts751_get_temperature(const stts751_t *dev) {
 
     return ((high << 8) | low) / 256.0;
 }
+
+
+uint16_t stts751_get_temperature_uint(const stts751_t *dev) {
+    uint8_t high = _read_reg(dev, STTS751_REG_TEMP_H);
+    uint8_t low = _read_reg(dev, STTS751_REG_TEMP_L);
+    return ((high << 8) | low);
+}

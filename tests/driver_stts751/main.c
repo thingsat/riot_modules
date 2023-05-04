@@ -31,7 +31,8 @@ int get_temp(int argc, char **argv)
     (void) argv;
 
     double temp = stts751_get_temperature(&stts751);
-    printf("Temperature: %d.%d C\n", (uint8_t)temp, (uint8_t)(temp * 10) % 10);
+    uint16_t utemp = stts751_get_temperature_uint(&stts751);
+    printf("Temperature:  %.2f C, %d C\n", temp, (uint8_t)utemp);
 
     return 0;
 }
