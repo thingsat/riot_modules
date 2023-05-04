@@ -28,6 +28,12 @@ CFLAGS += -DCORECELL_ON_NUCLEO=1
 # USEMODULE += stts751
 endif
 
+ifeq ($(BOARD),stm32f746g-disco)
+CFLAGS += -DCORECELL_ON_NUCLEO=1
+# USEMODULE += stts751
+endif
+
+
 
 # https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf
 ifeq ($(IKS01A3),yes)
@@ -88,6 +94,7 @@ USEMODULE += ps
 USEMODULE += fmt
 USEMODULE += printf_float
 
+#USEMODULE += sx1302_2_1_0
 USEMODULE += sx1302
 EXTERNAL_MODULE_DIRS += ../../modules
 
