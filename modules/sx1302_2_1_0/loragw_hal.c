@@ -30,7 +30,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include <stdbool.h>    /* bool type */
 #include <stdio.h>      /* printf fprintf */
 #include <string.h>     /* memcpy */
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
 #include <unistd.h>     /* symlink, unlink */
 #endif
 #include <inttypes.h>
@@ -40,18 +40,18 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include "loragw_aux.h"
 #include "loragw_com.h"
 
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
 #include "loragw_i2c.h"
 #include "loragw_lbt.h"
 #endif
 #include "loragw_sx1250.h"
 #include "loragw_sx125x.h"
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
 #include "loragw_sx1261.h"
 #endif
 #include "loragw_sx1302.h"
 #include "loragw_sx1302_timestamp.h"
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
 #include "loragw_stts751.h"
 #include "loragw_ad5338r.h"
 #endif

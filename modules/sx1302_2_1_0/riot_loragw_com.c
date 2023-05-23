@@ -22,7 +22,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include <stdio.h>      /* printf fprintf */
 
 #include "loragw_com.h"
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
 #include "loragw_usb.h"
 #endif
 #include "loragw_spi.h"
@@ -68,7 +68,7 @@ int lgw_com_open(lgw_com_type_t com_type, const char * com_path) {
     CHECK_NULL(com_path);
 
     if ((com_type != LGW_COM_SPI)
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
     && (com_type != LGW_COM_USB)
 #endif
     ) {
@@ -89,7 +89,7 @@ int lgw_com_open(lgw_com_type_t com_type, const char * com_path) {
             printf("Opening SPI communication interface\n");
             com_stat = lgw_spi_open(com_path, &_lgw_com_target);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             printf("Opening USB communication interface\n");
             com_stat = lgw_usb_open(com_path, &_lgw_com_target);
@@ -119,7 +119,7 @@ int lgw_com_close(void) {
             printf("Closing SPI communication interface\n");
             com_stat = lgw_spi_close(_lgw_com_target);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             printf("Closing USB communication interface\n");
             com_stat = lgw_usb_close(_lgw_com_target);
@@ -154,7 +154,7 @@ int lgw_com_w(uint8_t spi_mux_target, uint16_t address, uint8_t data) {
         case LGW_COM_SPI:
             com_stat = lgw_spi_w(_lgw_com_target, spi_mux_target, address, data);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_w(_lgw_com_target, spi_mux_target, address, data);
             break;
@@ -190,7 +190,7 @@ int lgw_com_r(uint8_t spi_mux_target, uint16_t address, uint8_t *data) {
         case LGW_COM_SPI:
             com_stat = lgw_spi_r(_lgw_com_target, spi_mux_target, address, data);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_r(_lgw_com_target, spi_mux_target, address, data);
             break;
@@ -224,7 +224,7 @@ int lgw_com_rmw(uint8_t spi_mux_target, uint16_t address, uint8_t offs, uint8_t 
         case LGW_COM_SPI:
             com_stat = lgw_spi_rmw(_lgw_com_target, spi_mux_target, address, offs, leng, data);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_rmw(_lgw_com_target, address, offs, leng, data);
             break;
@@ -260,7 +260,7 @@ int lgw_com_wb(uint8_t spi_mux_target, uint16_t address, const uint8_t *data, ui
         case LGW_COM_SPI:
             com_stat = lgw_spi_wb(_lgw_com_target, spi_mux_target, address, data, size);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_wb(_lgw_com_target, spi_mux_target, address, data, size);
             break;
@@ -296,7 +296,7 @@ int lgw_com_rb(uint8_t spi_mux_target, uint16_t address, uint8_t *data, uint16_t
         case LGW_COM_SPI:
             com_stat = lgw_spi_rb(_lgw_com_target, spi_mux_target, address, data, size);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_rb(_lgw_com_target, spi_mux_target, address, data, size);
             break;
@@ -322,7 +322,7 @@ int lgw_com_set_write_mode(lgw_com_write_mode_t write_mode) {
         case LGW_COM_SPI:
             /* Do nothing: only single mode is supported on SPI */
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_set_write_mode(write_mode);
             break;
@@ -345,7 +345,7 @@ int lgw_com_flush(void) {
         case LGW_COM_SPI:
             /* Do nothing: only single mode is supported on SPI */
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = lgw_usb_flush(_lgw_com_target);
             break;
@@ -365,7 +365,7 @@ uint16_t lgw_com_chunk_size(void) {
     switch (_lgw_com_type) {
         case LGW_COM_SPI:
             return lgw_spi_chunk_size();
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             return lgw_usb_chunk_size();
             break;
@@ -387,7 +387,7 @@ int lgw_com_get_temperature(float * temperature) {
         case LGW_COM_SPI:
             printf("ERROR(%s:%d): not supported for SPI com\n", __FUNCTION__, __LINE__);
             return -1;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             return lgw_usb_get_temperature(_lgw_com_target, temperature);
 #endif

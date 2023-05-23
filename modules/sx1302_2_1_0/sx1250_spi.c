@@ -22,8 +22,12 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include <fcntl.h>      /* open */
 #include <string.h>     /* memset */
 
+#ifndef RIOT_APPLICATION
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
+#else
+#include "spiconf.h"
+#endif
 
 #include "loragw_spi.h"
 #include "loragw_aux.h"
@@ -46,7 +50,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* -------------------------------------------------------------------------- */
 /* --- PRIVATE CONSTANTS ---------------------------------------------------- */
 
-#define WAIT_BUSY_SX1250_MS  1
+#define WAIT_BUSY_SX1250_MS  10
 
 /* -------------------------------------------------------------------------- */
 /* --- PUBLIC FUNCTIONS DEFINITION ------------------------------------------ */
@@ -77,6 +81,7 @@ int sx1250_spi_w(void *com_target, uint8_t spi_mux_target, sx1250_op_code_t op_c
     command_size = cmd_size + size;
 
     /* I/O transaction */
+#ifndef RIOT_APPLICATION
     memset(&k, 0, sizeof(k)); /* clear k */
     k.tx_buf = (unsigned long) out_buf;
     k.len = command_size;
@@ -93,6 +98,12 @@ int sx1250_spi_w(void *com_target, uint8_t spi_mux_target, sx1250_op_code_t op_c
         DEBUG_MSG("Note: SPI write success\n");
         return LGW_SPI_SUCCESS;
     }
+#else
+    _lgw_spi_acquire();
+    spi_transfer_bytes(spiconf.dev, spiconf.cs, false, out_buf, NULL, command_size);
+    _lgw_spi_release();
+    return LGW_SPI_SUCCESS;
+#endif
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -103,7 +114,6 @@ int sx1250_spi_r(void *com_target, uint8_t spi_mux_target, sx1250_op_code_t op_c
     uint8_t out_buf[cmd_size + size];
     uint8_t command_size;
     uint8_t in_buf[ARRAY_SIZE(out_buf)];
-    struct spi_ioc_transfer k;
     int a, i;
 
     /* wait BUSY */
@@ -123,7 +133,9 @@ int sx1250_spi_r(void *com_target, uint8_t spi_mux_target, sx1250_op_code_t op_c
     }
     command_size = cmd_size + size;
 
+#ifndef RIOT_APPLICATION
     /* I/O transaction */
+    struct spi_ioc_transfer k;
     memset(&k, 0, sizeof(k)); /* clear k */
     k.tx_buf = (unsigned long) out_buf;
     k.rx_buf = (unsigned long) in_buf;
@@ -141,6 +153,16 @@ int sx1250_spi_r(void *com_target, uint8_t spi_mux_target, sx1250_op_code_t op_c
         memcpy(data, in_buf + cmd_size, size);
         return LGW_SPI_SUCCESS;
     }
+
+#else
+    _lgw_spi_acquire();
+    spi_transfer_bytes(spiconf.dev, spiconf.cs, false, out_buf, in_buf, command_size);
+//    spi_transfer_bytes(spiconf.dev, spiconf.cs, true, out_buf, NULL, command_size);
+//    SPI_PAUSE;
+//    spi_transfer_bytes(spiconf.dev, spiconf.cs, false, NULL, in_buf, command_size);
+    _lgw_spi_release();
+    return LGW_SPI_SUCCESS;
+#endif
 }
 
 /* --- EOF ------------------------------------------------------------------ */

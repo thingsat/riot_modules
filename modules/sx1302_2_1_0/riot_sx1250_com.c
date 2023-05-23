@@ -22,7 +22,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include "sx1250_com.h"
 #include "sx1250_spi.h"
 
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
 #include "sx1250_usb.h"
 #endif
 
@@ -57,7 +57,7 @@ int sx1250_com_w(lgw_com_type_t com_type, void *com_target, uint8_t spi_mux_targ
         case LGW_COM_SPI:
             com_stat = sx1250_spi_w(com_target, spi_mux_target, op_code, data, size);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = sx1250_usb_w(com_target, spi_mux_target, op_code, data, size);
             break;
@@ -84,7 +84,7 @@ int sx1250_com_r(lgw_com_type_t com_type, void *com_target, uint8_t spi_mux_targ
         case LGW_COM_SPI:
             com_stat = sx1250_spi_r(com_target, spi_mux_target, op_code, data, size);
             break;
-#ifndef RIOTOS_PORT
+#ifndef RIOT_APPLICATION
         case LGW_COM_USB:
             com_stat = sx1250_usb_r(com_target, spi_mux_target, op_code, data, size);
             break;

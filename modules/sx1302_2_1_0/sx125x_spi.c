@@ -20,8 +20,12 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include <stdio.h>      /* printf fprintf */
 #include <string.h>     /* memset */
 
+#ifndef RIOT_APPLICATION
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
+#else
+#include "spiconf.h"
+#endif
 
 #include "sx125x_spi.h"
 #include "loragw_spi.h"
@@ -64,7 +68,6 @@ int sx125x_spi_r(void *com_target, uint8_t spi_mux_target, uint8_t address, uint
     uint8_t out_buf[3];
     uint8_t command_size;
     uint8_t in_buf[ARRAY_SIZE(out_buf)];
-    struct spi_ioc_transfer k;
     int a;
 
     /* check input variables */
@@ -80,6 +83,8 @@ int sx125x_spi_r(void *com_target, uint8_t spi_mux_target, uint8_t address, uint
     command_size = 3;
 
     /* I/O transaction */
+#ifndef RIOT_APPLICATION
+    struct spi_ioc_transfer k;
     memset(&k, 0, sizeof(k)); /* clear k */
     k.tx_buf = (unsigned long) out_buf;
     k.rx_buf = (unsigned long) in_buf;
@@ -96,6 +101,15 @@ int sx125x_spi_r(void *com_target, uint8_t spi_mux_target, uint8_t address, uint
         *data = in_buf[command_size - 1];
         return LGW_SPI_SUCCESS;
     }
+#else
+    _lgw_spi_acquire();
+    spi_transfer_bytes(spiconf.dev, spiconf.cs, false, out_buf, in_buf, command_size);
+//    spi_transfer_bytes(spiconf.dev, spiconf.cs, true, out_buf, NULL, command_size);
+//    SPI_PAUSE;
+//    spi_transfer_bytes(spiconf.dev, spiconf.cs, false, NULL, in_buf, command_size);
+    _lgw_spi_release();
+    return LGW_SPI_SUCCESS;
+#endif
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -119,6 +133,7 @@ int sx125x_spi_w(void *spi_target, uint8_t spi_mux_target, uint8_t address, uint
     command_size = 3;
 
     /* I/O transaction */
+#ifndef RIOT_APPLICATION
     memset(&k, 0, sizeof(k)); /* clear k */
     k.tx_buf = (unsigned long) out_buf;
     k.len = command_size;
@@ -135,6 +150,12 @@ int sx125x_spi_w(void *spi_target, uint8_t spi_mux_target, uint8_t address, uint
         //DEBUG_MSG("Note: SPI write success\n");
         return LGW_SPI_SUCCESS;
     }
+#else
+    _lgw_spi_acquire();
+    spi_transfer_bytes(spiconf.dev, spiconf.cs, false, out_buf, NULL, command_size);
+    _lgw_spi_release();
+    return LGW_SPI_SUCCESS;
+#endif
 }
 
 /* --- EOF ------------------------------------------------------------------ */

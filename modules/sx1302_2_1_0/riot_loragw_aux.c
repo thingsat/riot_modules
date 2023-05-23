@@ -26,7 +26,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #include <stdio.h>  /* printf fprintf */
 #include <math.h>   /* pow, ceil */
 
-#ifndef RIOTOS
+#ifndef RIOT_APPLICATION
 #include <time.h>   /* clock_nanosleep */
 #else
 #include <xtimer.h>
@@ -51,7 +51,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* --- PUBLIC FUNCTIONS DEFINITION ------------------------------------------ */
 
 void wait_us(unsigned long delay_us) {
-#ifndef RIOTOS    
+#ifndef RIOT_APPLICATION
     struct timespec dly;
     struct timespec rem;
 
@@ -80,7 +80,7 @@ void wait_us(unsigned long delay_us) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 void wait_ms(unsigned long delay_ms) {
-#ifndef RIOTOS    
+#ifndef RIOT_APPLICATION
     struct timespec dly;
     struct timespec rem;
 
