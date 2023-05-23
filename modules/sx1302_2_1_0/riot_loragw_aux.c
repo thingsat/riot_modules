@@ -40,8 +40,8 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* --- PRIVATE MACROS ------------------------------------------------------- */
 
 #if DEBUG_AUX == 1
-    #define DEBUG_MSG(str)                fprintf(stdout, str)
-    #define DEBUG_PRINTF(fmt, args...)    fprintf(stdout,"%s:%d: "fmt, __FUNCTION__, __LINE__, args)
+    #define DEBUG_MSG(str)              printf(str)
+    #define DEBUG_PRINTF(fmt, args...)  printf(fmt, args)
 #else
     #define DEBUG_MSG(str)
     #define DEBUG_PRINTF(fmt, args...)

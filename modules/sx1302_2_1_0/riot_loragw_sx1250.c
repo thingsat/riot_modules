@@ -16,6 +16,9 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* -------------------------------------------------------------------------- */
 /* --- DEPENDANCIES --------------------------------------------------------- */
 
+#define ENABLE_DEBUG	1
+#include "debug.h"
+
 #include <stdint.h>     /* C99 types */
 #include <stdio.h>      /* printf fprintf */
 
@@ -32,14 +35,31 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 #if DEBUG_RAD == 1
-    #define DEBUG_MSG(str)                fprintf(stdout, str)
-    #define DEBUG_PRINTF(fmt, args...)    fprintf(stdout,"%s:%d: "fmt, __FUNCTION__, __LINE__, args)
-    #define CHECK_NULL(a)                if(a==NULL){fprintf(stderr,"%s:%d: ERROR: NULL POINTER AS ARGUMENT\n", __FUNCTION__, __LINE__);return LGW_REG_ERROR;}
+    #define DEBUG_MSG(str)                printf(str)
+    #define DEBUG_PRINTF(fmt, args...)    printf("%s:%d: "fmt, __FUNCTION__, __LINE__, args)
+	#define DEBUG_RW(fmt, args...)    	  printf(fmt, args)
+	#define DEBUG_HEX(data, size)    	  printfhex(data, size)
+    #define CHECK_NULL(a)                if(a==NULL){printf("%s:%d: ERROR: NULL POINTER AS ARGUMENT\n", __FUNCTION__, __LINE__);return LGW_REG_ERROR;}
 #else
     #define DEBUG_MSG(str)
     #define DEBUG_PRINTF(fmt, args...)
+	#define DEBUG_RW(fmt, args...)
+	#define DEBUG_HEX(data, size)
     #define CHECK_NULL(a)                if(a==NULL){return LGW_REG_ERROR;}
 #endif
+
+/* -------------------------------------------------------------------------- */
+/* --- PRIVATE CONSTANTS ---------------------------------------------------- */
+
+//static const char *TAG = "LGW_SX1250";
+
+#define WAIT_BUSY_SX1250_MS 	(10U)
+
+/* -------------------------------------------------------------------------- */
+/* --- INTERNAL SHARED VARIABLES -------------------------------------------- */
+
+extern void *lgw_spi_target; /*! generic pointer to the SPI device */
+
 
 /* -------------------------------------------------------------------------- */
 /* --- PRIVATE CONSTANTS ---------------------------------------------------- */
@@ -48,6 +68,11 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* --- PUBLIC FUNCTIONS DEFINITION ------------------------------------------ */
 
 int sx1250_reg_w(sx1250_op_code_t op_code, uint8_t *data, uint16_t size, uint8_t rf_chain) {
+
+	DEBUG_RW("[%s]: rf_chain=%d, op_code=0x%x, size=%d\n" , __FUNCTION__, rf_chain, op_code, size);
+
+    CHECK_NULL(lgw_spi_target);
+
     int com_stat;
 
     /* checking input parameters */
@@ -69,7 +94,12 @@ int sx1250_reg_w(sx1250_op_code_t op_code, uint8_t *data, uint16_t size, uint8_t
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 int sx1250_reg_r(sx1250_op_code_t op_code, uint8_t *data, uint16_t size, uint8_t rf_chain) {
-    int com_stat;
+
+	DEBUG_RW("[%s]: rf_chain=%d, op_code=0x%x, size=%d\n" , __FUNCTION__, rf_chain, op_code, size);
+    CHECK_NULL(lgw_spi_target);
+    CHECK_NULL(data);
+
+	int com_stat;
 
     /* checking input parameters */
     if (rf_chain >= LGW_RF_CHAIN_NB) {
@@ -90,7 +120,10 @@ int sx1250_reg_r(sx1250_op_code_t op_code, uint8_t *data, uint16_t size, uint8_t
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 int sx1250_calibrate(uint8_t rf_chain, uint32_t freq_hz) {
-    int err = LGW_REG_SUCCESS;
+
+	DEBUG_RW("[%s]: rf_chain=%d, freq_hz=%ld\n" , __FUNCTION__, rf_chain, freq_hz);
+
+	int err = LGW_REG_SUCCESS;
     uint8_t buff[16];
 
     buff[0] = 0x00;
@@ -119,7 +152,7 @@ int sx1250_calibrate(uint8_t rf_chain, uint32_t freq_hz) {
     err |= sx1250_reg_w(CALIBRATE_IMAGE, buff, 2, rf_chain);
 
     /* Wait for calibration to complete */
-    wait_ms(10);
+    wait_ms(WAIT_BUSY_SX1250_MS);
 
     buff[0] = 0x00;
     buff[1] = 0x00;
@@ -136,14 +169,16 @@ int sx1250_calibrate(uint8_t rf_chain, uint32_t freq_hz) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 int sx1250_setup(uint8_t rf_chain, uint32_t freq_hz, bool single_input_mode) {
-    int32_t freq_reg;
+	DEBUG_RW("[%s]: rf_chain=%d, freq_hz=%ld, single_input_mode=%d\n" , __FUNCTION__, rf_chain, freq_hz, single_input_mode);
+
+	int32_t freq_reg;
     uint8_t buff[16];
     int err = LGW_REG_SUCCESS;
 
     /* Set Radio in Standby for calibrations */
     buff[0] = (uint8_t)STDBY_RC;
     err |= sx1250_reg_w(SET_STANDBY, buff, 1, rf_chain);
-    wait_ms(10);
+    wait_ms(WAIT_BUSY_SX1250_MS);
 
     /* Get status to check Standby mode has been properly set */
     buff[0] = 0x00;
