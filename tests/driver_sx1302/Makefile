@@ -88,7 +88,7 @@ USEMODULE += ps
 USEMODULE += fmt
 USEMODULE += printf_float
 
-USEMODULE += sx1302
+USEMODULE += sx1302_2_1_0
 EXTERNAL_MODULE_DIRS += ../../modules
 
 FEATURES_REQUIRED += periph_rtc
