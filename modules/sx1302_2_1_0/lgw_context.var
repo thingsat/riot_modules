@@ -1,0 +1,115 @@
+/*
+ * Port of SX1302 driver for RIOT
+ * 
+ * Author:
+ *   Didier DONSEZ, Université Grenoble Alpes, 2021-2023.
+ */
+
+/*
+The following static variable holds the gateway configuration provided by the
+user that need to be propagated in the drivers.
+
+Parameters validity and coherency is verified by the _setconf functions and
+the _start and _send functions assume they are valid.
+*/
+
+static lgw_context_t lgw_context = {
+    .is_started = false,
+    .board_cfg.com_type = LGW_COM_SPI,
+    .board_cfg.com_path = "/dev/spidev0.0",
+    .board_cfg.lorawan_public = true,
+    .board_cfg.clksrc = 0,
+    .board_cfg.full_duplex = false,
+    .rf_chain_cfg = {{0}},
+    .if_chain_cfg = {{0}},
+    .demod_cfg = {
+        .multisf_datarate = LGW_MULTI_SF_EN
+    },
+    .lora_service_cfg = {
+        .enable = 0,    /* not used, handled by if_chain_cfg */
+        .rf_chain = 0,  /* not used, handled by if_chain_cfg */
+        .freq_hz = 0,   /* not used, handled by if_chain_cfg */
+        .bandwidth = BW_250KHZ,
+        .datarate = DR_LORA_SF7,
+        .implicit_hdr = false,
+        .implicit_payload_length = 0,
+        .implicit_crc_en = 0,
+        .implicit_coderate = 0
+    },
+    .fsk_cfg = {
+        .enable = 0,    /* not used, handled by if_chain_cfg */
+        .rf_chain = 0,  /* not used, handled by if_chain_cfg */
+        .freq_hz = 0,   /* not used, handled by if_chain_cfg */
+        .bandwidth = BW_125KHZ,
+        .datarate = 50000,
+        .sync_word_size = 3,
+        .sync_word = 0xC194C1
+    },
+    .tx_gain_lut = {
+        {
+            .size = 1,
+            .lut[0] = {
+                .rf_power = 14,
+                .dig_gain = 0,
+                .pa_gain = 2,
+                .dac_gain = 3,
+                .mix_gain = 10,
+                .offset_i = 0,
+                .offset_q = 0,
+                .pwr_idx = 0
+            }
+        },{
+            .size = 1,
+            .lut[0] = {
+                .rf_power = 14,
+                .dig_gain = 0,
+                .pa_gain = 2,
+                .dac_gain = 3,
+                .mix_gain = 10,
+                .offset_i = 0,
+                .offset_q = 0,
+                .pwr_idx = 0
+            }
+        }
+    },
+    .ftime_cfg = {
+        .enable = false,
+        .mode = LGW_FTIME_MODE_ALL_SF
+    },
+#if ENABLE_LBT == 1
+    .sx1261_cfg = {
+        .enable = false,
+        .spi_path = "/dev/spidev0.1",
+        .rssi_offset = 0,
+ /*     
+ 		.spectral_scan = {
+			.enable = false,
+			.freq_start = 867100000,
+			.nb_chan = 8,
+			.nb_scan = 2000,
+			.pace_s = 10
+		},
+*/
+        .lbt_conf = {
+            .rssi_target = -70, /* dBm */
+            .nb_channel = 10,
+			.channels = { /* 16 channels maximum */
+				{ .freq_hz = 867100000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 867300000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 867500000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 867700000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 867900000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 868100000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 868300000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 868500000, .bandwidth = 125, .scan_time_us = 128,  .transmit_time_ms = 400 },
+				{ .freq_hz = 869525000, .bandwidth = 125, .scan_time_us = 5000, .transmit_time_ms = 4000 },
+				{ .freq_hz = 868300000, .bandwidth = 250, .scan_time_us = 128,  .transmit_time_ms = 400 }
+			}
+        }
+    },
+#endif
+    .debug_cfg = {
+        .nb_ref_payload = 0,
+        .log_file_name = "loragw_hal.log"
+    }
+};

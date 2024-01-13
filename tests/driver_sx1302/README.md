@@ -2,18 +2,33 @@
 
 ## About
 
-This is a interactive shell test for Semtech SX1302 LoRa radio.
+This is a interactive shell test for Semtech SX1302/SX1303 LoRa radio.
 
 If you have other hardware (boards, Semtech based LoRa module), you can adapt
 the configuration to your needs by copying an adapted version of
 `drivers/sx1302/include/sx1302_params.h` file to your application directory.
 
+## Configure Eclipse CDT IDE
+
+https://github.com/RIOT-OS/RIOT/wiki/Using-the-Eclipse-IDE-for-C-and-CPP-Developers%2C-Howto
+
+```bash
+gmake eclipsesym
+sed -i .bak 's/\/RIOT\//\/Users\/donsez\/github\/RIOT-OS\/RIOT\//g' eclipsesym.xml 
+```
+
+In Eclipse CDT IDE, Project→Properties Then C/C++ General→Paths and Symbols
+* Restore Defaults to delete any existing macros and include paths
+* Import Settings.. and Select the generated eclipsesym.xml
+
 ## Setup
+
+### for V1.0.4
 
 ```bash
 export RIOTBASE=~/github/RIOT-OS/RIOT
-cd ~/github/thingsat/riot-modules
-cd app/driver_sx1302
+cd ~/github/thingsat/riot_modules
+cd tests/test_up4_sx1302
 ```
 
 For Nucleo F446RE (default board)
@@ -31,17 +46,77 @@ For Nucleo F429ZI + [X-NUCLEO-IKS01A3 MEMS shield](https://www.st.com/resource/e
 gmake BOARD=nucleo-f429zi IKS01A3=yes -j 8 flash
 ```
 
+### for V2.1.0
+
+```bash
+export RIOTBASE=~/github/RIOT-OS/RIOT
+cd ~/github/thingsat/riot_modules
+cd tests/test_up4_sx1302
+```
+
+For Thingsat UP4 (default board)
+```bash
+gmake BOARD=thingsat-up4 SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
+For Nucleo F446RE (with Corecell)
+```bash
+gmake BOARD=nucleo-f446re SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
+For Nucleo L476RG (With RAK5146)
+```bash
+gmake BOARD=nucleo-l476rg SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
+For Nucleo L432KC (With RAK5146)
+```bash
+gmake BOARD=nucleo-l432kc SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
+For ESP32 WROOM (With RAK5146)
+```bash
+gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
+
+## Console
+```bash
+tio -L
+tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
+```
+
 ## Tested boards
 
+### for V1.0.4
+
+* [x] Thingsat F4 @Stork1 (`BOARD=thingsat-up1-f4`)
 * [x] Nucleo F446RE (`BOARD=nucleo-f446re`)
 * [x] Nucleo F446ZE (`BOARD=nucleo-f446ze`)
 * [x] Nucleo F429ZI (`BOARD=nucleo-f429zi`)
 * [x] Nucleo F429ZI + X-NUCLEO-IKS01A3 MEMS shield (`BOARD=nucleo-f429zi IKS01A3=yes`)
 * [x] Nucleo F746ZG (`BOARD=nucleo-f746zg`)
 * [ ] Nucleo F439ZI (`BOARD=nucleo-f439zi`)
+<<<<<<< HEAD
 * [x] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
+=======
+* [ ] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
+* [x] [ESP32-WROOM](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
+
+### for V2.1.0
+
+* [x] Thingsat UP4 (`BOARD=thingsat-up4`) (+ SX1303)
+* [x] Thingsat UP4 v2 (`BOARD=thingsat-up4-v2`) (+ SX1303)
+* [x] Nucleo F446RE (`BOARD=nucleo-f446re`) (+ SX1302 (Corecell))
+* [x] Nucleo L476RG (`BOARD=nucleo-l476rg`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
+* [x] Nucleo-L432KC (`BOARD=nucleo-l432kc`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
+* [x] [ESP32-WROOM](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
+
+>>>>>>> wip/sx1302_2_1_0
 
 ## Wiring
+
+### [Semtech Corecell (SX1302CxxxGW1)](https://www.semtech.fr/products/wireless-rf/lora-core/sx1302cxxxgw1)
 
 Using the SX1302 CoreCell Gateway Interface Board V1a, and a Nucleo-64 or Nucleo-144 with Shield:
 
@@ -60,16 +135,48 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 1 3 5 ...  
 2 4 6 ...  
 
+### RAK5146 Concentrator Module + [RAK2287/RAK5146 Pi HAT](https://store.rakwireless.com/products/rak2287-pi-hat)
+
+| Nucleo L476RG  | CN1 |
+| -------------- | --- |
+| GND            | 39/6/25/30/34  |
+| 5V             | 2   |
+| POWER EN (D8)  | 26  |
+| RESET    (D7)  | 11  |
+| CS       (D10) | 24  |
+| MOSI     (D11) | 19  |
+| MISO     (D12) | 21  |
+| CLK      (D13) | 23  |
+| Serial1_TX (D2) | 8  (UART_RXD of GPS) |
+| Serial1_RX (D9) | 10 (UART_TXD of GPS) |
+
+
+| ESP32 WROOM    | CN1 |
+| -------------- | --- |
+| GND            | 39/6/25/30/34  |
+| 5V             | 2   |
+| TBC            | TBC   |
+| POWER EN (D8)  | 26  |
+| RESET    (D2)  | 11  |
+| CS       (D10) | 24  |
+| MOSI     (D11) | 19  |
+| MISO     (D12) | 21  |
+| CLK      (D13) | 23  |
+| Serial1_TX (??) | 8  (UART_RXD of GPS) |
+| Serial1_RX (??) | 10 (UART_TXD of GPS) |
+
+
+
 
 
 ## TODO
-
 
 * [x] Add ENABLE_FSK section  (for reducing module footprint)
 * [x] Add ENABLE_SX125X section (for reducing module footprint)
 * [x] add start and stop gateway
 * [x] add LoRaWAN frame decoder (DTUP, JREQ, DevADDR, DevEUI, FCnt  ...).
 * [x] add time on air for passing after TX.
+* [x] add `chantest` on pre-defined channels at various tx power.
 * [x] add time on air for rx pkt displaying.
 * [x] fix LoRa service band SF7BW250.
 * [x] fix "WARNING: not enough space allocated, fetched 21 packet(s), 5 will be left in RX buffer" 
@@ -81,8 +188,8 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [x] test on nucleo-f429zi
 * [ ] add temperature cmd for setting fake temperature.
 * [ ] add documentation on I2C wires for STTS751 temperature sensor.
-* [ ] add stts751 driver (available on the Corecell board : driver should be activated after corecell power on).
-* [ ] add SAUL temperature into the SX1302 driver (see ).
+* [x] add stts751 driver (available on the Corecell board : driver should be activated after corecell power on).
+* [x] add SAUL temperature into the SX1302 driver (see ).
 * [ ] print map of rssi correction (temp versus rssi)
 * [ ] improve stats (rx_ok, ...).
 * [ ] what is single_input_mode ?
@@ -101,6 +208,7 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [ ] add timeout into rx_cmd and listen_cmd commands
 * [ ] add public operator name of the devaddr
 * [ ] test `eu433` configuration
+* [x] add command for showing RF params
 
 ## RX Thread Stack
 
@@ -132,6 +240,7 @@ This test application provides low level shell commands to interact with the SX1
 
 Once the board is flashed and you are connected via serial to the shell, use the help command to display the available commands:
 
+
 ```
 main(): This is RIOT! (Version: 2023.04-devel-682-gc4400)
 =========================================
@@ -155,28 +264,45 @@ Data:             26.07 ?°C
 > rtc settime 2023-03-20 15:12:53
 > rtc gettime
 2023-03-20 15:13:02
-> help
+=========================================
+SX1302/SX1303 Driver Test Application
+Copyright (c) 2021-2024 UGA CSUG LIG
+=========================================
+STTS751 initializations done
+> help 
 Command              Description
 ---------------------------------------
 lgw                  LoRa gateway commands
+temp                 Get the temperatures (Celsius)
 pm                   interact with layered PM subsystem
 ps                   Prints information about running threads.
 reboot               Reboot the node
 rtc                  control RTC peripheral interface
+saul                 interact with sensors and actuators using SAUL
 version              Prints current RIOT_VERSION
 > lgw
-lgw reset    : Reset the SX1302
-lgw status   : Get the SX1302 status
-lgw start    : Start the gateway
-lgw stop     : Stop the gateway
-lgw stat     : Get stats of the gateway
-lgw eui      : Get the concentrator EUI
-lgw rx       : Receive radio packet(s)
-lgw listen   : Receive radio packet(s) in background Stop to receive radio packet(s) in background (remark: the)
-lgw idle     : Stop to receive radio packet(s) in background
-lgw tx       : Transmit one radio packet
-lgw bench    : Transmit a sequence of radio packets
-lgw reg_test : Test writing and reading from registers
+lgw reset      : Reset the SX1302/SX1303
+lgw status     : Get the SX1302/SX1303 status
+lgw freq_plan  : Get the frequencies plan
+lgw start      : Start the gateway
+lgw stop       : Stop the gateway
+lgw stat       : Get stats of the gateway
+lgw eui        : Get the concentrator EUI
+lgw instcnt    : Get the instruction counter
+lgw rx         : Receive radio packet(s)
+lgw listen     : Receive radio packet(s) in background Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)
+lgw idle       : Stop to receive radio packet(s) in background
+lgw tx         : Transmit one radio packet
+lgw bench      : Transmit a sequence of radio packets
+lgw rfparams   : Print the RF params of concentrator
+lgw chantest   : Transmit a sequence of radio packets at various tx power
+lgw temp       : Get on-board temperature
+lgw reg_test   : Test writing and reading from registers
+> lgw rfparams
+SX1302_LUT_DIG_GAIN: 0
+Power      : 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+Power index: 15 16 17 19 20 22  1  2  3  4  5  6  7  9 11
+Power gain :  0  0  0  0  0  0  1  1  1  1  1  1  1  1  1
 > lgw reset
 Set power and reset
 > lgw start
@@ -197,8 +323,16 @@ INFO: Configuring SX1250_1 in single input mode
 Gateway started
 > lgw eui
 Concentrator EUI: 0x0016C00100002F4A
+```
+
+```
 > lgw start
 ERROR: the gateway is already started
+```
+
+### `listen`
+
+```
 > lgw listen
 rxpkt buffer size is set to 4
 Waiting for packets...
@@ -308,11 +442,32 @@ Exiting
 
 Nb valid packets received: 4 CRC OK
 
+```
+
+
+lgw tx 867500 12 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+lgw tx 867500 12 125 8 17 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+lgw tx 867500 12 125 8 18 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+lgw tx 867500 12 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+lgw tx 867500 12 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+
+lgw tx 868500 12 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+
+
+### `tx`
+```
 > REM TX as an endpoint (crc=on invert_iq=false)
 > lgw tx 867500 12 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 Transmitting LoRa packet on 867.500MHz [SF7BW125, TXPOWER 12, PWID 15, PA OFF, ToA 72 msec]
 40 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
 Waiting 72 msec
+
+> REM TX as an endpoint (crc=on invert_iq=false)
+> lgw tx 867500 12 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+Transmitting LoRa packet on 867.500MHz [SF7BW125, TXPOWER 12, PWID 15, PA OFF, ToA 72 msec]
+40 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
+Waiting 72 msec
+
 
 
 > REM TX as an endpoint (crc=on invert_iq=false)
@@ -321,7 +476,7 @@ Transmitting LoRa packet on 867.500MHz [SF7BW125, TXPOWER 12, PWID 15, PA OFF, T
 40 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
 Waiting 72 msec
 
-> REM TX as an endpoint on LoRaWAN service channel (crc=on invert_iq=false)
+> REM TX as an endpoint on LoRaWAN (DR6=SF7BW250) service channel (crc=on invert_iq=false)
 > lgw tx 868300 7 250 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 Transmitting LoRa packet on 868.300MHz [SF7BW250, TXPOWER 12, PWID 15, PA OFF, ToA 36 msec]
 40 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
@@ -333,6 +488,20 @@ Transmitting LoRa packet on 868.500MHz [SF7BW125, TXPOWER 12, PWID 15, PA OFF, T
 60 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
 Waiting 72 msec
 
+<<<<<<< HEAD
+=======
+> REM TX as a gateway on RX2 channel (crc=off invert_iq=true)
+> lgw tx 869525 9 125 8 22 off true 60341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+Transmitting LoRa packet on 869.525MHz [SF9BW125, TXPOWER 22, PWID 5, PA ON, ToA 227 msec]
+60 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
+Waiting 227 msec
+```
+
+
+```
+### `bench`
+
+>>>>>>> wip/sx1302_2_1_0
 > REM TX as an endpoint (crc=on invert_iq=false)
 > lgw bench 3 7 125 8 12 on false 32 500
 Transmitting LoRa packet on 868.500MHz [SF7BW125, PWID : 22, PA OFF, ToA 72 msec]
@@ -344,6 +513,9 @@ Waiting 572 msec
 Transmitting LoRa packet on 868.100MHz [SF7BW125, PWID : 22, PA OFF, ToA 72 msec]
 40 34 12 00 FC 00 00 03 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
 Waiting 572 msec
+
+> REM TX as an endpoint (crc=on invert_iq=false)
+> lgw bench 3 12 125 8 12 on false 32 500
 
 
 > REM Conso 170mA @ 3V3
@@ -358,6 +530,18 @@ Waiting 572 msec
 > lgw bench 10 12 125 8 27 on false 64 1000
 ...
 
+```
+
+### `chantest`
+
+
+```
+> REM TX as an endpoint (crc=on invert_iq=false)
+> lgw chantest 10000 12 125 8 on false 32 500
+```
+
+### `stat`
+```
 
 > lgw stat
 
@@ -390,11 +574,20 @@ Waiting 572 msec
 ```
 
 
+<<<<<<< HEAD
 # RF Power study
  
 rfpower: RF power in dBm (12 .. 27).
 
 with HackRFOne (`gqrx utility`)
+=======
+
+# RF Power and Power consumption study
+ 
+rfpower: RF power in dBm (12 .. 27).
+
+with HackRFOne (`gqrx` utility) and nRF PPKII
+>>>>>>> wip/sx1302_2_1_0
 
  
 # Power consumption study
@@ -415,15 +608,24 @@ lgw tx 867500 10 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F1011121314151
 lgw tx 867500 10 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 lgw tx 867500 10 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 
+<<<<<<< HEAD
 lgw tx 867500 12 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 --> 5V 160mA
 lgw tx 867500 12 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 --> 5V 208mA
+=======
+lgw tx 867100 12 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+lgw tx 867300 12 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+>>>>>>> wip/sx1302_2_1_0
 lgw tx 867500 12 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 --> 5V 364mA
 
+<<<<<<< HEAD
 lgw tx 867500 12 250 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 --> 5V 220mA
+=======
+lgw tx 867700 12 250 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
+>>>>>>> wip/sx1302_2_1_0
 lgw tx 867500 12 500 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 --> 5V 220mA
 lgw stop
