@@ -97,9 +97,6 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 * [x] Nucleo F429ZI + X-NUCLEO-IKS01A3 MEMS shield (`BOARD=nucleo-f429zi IKS01A3=yes`)
 * [x] Nucleo F746ZG (`BOARD=nucleo-f746zg`)
 * [ ] Nucleo F439ZI (`BOARD=nucleo-f439zi`)
-<<<<<<< HEAD
-* [x] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
-=======
 * [ ] STM32 F746G Disco (`BOARD=stm32f746g-disco`)
 * [x] [ESP32-WROOM](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 
@@ -112,7 +109,6 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 * [x] Nucleo-L432KC (`BOARD=nucleo-l432kc`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 * [x] [ESP32-WROOM](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 
->>>>>>> wip/sx1302_2_1_0
 
 ## Wiring
 
@@ -488,8 +484,6 @@ Transmitting LoRa packet on 868.500MHz [SF7BW125, TXPOWER 12, PWID 15, PA OFF, T
 60 34 12 00 FC 00 00 02 02 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F 
 Waiting 72 msec
 
-<<<<<<< HEAD
-=======
 > REM TX as a gateway on RX2 channel (crc=off invert_iq=true)
 > lgw tx 869525 9 125 8 22 off true 60341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 Transmitting LoRa packet on 869.525MHz [SF9BW125, TXPOWER 22, PWID 5, PA ON, ToA 227 msec]
@@ -501,7 +495,6 @@ Waiting 227 msec
 ```
 ### `bench`
 
->>>>>>> wip/sx1302_2_1_0
 > REM TX as an endpoint (crc=on invert_iq=false)
 > lgw bench 3 7 125 8 12 on false 32 500
 Transmitting LoRa packet on 868.500MHz [SF7BW125, PWID : 22, PA OFF, ToA 72 msec]
@@ -574,33 +567,15 @@ Waiting 572 msec
 ```
 
 
-<<<<<<< HEAD
-# RF Power study
- 
-rfpower: RF power in dBm (12 .. 27).
-
-with HackRFOne (`gqrx utility`)
-=======
 
 # RF Power and Power consumption study
  
 rfpower: RF power in dBm (12 .. 27).
 
 with HackRFOne (`gqrx` utility) and nRF PPKII
->>>>>>> wip/sx1302_2_1_0
 
  
-# Power consumption study
-
-With [nRF PPK2](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fug_ppk2%2FUG%2Fppk%2FPPK_user_guide_Intro.html) for Semtech Corecell Reference Design only.
-
 ```
-lgw start
---> 5V 153mA then 45mA
-
-lgw listen
---> 5V 43mA
-
 lgw tx
 lgw tx 867500 7 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 
@@ -608,30 +583,14 @@ lgw tx 867500 10 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F1011121314151
 lgw tx 867500 10 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 lgw tx 867500 10 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 
-<<<<<<< HEAD
-lgw tx 867500 12 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
---> 5V 160mA
-lgw tx 867500 12 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
---> 5V 208mA
-=======
 lgw tx 867100 12 125 8 12 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
 lgw tx 867300 12 125 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
->>>>>>> wip/sx1302_2_1_0
 lgw tx 867500 12 125 8 27 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
---> 5V 364mA
 
-<<<<<<< HEAD
-lgw tx 867500 12 250 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
---> 5V 220mA
-=======
 lgw tx 867700 12 250 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
->>>>>>> wip/sx1302_2_1_0
 lgw tx 867500 12 500 8 22 on false 40341200FC00000202090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F
---> 5V 220mA
-lgw stop
---> 5V 74mA
+
 ```
-![PPK2](images/nrf-ppk2-02-annotated.png)
 
 # References
 

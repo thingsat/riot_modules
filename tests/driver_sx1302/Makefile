@@ -40,14 +40,6 @@ ifeq ($(BOARD),nucleo-f746zg)
 CORECELL_ON_NUCLEO=yes
 endif
 
-<<<<<<< HEAD
-ifeq ($(BOARD),stm32f746g-disco)
-CFLAGS += -DCORECELL_ON_NUCLEO=1
-# USEMODULE += stts751
-endif
-
-
-=======
 ifeq ($(BOARD),nucleo-l476rg)
 RAK5146_ON_NUCLEO=yes
 endif
@@ -127,7 +119,6 @@ USEMODULE += saul_default
 #USEMODULE += senml_saul
 USEMODULE += senml_phydat
 USEMODULE += printf_float
->>>>>>> wip/sx1302_2_1_0
 
 # https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf
 ifeq ($(IKS01A3),yes)
@@ -197,12 +188,6 @@ USEMODULE += ps
 USEMODULE += fmt
 USEMODULE += printf_float
 
-<<<<<<< HEAD
-#USEMODULE += sx1302_2_1_0
-USEMODULE += sx1302
-EXTERNAL_MODULE_DIRS += ../../modules
-=======
->>>>>>> wip/sx1302_2_1_0
 
 
 # -----------------------------
