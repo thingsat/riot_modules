@@ -1,0 +1,30 @@
+FEATURES_REQUIRED += periph_gpio
+FEATURES_REQUIRED += periph_gpio_irq
+FEATURES_REQUIRED += periph_spi
+FEATURES_OPTIONAL += periph_spi_gpio_mode
+
+#USEMODULE += iolist
+#USEMODULE += ztimer_msec
+USEMODULE += xtimer
+
+#USEMODULE += saul
+
+USEMODULE += lorawan
+EXTERNAL_MODULE_DIRS += ../../modules/lorawan
+
+# Enable code section save time for porting and firmware size
+
+# SPI Clock speed for Corecell
+SX1302_PARAM_SPI_CLK_SPEED ?= SPI_CLK_5MHZ
+CFLAGS += -DSX1302_PARAM_SPI_CLK_SPEED=$(SX1302_PARAM_SPI_CLK_SPEED)
+
+CFLAGS += -DENABLE_STTS751=0
+CFLAGS += -DENABLE_AD5338R=0
+CFLAGS += -DENABLE_SX1261=0
+
+CFLAGS += -DENABLE_MOD_FSK=0
+# when CFLAGS += -DENABLE_SX125X=0 --> save 8KB
+CFLAGS += -DENABLE_SX125X=0
+CFLAGS += -DENABLE_SX1250=1
+
+CFLAGS += -DENABLE_REGTEST=1
