@@ -9,9 +9,7 @@ https://github.com/Lora-net/sx1302_hal
 * [ ] add [sx1261/sx1262](https://doc.riot-os.org/group__drivers__sx126x__internal.html)
 * [ ] add LBT
 * [ ] add spectral scan
-* [ ] add LR-FHSS TX
-
-
+* [x] add LR-FHSS TX (seperate driver based on [sx126x_driver](https://github.com/Lora-net/sx126x_driver))
 
 ## Pinout
 
