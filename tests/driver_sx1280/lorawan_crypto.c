@@ -9,11 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "hashes/cmac.h"
+#include "hashes/aes128_cmac.h"
 
 #include "lorawan_crypto.h"
 
-static cmac_context_t CmacContext;
+static aes128_cmac_context_t CmacContext;
 
 static uint8_t digest[CMAC_KEY_LEN];
 
@@ -66,13 +66,13 @@ static void LoRaMacComputeMic( const uint8_t *buffer, uint16_t size, const uint8
 
     MicBlockB0[15] = size & 0xFF;
 
-    cmac_init(&CmacContext, key, CMAC_KEY_LEN);
+    aes128_cmac_init(&CmacContext, key, CMAC_KEY_LEN);
 
-    cmac_update(&CmacContext, MicBlockB0, LORAMAC_MIC_BLOCK_B0_SIZE);
+    aes128_cmac_update(&CmacContext, MicBlockB0, LORAMAC_MIC_BLOCK_B0_SIZE);
 
-    cmac_update(&CmacContext, buffer, size & 0xFF);
+    aes128_cmac_update(&CmacContext, buffer, size & 0xFF);
 
-    cmac_final(&CmacContext, digest); // TODO reuse MicBlockB0
+    aes128_cmac_final(&CmacContext, digest); // TODO reuse MicBlockB0
 
 
 
