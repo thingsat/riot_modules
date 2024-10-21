@@ -76,7 +76,7 @@
 
 #elif RAK5146_ON_NUCLEO == 1
 
-#include "arduino_board.h"
+#include "arduino_pinmap.h"
 
 #ifndef SX1302_PARAM_SPI
 #define SX1302_PARAM_SPI                    	(SPI_DEV(0))
@@ -137,7 +137,7 @@
 
 // Pins are adapted to STM32 Nucleo-64 boards and ESP32 Wroom 32U/D
 
-#include "arduino_board.h"
+#include "arduino_pinmap.h"
 
 #ifndef SX1302_PARAM_SPI
 #define SX1302_PARAM_SPI                    	(SPI_DEV(0))
