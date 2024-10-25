@@ -264,7 +264,7 @@ bool lorawan_get_fctrl_pending(const uint8_t *frame_buffer, const uint8_t size) 
 /** Get FPort */
 uint8_t lorawan_get_fport(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
-	uint8_t fOptLen = frame_buffer[1] & 0x0F;
+	uint8_t fOptLen = frame_buffer[5] & 0x0F;
 	if (size == (1 + 4 + 1 + 2 + fOptLen + 4)) {
 		// No Port, No Payload
 		return 0xFF;
@@ -276,7 +276,7 @@ uint8_t lorawan_get_fport(const uint8_t *frame_buffer, const uint8_t size) {
 /** Get FPayload */
 uint8_t* lorawan_get_fpayload(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
-	uint8_t fOptLen = frame_buffer[1] & 0x0F;
+	uint8_t fOptLen = frame_buffer[5] & 0x0F;
 	if (size == (1 + 4 + 1 + 2 + fOptLen + 4)) {
 		// No Port, No Payload
 		return NULL;
@@ -288,7 +288,7 @@ uint8_t* lorawan_get_fpayload(const uint8_t *frame_buffer, const uint8_t size) {
 /** Get FPayload size */
 uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
-	uint8_t fOptLen = frame_buffer[1] & 0x0F;
+	uint8_t fOptLen = frame_buffer[5] & 0x0F;
 	if (size <= (1 + 4 + 1 + 2 + fOptLen + 4)) {
 		// No Port, No Payload
 		// REMARK : not <= instead of == since fOptLen may be not correct
