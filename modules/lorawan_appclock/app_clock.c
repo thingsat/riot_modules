@@ -364,7 +364,7 @@ int8_t app_clock_process_downlink(semtech_loramac_t *loramac) {
 	}
 
 	DEBUG("[clock] sent_buffer:");
-	printf_ba(sent_buffer, sent_buffer_cursor);
+	up_printf_ba(sent_buffer, sent_buffer_cursor);
 	DEBUG("\n");
 
 	if (error == APP_CLOCK_OK) {

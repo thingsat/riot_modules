@@ -201,7 +201,7 @@ private:
     double cp_dMA;      // Mean anomaly             deg
     double cp_dMM;      // Mean motion              rev/d
     double cp_dM2;      // Decay Rate               rev/d/d
-    double cp_dRV;      // Orbit number              -
+    double cp_lRV;      // Orbit number              -
 //    double cp_dALON;    // Sat attitude             deg
 //    double cp_dALAT;    // Sat attitude             deg
     long   cp_lDE;      // Epoch Fraction of day

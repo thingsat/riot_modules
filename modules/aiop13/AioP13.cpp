@@ -372,7 +372,7 @@ void P13Satellite::tle(const char *p_ccnm, const char *p_ccl1, const char *p_ccl
     cp_dWP = radians(getdouble(p_ccl2, 34, 42));    // Get argument of perigee (degrees) from tle:l2:34..41
     cp_dMA = radians(getdouble(p_ccl2, 43, 51));    // Get mean anomaly (degrees) from tle:l2:43..50
     cp_dMM = 2.0 * PI * getdouble(p_ccl2, 52, 63);  // Get mean motion from tle:l2:52..62
-    cp_dRV = getlong(p_ccl2, 63, 68);               // Get Revolution number at epoch (revolutions) from tle:l2:63..67
+    cp_lRV = getlong(p_ccl2, 63, 68);               // Get Revolution number at epoch (revolutions) from tle:l2:63..67
 
     // Derived quantities from the orbital elements 
 

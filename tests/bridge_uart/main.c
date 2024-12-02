@@ -26,7 +26,7 @@
 #define PRINTER_PRIO        (THREAD_PRIORITY_MAIN - 1)
 #define PRINTER_TYPE        (0xabcd)
 
-#define POWEROFF_DELAY      (250U * US_PER_MS)      /* quarter of a second */
+#define UART_POWEROFF_DELAY      (250U * US_PER_MS)      /* quarter of a second */
 
 #ifndef STDIO_UART_DEV
 #define STDIO_UART_DEV      (UART_UNDEF)
@@ -91,7 +91,7 @@ static void sleep_test(int num, uart_t uart)
 {
     printf("UARD_DEV(%i): test uart_poweron() and uart_poweroff()  ->  ", num);
     uart_poweroff(uart);
-    xtimer_usleep(POWEROFF_DELAY);
+    xtimer_usleep(UART_POWEROFF_DELAY);
     uart_poweron(uart);
     puts("[OK]");
 }
