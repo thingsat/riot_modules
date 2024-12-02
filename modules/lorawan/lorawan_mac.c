@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Université Grenoble Alpes
+ * Copyright (C) 2020-2024 Université Grenoble Alpes
  */
 
 /*
@@ -261,10 +261,26 @@ bool lorawan_get_fctrl_pending(const uint8_t *frame_buffer, const uint8_t size) 
 	return (fctrl & 0x01) == 1;
 }
 
+/** Get FHDR - FCtrl - fOptLen */
+inline bool lorawan_get_fctrl_fOptLen(const uint8_t *frame_buffer, const uint8_t size) {
+	(void) size;
+	return frame_buffer[5] & 0x0F;
+}
+
+
+uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer, const uint8_t size) {
+	bool lorawan_get_fctrl_pending(const uint8_t *frame_buffer, const uint8_t size) {
+		(void) size;
+		uint8_t fctrl = frame_buffer[5] >> 4;
+		return (fctrl & 0x01) == 1;
+	}
+
+
 /** Get FPort */
+// TODO Frame can have no FPort and no FPayload
 uint8_t lorawan_get_fport(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
-	uint8_t fOptLen = frame_buffer[1] & 0x0F;
+	const uint8_t fOptLen = lorawan_get_fctrl_fOptLen(frame_buffer, size);
 	if (size == (1 + 4 + 1 + 2 + fOptLen + 4)) {
 		// No Port, No Payload
 		return 0xFF;
@@ -274,9 +290,10 @@ uint8_t lorawan_get_fport(const uint8_t *frame_buffer, const uint8_t size) {
 }
 
 /** Get FPayload */
+// TODO Frame can have no FPayload
 uint8_t* lorawan_get_fpayload(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
-	uint8_t fOptLen = frame_buffer[1] & 0x0F;
+	const uint8_t fOptLen = lorawan_get_fctrl_fOptLen(frame_buffer, size);
 	if (size == (1 + 4 + 1 + 2 + fOptLen + 4)) {
 		// No Port, No Payload
 		return NULL;
@@ -286,9 +303,10 @@ uint8_t* lorawan_get_fpayload(const uint8_t *frame_buffer, const uint8_t size) {
 }
 
 /** Get FPayload size */
+// TODO Frame can have no FPayload
 uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
-	uint8_t fOptLen = frame_buffer[1] & 0x0F;
+	const uint8_t fOptLen = lorawan_get_fctrl_fOptLen(frame_buffer, size);
 	if (size <= (1 + 4 + 1 + 2 + fOptLen + 4)) {
 		// No Port, No Payload
 		// REMARK : not <= instead of == since fOptLen may be not correct
@@ -434,6 +452,7 @@ uint8_t lorawan_get_datarate(uint8_t sf, uint32_t bw) {
 	} else if (bw == 250000 && sf == 7) {
 		return 6;
 	} else {
+		// default FSK modulation
 		return 7;
 	}
 }
