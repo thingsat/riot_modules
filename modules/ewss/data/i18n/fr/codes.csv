@@ -1,0 +1,36 @@
+18.4.35.1;D1;Magnitude sur l'échelle de Richter  
+18.4.35.2;D2;Coefficient sismique  
+18.4.35.3;D3;Azimut du centre de l'ellipse principale à l'épicentre  
+18.4.35.4;D4;Longueur du vecteur entre le centre de l'ellipse principale et l'épicentre  
+18.4.35.5;D5;Hauteur des vagues  
+18.4.35.6;D6;Plage de températures  
+18.4.35.7;D7;Catégories de cyclones  
+18.4.35.8;D8;Vitesse du vent  
+18.4.35.9;D9;Quantité de précipitations  
+18.4.35.10;D10;Catégorie de dégâts  
+18.4.35.11;D11;Probabilité de tornade  
+18.4.35.12;D12;Échelle de grêle  
+18.4.35.13;D13;Visibilité  
+18.4.35.14;D14;Profondeur de neige  
+18.4.35.15;D15;Gravité des inondations  
+18.4.35.16;D16;Intensité des éclairs  
+18.4.35.17;D17;Niveau de brouillard  
+18.4.35.18;D18;Niveau de sécheresse  
+18.4.35.19;D19;Niveau d'avertissement d'avalanche  
+18.4.35.20;D20;Quantité de cendres et impact  
+18.4.35.21;D21;Échelle géomagnétique  
+18.4.35.22;D22;Niveau de menace terroriste  
+18.4.35.23;D23;Niveau de risque d'incendie  
+18.4.35.24;D24;Qualité de l'eau  
+18.4.35.25;D25;Indice UV  
+18.4.35.26;D26;Nombre de cas pour 100 000 habitants  
+18.4.35.27;D27;Plage de bruit  
+18.4.35.28;D28;Indice de qualité de l'air  
+18.4.35.29;D29;Durée estimée de la coupure  
+18.4.35.30;D30;Échelle des événements nucléaires  
+18.4.35.31;D31;Type de risque chimique  
+18.4.35.32;D32;Niveau de biohazard  
+18.4.35.33;D33;Type de biohazard  
+18.4.35.34;D34;Type de risque d'explosif  
+18.4.35.35;D35;Type d'infection  
+18.4.35.36;D36;Catégories de typhons
