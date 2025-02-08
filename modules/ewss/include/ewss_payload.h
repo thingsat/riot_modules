@@ -196,7 +196,7 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	/*
 	 * @brief 17. Main subject (A17)
 	 */
-	uint16_t naimn_subject :2;
+	uint16_t main_subject :2;
 
 	/*
 	 * @brief 18. Specific settings (A18)
