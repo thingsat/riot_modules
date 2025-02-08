@@ -1,0 +1,37 @@
+18.4.35.1;D1;Magnitude on Richter Scale
+18.4.35.2;D2;Seismic Coefficient
+18.4.35.3;D3;Azimuth from Centre of Main Ellipse to Epicentre
+18.4.35.4;D4;Vector Length between Centre of Main Ellipse and Epicentre
+18.4.35.5;D5;Wave Height
+18.4.35.6;D6;Temperature Range
+18.4.35.7;D7;Hurricane Categories
+18.4.35.8;D8;Wind Speed
+18.4.35.9;D9;Rainfall Amounts
+18.4.35.10;D10;Damage Category
+18.4.35.11;D11;Tornado Probability
+18.4.35.12;D12;Hail Scale.
+18.4.35.13;D13;Visibility
+18.4.35.14;D14;Snow Depth
+18.4.35.15;D15;Flood Severity
+18.4.35.16;D16;Lightning Intensity
+18.4.35.17;D17;Fog Level
+18.4.35.18;D18;Drought Level
+18.4.35.19;D19;Avalanche Warning Level
+18.4.35.20;D20;Ash Fall Amount and Impact
+18.4.35.21;D21;Geomagnetic Scale
+18.4.35.22;D22;Terrorism Threat Level
+18.4.35.23;D23;Fire Risk Level
+18.4.35.24;D24;Water Quality
+18.4.35.25;D25;UV Index
+18.4.35.26;D26;Number of Cases per 100 000 Inhabitants
+18.4.35.27;D27;Noise Range
+18.4.35.28;D28;Air Quality Index
+18.4.35.29;D29;Outage Estimated Duration
+18.4.35.30;D30;Nuclear Event Scale
+18.4.35.31;D31;Chemical Hazard Type
+18.4.35.32;D32;Biohazard Level
+18.4.35.33;D33;Biohazard Type
+18.4.35.34;D34;Explosive Hazard Type
+18.4.35.35;D35;Infection Type
+18.4.35.36;D36;Typhoon Categories
+
