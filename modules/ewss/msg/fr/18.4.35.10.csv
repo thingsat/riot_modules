@@ -1,0 +1,6 @@
+000;Catégorie 1 - Des vents très dangereux provoqueront quelques dommages. Échelle 1 et Intensité 1  
+001;Catégorie 2 - Des vents extrêmement dangereux provoqueront des dommages étendus. Échelle 1 et Intensité 2  
+010;Catégorie 3 - Des dommages dévastateurs se produiront. Échelle 1 et Intensité 3  
+011;Catégorie 4 - Des dommages catastrophiques se produiront. Échelle 2 et Intensité 1  
+100;Catégorie 5 - Des dommages catastrophiques se produiront. Échelle 2 et Intensité 2  
+101;Catégorie 5 - Des dommages catastrophiques se produiront. Échelle 3 et Intensité 3
