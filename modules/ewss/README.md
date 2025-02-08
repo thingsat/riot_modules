@@ -11,3 +11,4 @@ developed with these constraints. However, if satellite navigation providers hav
 signals (i.e. spare bits), it is still possible to use these extra bits for extending the information contained
 in the EWM (e.g. for adding more severity levels, or more instructions).
 
+![EWSS forest fire](https://air.imag.fr/images/a/a8/EWSS-01.jpg)
