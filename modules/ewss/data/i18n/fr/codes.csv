@@ -1,3 +1,47 @@
+18.1.1;C1;Emplacement du centre de l'ellipse affinée;Latitude  
+18.1.2;C2;Emplacement du centre de l'ellipse affinée;Longitude  
+18.1.3;C3;Longueur de l'axe semi-major de l'ellipse affinée  
+18.1.4;C4;Longueur de l'axe semi-mineur de l'ellipse affinée  
+18.2.1;C5;Delta-Latitude depuis le centre de l'ellipse principale  
+18.2.2;C6;Delta-Longitude depuis le centre de l'ellipse principale  
+18.3.1;C7;Décalage du centre de la deuxième ellipse  
+18.3.2;C8;Facteur homothétique de la deuxième ellipse  
+18.3.3;C9;Angle de direction de la deuxième ellipse  
+18.3.4;C10;Bibliothèque de guidage pour la deuxième ellipse  
+18.4.1;A18;B4 GEO;Séisme  
+18.4.2;A18;B4 GEO;Tsunami  
+18.4.3;A18;B4 MET;Vague de froid et vague de chaleur  
+18.4.4;A18;B4 MET;Cyclone tropical (ouragan)  
+18.4.5;A15-B4 MET;Cyclone tropical (typhon)  
+18.4.6;A15-B4 MET;Tornade  
+18.4.7;A15-B4 MET;Tempête ou orage  
+18.4.8;A15-B4 MET;Grêle  
+18.4.9;A15-B4 MET;Précipitations  
+18.4.10;A15-B4 MET;Chute de neige  
+18.4.11;A15-B4 MET;Inondation  
+18.4.12;A15-B4 MET;Éclairs  
+18.4.13;A15-B4 MET;Refroidissement éolien / Gel  
+18.4.14;A15-B4 MET;Derecho  
+18.4.15;A15-B4 MET;Brouillard  
+18.4.16;A15-B4 MET;Tempête de neige / Blizzard  
+18.4.17;A15-B4 MET;Sécheresse  
+18.4.18;A15-B4 GEO;Risque d'avalanche  
+18.4.19;A15-B4 GEO;Vague de marée  
+18.4.20;A15-B4 GEO;Chute de cendres  
+18.4.21;A15-B4 GEO;Marée de tempête/Vagues/Tempête  
+18.4.22;A15-B4 GEO;Tempête géomagnétique ou solaire  
+18.4.23;A15-B4 SECURITY;Terrorisme  
+18.4.24;A15-B4 FIRE;Incendie de forêt ou risque d'incendie  
+18.4.25;A15-B4 ENVIRONMENT;Eau potable contaminée ou pollution marine ou pollution des rivières……..  
+18.4.26;A15-B4 ENVIRONMENT;Radiation UV  
+18.4.27;A15-B4 HEALTH;Risque d'infection ou pandémie  
+18.4.28;A15-B4 ENVIRONMENT;Pollution sonore  
+18.4.29;A15-B4 ENVIRONMENT;Pollution de l'air  
+18.4.30;A15-B4 INFRASTRUCTURE;Panne d'approvisionnement en gaz ou panne des systèmes informatiques ou panne d'électricité ou panne des numéros d'urgence ou panne de ligne téléphonique  
+18.4.31;A15-B4 CBRNE;Risque chimique  
+18.4.32;A15-B4 CBRNE;Risque radiologique ou risque nucléaire ou accident de centrale nucléaire………  
+18.4.33;A15-B4 CBRNE;Risque biologique  
+18.4.34;A15-B4 CBRNE;Risque d'explosif
 18.4.35.1;D1;Magnitude sur l'échelle de Richter  
 18.4.35.2;D2;Coefficient sismique  
 18.4.35.3;D3;Azimut du centre de l'ellipse principale à l'épicentre  

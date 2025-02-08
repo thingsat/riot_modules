@@ -1,3 +1,47 @@
+18.1.1;C1;Refined Ellipse Centre Location;Latitude
+18.1.2;C2;Refined Ellipse Centre Location;Longitude
+18.1.3;C3;Refined Ellipse Semi-Major Axis Length
+18.1.4;C4;Refined Ellipse Semi-Minor Axis Length
+18.2.1;C5;Delta-Latitude from Main Ellipse Centre
+18.2.2;C6;Delta-Longitude from Main Ellipse Centre
+18.3.1;C7;Shift of Second Ellipse Centre
+18.3.2;C8;Homothetic Factor of Second Ellipse
+18.3.3;C9;Bearing Angle of Second Ellipse
+18.3.4;C10;Guidance Library for Second Ellipse
+18.4.1;A18;B4 GEO;Earthquake
+18.4.2;A18;B4 GEO;Tsunami
+18.4.3;A18;B4 MET;Cold Wave and Heat Wave
+18.4.4;A18;B4 MET;Tropical Cyclone (hurricane)
+18.4.5;A15-B4 MET;Tropical Cyclone (typhoon)
+18.4.6;A15-B4 MET;Tornado
+18.4.7;A15-B4 MET;Storm or Thunderstorm
+18.4.8;A15-B4 MET;Hail
+18.4.9;A15-B4 MET;Rainfall
+18.4.10;A15-B4 MET;Snowfall
+18.4.11;A15-B4 MET;Flood
+18.4.12;A15-B4 MET;Lightning
+18.4.13;A15-B4 MET;Wind Chill / Frost
+18.4.14;A15-B4 MET;Derecho
+18.4.15;A15-B4 MET;Fog
+18.4.16;A15-B4 MET;Snow Storm / blizzard
+18.4.17;A15-B4 MET;Drought
+18.4.18;A15-B4 GEO;Avalanche Risk
+18.4.19;A15-B4 GEO;Tidal Wave
+18.4.20;A15-B4 GEO;Ash Fall
+18.4.21;A15-B4 GEO;Wave/Wind/Storm Surge
+18.4.22;A15-B4 GEO;Geomagnetic or Solar Storm
+18.4.23;A15-B4 SECURITY;Terrorism
+18.4.24;A15-B4 FIRE;Forest Fire or Risk of Fire
+18.4.25;A15-B4 ENVIRONMENT;Contaminated Drinking Water or Marine Pollution or River Pollution……..
+18.4.26;A15-B4 ENVIRONMENT;UV Radiation
+18.4.27;A15-B4 HEALTH;Risk of Infection or Pandemic
+18.4.28;A15-B4 ENVIRONMENT;Noise Pollution
+18.4.29;A15-B4 ENVIRONMENT;Air Pollution
+18.4.30;A15-B4 INFRASTRUCTURE;Gas supply outage or Outage of IT systems or Power outage or Emergency number outage or Telephone line outage
+18.4.31;A15-B4 CBRNE;Chemical Hazard
+18.4.32;A15-B4 CBRNE;Radiological Hazard or Nuclear Hazard or Nuclear power station accident………
+18.4.33;A15-B4 CBRNE;Biological Hazard
+18.4.34;A15-B4 CBRNE;Explosive Hazard
 18.4.35.1;D1;Magnitude on Richter Scale
 18.4.35.2;D2;Seismic Coefficient
 18.4.35.3;D3;Azimuth from Centre of Main Ellipse to Epicentre
