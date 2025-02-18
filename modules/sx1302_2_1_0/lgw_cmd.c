@@ -32,6 +32,7 @@
 #include "lgw_config.h"
 #include "lgw_cmd.h"
 #include "lorawan_mac.h"
+#include "lorawan_printf.h"
 
 #include "loragw_sx1302.h"
 
