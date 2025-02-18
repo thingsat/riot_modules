@@ -141,6 +141,27 @@ static const i2c_conf_t i2c_config[] = {
 #define RAK5146_ON_NUCLEO 1
 /** @} */
 
+
+
+/**
+ * @name    ADC configuration
+ *
+ * Only the internal VBAT channel
+ * @{
+ */
+static const adc_conf_t adc_config[] = {
+    { .pin = GPIO_UNDEF, 	  .dev = 0, .chan = 18 }, /* VBAT */
+};
+
+/**
+* @brief Number of ADC devices
+*/
+#define ADC_NUMOF           ARRAY_SIZE(adc_config)
+
+#define VBAT_ADC            ADC_LINE(0) /**< VBAT ADC line */
+
+// TODO Add ADC for STM32 internal temperature sensor
+
 #ifdef __cplusplus
 }
 #endif
