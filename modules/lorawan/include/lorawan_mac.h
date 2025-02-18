@@ -13,6 +13,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
+#if 0
 // From https://github.com/Lora-net/LoRaMac-node/blob/master/src/mac/LoRaMacTypes.h
 /*!
  * LoRaMAC frame types
@@ -59,11 +60,23 @@ typedef enum eLoRaMacFrameType
 /** Get Type */
 bool lorawan_check_valid_frame_size(const uint8_t *frame_buffer, const uint8_t size);
 
+/** Is LoRaWAN Size  */
+// TODO bool lorawan_is_lorawan_size(const uint8_t *frame_buffer, const uint8_t size, const uint8_t datarate)
+
 /** Get frame MIC */
 uint32_t lorawan_get_mic(const uint8_t *frame_buffer, const uint8_t size);
 
 /** Get Type */
 uint8_t lorawan_get_type(const uint8_t *frame_buffer, const uint8_t size);
+
+/** Is LoRaWAN Join Frame */
+bool lorawan_is_joinframe(const uint8_t *frame_buffer, const uint8_t size);
+
+/** Is LoRaWAN Data Frame */
+bool lorawan_is_dataframe(const uint8_t *frame_buffer, const uint8_t size);
+
+/** Is LoRaWAN Uplink */
+bool lorawan_is_uplink(const uint8_t *frame_buffer, const uint8_t size);
 
 /** Get Version */
 uint8_t lorawan_get_version(const uint8_t *frame_buffer, const uint8_t size);
@@ -106,6 +119,23 @@ uint16_t lorawan_get_devnonce(const uint8_t *frame_buffer, const uint8_t size);
 /** Get LoRaWAN datarate */
 uint8_t lorawan_get_datarate(uint8_t sf, uint32_t bw);
 
+void lorawan_printf_jreq(const uint8_t *frame_buffer, const uint8_t size);
+
+void lorawan_printf_payload(const uint8_t *frame_buffer, const uint8_t size);
+
+#endif
+
+/** check the MIC of a uplink frame */
+bool lorawan_check_mic_up(
+		const uint32_t devaddr, const uint32_t fcnt,
+		const uint8_t *nwkskey,
+		const uint8_t *frame_buffer, const uint8_t frame_size);
+
+/** check the MIC of a downlink frame */
+bool lorawan_check_mic_dn(
+		const uint32_t devaddr, const uint32_t fcnt,
+		const uint8_t *nwkskey,
+		const uint8_t *frame_buffer, const uint8_t frame_size);
 
 /*
  * @brief Prepare a Data Up Frame
@@ -142,10 +172,5 @@ void lorawan_prepare_dn_dataframe(
 		uint8_t *frame_buffer,
 		uint8_t *frame_size
 		);
-
-
-void lorawan_printf_jreq(const uint8_t *frame_buffer, const uint8_t size);
-
-void lorawan_printf_payload(const uint8_t *frame_buffer, const uint8_t size);
 
 #endif

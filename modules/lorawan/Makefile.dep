@@ -1,0 +1,3 @@
+
+EXTERNAL_MODULE_DIRS += ../../modules
+USEMODULE += lorawan_printf

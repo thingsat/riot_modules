@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 Université Grenoble Alpes
+ * Copyright (C) 2020-2023 Université Grenoble Alpes
  */
 
 /*
@@ -11,155 +11,15 @@
 #include <stdio.h>
 #include "fmt.h"
 
+
+
 #include "lorawan_crypto.h"
 #include "lorawan_mac.h"
+#include "lorawan_printf.h"
 
-static void lorawan_prepare_dataframe(
-		const uint8_t dir,
-		const bool confirmed,
-		const uint32_t devaddr,
-		const uint8_t fctrl,
-		const uint32_t fcnt,
-		const uint32_t fport,
-		const uint8_t *fpayload,
-		const uint8_t fpayload_size,
-		const uint8_t *nwkskey,
-		const uint8_t *appskey,
-		uint8_t *frame_buffer,
-		uint8_t *frame_size
-		) {
+#if 0
 
-
-	// No fOpt
-	// const uint8_t foptlen = 0;
-
-	// Reset buffer
-	memset(frame_buffer, 0, 255); // TODO add constant instead of 255
-
-	uint8_t len = 0;
-
-	// Frame Type
-	if(dir == LORAMAC_DIR_DOWNLINK) {
-		frame_buffer[len++] = (confirmed ?
-						FRAME_TYPE_DATA_CONFIRMED_DOWN :
-						FRAME_TYPE_DATA_UNCONFIRMED_DOWN) << 5;
-	} else {
-		frame_buffer[len++] = (confirmed ?
-						FRAME_TYPE_DATA_CONFIRMED_UP :
-						FRAME_TYPE_DATA_UNCONFIRMED_UP) << 5;
-	}
-
-	// DevAddr
-	frame_buffer[len++] = devaddr & 0xFF;
-	frame_buffer[len++] = (devaddr >> 8) & 0xFF;
-	frame_buffer[len++] = (devaddr >> 16) & 0xFF;
-	frame_buffer[len++] = (devaddr >> 24) & 0xFF;
-
-	// Frame Ctrl (ADR...)
-	frame_buffer[len++] = fctrl; /* FCTrl (FOptLen = 0) */
-
-	// FCnt (32 bit counter)
-	frame_buffer[len++] = (uint8_t) fcnt;
-	frame_buffer[len++] = (uint8_t) (fcnt >> 8) & 0xFF;
-
-	// No FOpt
-
-	// FPort
-	frame_buffer[len++] = fport;
-
-	// Encrypt fpayload with AppSKey (since fPort can not be 0)
-	lorawan_payload_encrypt(
-			fpayload,
-			fpayload_size,
-			fport==0 ? nwkskey : appskey,
-			devaddr,
-			dir,
-			fcnt,
-			frame_buffer + len);
-
-	len += fpayload_size;
-
-	// Add MIC computed with NwkSKey
-	uint32_t mic;
-	lorawan_cmac_calculate_mic(
-			frame_buffer,
-			len,
-			nwkskey,
-			devaddr,
-			LORAMAC_DIR_UPLINK,
-			fcnt,
-			&mic);
-
-	frame_buffer[len++] = mic & 0xFF;
-	frame_buffer[len++] = ( mic >> 8 ) & 0xFF;
-	frame_buffer[len++] = ( mic >> 16 ) & 0xFF;
-	frame_buffer[len++] = ( mic >> 24 ) & 0xFF;
-
-	*frame_size = len;
-}
-
-
-void lorawan_prepare_up_dataframe(
-		const bool confirmed,
-		const uint32_t devaddr,
-		const uint8_t fctrl,
-		const uint32_t fcnt,
-		const uint32_t fport,
-		const uint8_t *fpayload,
-		const uint8_t fpayload_size,
-		const uint8_t *nwkskey,
-		const uint8_t *appskey,
-		uint8_t *frame_buffer,
-		uint8_t *frame_size
-		) {
-
-	lorawan_prepare_dataframe(
-			LORAMAC_DIR_UPLINK,
-			confirmed,
-			devaddr,
-			fctrl,
-			fcnt,
-			fport,
-			fpayload,
-			fpayload_size,
-			nwkskey,
-			appskey,
-			frame_buffer,
-			frame_size
-	);
-}
-
-void lorawan_prepare_dn_dataframe(
-		const bool confirmed,
-		const uint32_t devaddr,
-		const uint8_t fctrl,
-		const uint32_t fcnt,
-		const uint32_t fport,
-		const uint8_t *fpayload,
-		const uint8_t fpayload_size,
-		const uint8_t *nwkskey,
-		const uint8_t *appskey,
-		uint8_t *frame_buffer,
-		uint8_t *frame_size
-		) {
-
-	lorawan_prepare_dataframe(
-			LORAMAC_DIR_DOWNLINK,
-			confirmed,
-			devaddr,
-			fctrl,
-			fcnt,
-			fport,
-			fpayload,
-			fpayload_size,
-			nwkskey,
-			appskey,
-			frame_buffer,
-			frame_size
-	);
-}
-
-
+// TODO implement case when there is no port and no payload
 
 //uint64_t swap_uint64( uint64_t val )
 //{
@@ -169,12 +29,13 @@ void lorawan_prepare_dn_dataframe(
 //}
 
 /** Get Type */
-bool lorawan_check_valid_frame_size(const uint8_t *frame_buffer, const uint8_t size) {
+bool lorawan_check_valid_frame_size(const uint8_t *frame_buffer,
+		const uint8_t size) {
 	if (size < 1) {
 		return false;
 	}
 
-	if(lorawan_get_version(frame_buffer,size)!=0) {
+	if (lorawan_get_version(frame_buffer, size) != 0) {
 		return false;
 	}
 
@@ -203,12 +64,55 @@ uint8_t lorawan_get_type(const uint8_t *frame_buffer, const uint8_t size) {
 	return frame_buffer[0] >> 5;
 }
 
+/** Is LoRaWAN Join Frame */
+bool lorawan_is_joinframe(const uint8_t *frame_buffer, const uint8_t size) {
+	switch (lorawan_get_type(frame_buffer, size)) {
+	case FRAME_TYPE_JOIN_REQ:
+	case FRAME_TYPE_REJOIN: {
+		return true;
+	}
+	default: {
+		return false;
+	}
+	}
+}
+
+/** Is LoRaWAN Data Frame */
+bool lorawan_is_dataframe(const uint8_t *frame_buffer, const uint8_t size) {
+	switch (lorawan_get_type(frame_buffer, size)) {
+	case FRAME_TYPE_DATA_CONFIRMED_DOWN:
+	case FRAME_TYPE_DATA_UNCONFIRMED_DOWN:
+	case FRAME_TYPE_DATA_CONFIRMED_UP:
+	case FRAME_TYPE_DATA_UNCONFIRMED_UP: {
+		return true;
+	}
+	default: {
+		return false;
+	}
+	}
+}
+/** Is LoRaWAN Uplink */
+bool lorawan_is_uplink(const uint8_t *frame_buffer, const uint8_t size) {
+	switch (lorawan_get_type(frame_buffer, size)) {
+	case FRAME_TYPE_JOIN_REQ:
+	case FRAME_TYPE_REJOIN:
+	case FRAME_TYPE_DATA_CONFIRMED_UP:
+	case FRAME_TYPE_DATA_UNCONFIRMED_UP: {
+		return true;
+	}
+	default: {
+		return false;
+	}
+	}
+}
+
+/** Is LoRaWAN Size  */
+// TODO bool lorawan_is_lorawan_size(const uint8_t *frame_buffer, const uint8_t size, const uint8_t datarate)
 /** Get Version */
 uint8_t lorawan_get_version(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
 	return frame_buffer[0] & 0b00011111;
 }
-
 
 /** Get frame MIC */
 uint32_t lorawan_get_mic(const uint8_t *frame_buffer, const uint8_t size) {
@@ -267,17 +171,7 @@ inline bool lorawan_get_fctrl_fOptLen(const uint8_t *frame_buffer, const uint8_t
 	return frame_buffer[5] & 0x0F;
 }
 
-
-uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer, const uint8_t size) {
-	bool lorawan_get_fctrl_pending(const uint8_t *frame_buffer, const uint8_t size) {
-		(void) size;
-		uint8_t fctrl = frame_buffer[5] >> 4;
-		return (fctrl & 0x01) == 1;
-	}
-
-
 /** Get FPort */
-// TODO Frame can have no FPort and no FPayload
 uint8_t lorawan_get_fport(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
 	const uint8_t fOptLen = lorawan_get_fctrl_fOptLen(frame_buffer, size);
@@ -290,7 +184,6 @@ uint8_t lorawan_get_fport(const uint8_t *frame_buffer, const uint8_t size) {
 }
 
 /** Get FPayload */
-// TODO Frame can have no FPayload
 uint8_t* lorawan_get_fpayload(const uint8_t *frame_buffer, const uint8_t size) {
 	(void) size;
 	const uint8_t fOptLen = lorawan_get_fctrl_fOptLen(frame_buffer, size);
@@ -303,8 +196,8 @@ uint8_t* lorawan_get_fpayload(const uint8_t *frame_buffer, const uint8_t size) {
 }
 
 /** Get FPayload size */
-// TODO Frame can have no FPayload
-uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer, const uint8_t size) {
+uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer,
+		const uint8_t size) {
 	(void) size;
 	const uint8_t fOptLen = lorawan_get_fctrl_fOptLen(frame_buffer, size);
 	if (size <= (1 + 4 + 1 + 2 + fOptLen + 4)) {
@@ -315,7 +208,6 @@ uint8_t lorawan_get_fpayload_size(const uint8_t *frame_buffer, const uint8_t siz
 		return size - (1 + 4 + 1 + 2 + fOptLen + 1 + 4);
 	}
 }
-
 
 void lorawan_printf_dtup(const uint8_t *frame_buffer, const uint8_t size) {
 
@@ -395,7 +287,7 @@ void lorawan_printf_payload(const uint8_t *frame_buffer, const uint8_t size) {
 		return;
 
 	const uint8_t frame_version = lorawan_get_version(frame_buffer, size);
-	if(frame_version != 0) {
+	if (frame_version != 0) {
 		printf("PROPRIETARY: Version = %02X\n", frame_version);
 		return;
 	}
@@ -452,7 +344,120 @@ uint8_t lorawan_get_datarate(uint8_t sf, uint32_t bw) {
 	} else if (bw == 250000 && sf == 7) {
 		return 6;
 	} else {
-		// default FSK modulation
 		return 7;
 	}
+}
+
+#endif
+
+
+
+static bool lorawan_check_mic(const uint8_t dir,
+		const uint32_t devaddr, const uint32_t fcnt,
+		const uint8_t *nwkskey,
+		const uint8_t *frame_buffer, const uint8_t frame_size) {
+	return lorawan_cmac_check_mic(frame_buffer,  frame_size, nwkskey,  devaddr,  dir, fcnt);
+}
+
+
+bool lorawan_check_mic_up(
+		const uint32_t devaddr, const uint32_t fcnt,
+		const uint8_t *nwkskey,
+		const uint8_t *frame_buffer, const uint8_t frame_size) {
+	return lorawan_check_mic(LORAMAC_DIR_UPLINK, devaddr, fcnt, nwkskey, frame_buffer, frame_size);
+}
+
+bool lorawan_check_mic_dn(
+		const uint32_t devaddr, const uint32_t fcnt,
+		const uint8_t *nwkskey,
+		const uint8_t *frame_buffer, const uint8_t frame_size) {
+	return lorawan_check_mic(LORAMAC_DIR_DOWNLINK, devaddr, fcnt, nwkskey, frame_buffer, frame_size);
+}
+
+
+static void lorawan_prepare_dataframe(const uint8_t dir, const bool confirmed,
+		const uint32_t devaddr, const uint8_t fctrl, const uint32_t fcnt,
+		const uint32_t fport, const uint8_t *fpayload,
+		const uint8_t fpayload_size, const uint8_t *nwkskey,
+		const uint8_t *appskey, uint8_t *frame_buffer, uint8_t *frame_size) {
+
+	// No fOpt
+	// const uint8_t foptlen = 0;
+
+	// Reset buffer
+	memset(frame_buffer, 0, 255); // TODO add constant instead of 255
+
+	uint8_t len = 0;
+
+	// Frame Type
+	if (dir == LORAMAC_DIR_DOWNLINK) {
+		frame_buffer[len++] = (
+				confirmed ?
+						FRAME_TYPE_DATA_CONFIRMED_DOWN :
+						FRAME_TYPE_DATA_UNCONFIRMED_DOWN) << 5;
+	} else {
+		frame_buffer[len++] = (
+				confirmed ?
+						FRAME_TYPE_DATA_CONFIRMED_UP :
+						FRAME_TYPE_DATA_UNCONFIRMED_UP) << 5;
+	}
+
+	// DevAddr
+	frame_buffer[len++] = devaddr & 0xFF;
+	frame_buffer[len++] = (devaddr >> 8) & 0xFF;
+	frame_buffer[len++] = (devaddr >> 16) & 0xFF;
+	frame_buffer[len++] = (devaddr >> 24) & 0xFF;
+
+	// Frame Ctrl (ADR...)
+	frame_buffer[len++] = fctrl; /* FCTrl (FOptLen = 0) */
+
+	// FCnt (32 bit counter)
+	frame_buffer[len++] = (uint8_t) fcnt;
+	frame_buffer[len++] = (uint8_t)(fcnt >> 8) & 0xFF;
+
+	// No FOpt
+
+	// FPort
+	frame_buffer[len++] = fport;
+
+	// Encrypt fpayload with AppSKey (since fPort can not be 0)
+	lorawan_payload_encrypt(fpayload, fpayload_size,
+			fport == 0 ? nwkskey : appskey, devaddr, dir, fcnt,
+			frame_buffer + len);
+
+	len += fpayload_size;
+
+	// Add MIC computed with NwkSKey
+	uint32_t mic;
+	lorawan_cmac_calculate_mic(frame_buffer, len, nwkskey, devaddr,
+	LORAMAC_DIR_UPLINK, fcnt, &mic);
+
+	frame_buffer[len++] = mic & 0xFF;
+	frame_buffer[len++] = (mic >> 8) & 0xFF;
+	frame_buffer[len++] = (mic >> 16) & 0xFF;
+	frame_buffer[len++] = (mic >> 24) & 0xFF;
+
+	*frame_size = len;
+}
+
+void lorawan_prepare_up_dataframe(const bool confirmed, const uint32_t devaddr,
+		const uint8_t fctrl, const uint32_t fcnt, const uint32_t fport,
+		const uint8_t *fpayload, const uint8_t fpayload_size,
+		const uint8_t *nwkskey, const uint8_t *appskey, uint8_t *frame_buffer,
+		uint8_t *frame_size) {
+
+	lorawan_prepare_dataframe(
+	LORAMAC_DIR_UPLINK, confirmed, devaddr, fctrl, fcnt, fport, fpayload,
+			fpayload_size, nwkskey, appskey, frame_buffer, frame_size);
+}
+
+void lorawan_prepare_dn_dataframe(const bool confirmed, const uint32_t devaddr,
+		const uint8_t fctrl, const uint32_t fcnt, const uint32_t fport,
+		const uint8_t *fpayload, const uint8_t fpayload_size,
+		const uint8_t *nwkskey, const uint8_t *appskey, uint8_t *frame_buffer,
+		uint8_t *frame_size) {
+
+	lorawan_prepare_dataframe(
+	LORAMAC_DIR_DOWNLINK, confirmed, devaddr, fctrl, fcnt, fport, fpayload,
+			fpayload_size, nwkskey, appskey, frame_buffer, frame_size);
 }
