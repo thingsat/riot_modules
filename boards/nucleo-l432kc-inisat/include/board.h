@@ -39,15 +39,33 @@ extern "C" {
 #define LED0_PORT_NUM       PORT_B
 
 
-#define SX1280_PARAM_SPI_NSS                GPIO_PIN(PORT_B, 4)  /**< SPI NSS pin D12 */
 
 
-#define SX1280_PARAM_RESET                  GPIO_PIN(PORT_B, 5)  /**< Reset pin D11 */
+//Chip select
+#define CS_MK   GPIO_PIN(PORT_A,5)
+#define CS_RAK  GPIO_PIN(PORT_B,1)   
 
 
-#define SX1280_PARAM_DIO0                   GPIO_PIN(PORT_A, 4) /**< DIO0 A3 */
+// nucleo L432KC SPI #3 (SX1303)
+// REMARK : leave SX1302_ in define even if the component is a SX1303
+#define SX1302_PARAM_SPI             (SPI_DEV(0))
+#define SX1302_PARAM_SPI_NSS         CS_RAK
+#define SX1302_PARAM_SPI_CLK_SPEED	 SPI_CLK_5MHZ
 
-#define SX1280_PARAM_DIO1                   GPIO_UNDEF
+#define SX1302_PARAM_RESET_PIN       GPIO_PIN(PORT_B,0)
+
+
+
+// TO UPDATE
+// #define SX1280_PARAM_SPI_NSS                GPIO_PIN(PORT_B, 4)  /**< SPI NSS pin D12 */
+
+
+// #define SX1280_PARAM_RESET                  GPIO_PIN(PORT_B, 5)  /**< Reset pin D11 */
+
+
+// #define SX1280_PARAM_DIO0                   GPIO_PIN(PORT_A, 4) /**< DIO0 A3 */
+
+// #define SX1280_PARAM_DIO1                   GPIO_UNDEF
 
 
 /** @} */
