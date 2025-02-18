@@ -74,6 +74,12 @@ For Nucleo L432KC (With RAK5146)
 gmake BOARD=nucleo-l432kc SX1302_LIB_VERSION=2_1_0 -j 8 flash term
 ```
 
+For Nucleo L432KC With RAK5146 on INISAT board
+```bash
+gmake BOARD=nucleo-l432kc-inisat SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
+
 For ESP32 WROOM (With RAK5146)
 ```bash
 gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 SX1302_LIB_VERSION=2_1_0 -j 8 flash term
