@@ -1441,6 +1441,22 @@ static int lgw_listen_cmd_with_ztimer(int argc, char **argv) {
 #endif
 
 /**
+ * Repeat command
+ */
+static int lgw_repeat_cmd(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
+
+	if(!lgw_is_started()) {
+		printf("ERROR: the gateway is not started\n");
+		return EXIT_FAILURE;
+	}
+
+	printf("ERROR: the repeat command is not implemented yet !\n");
+	return EXIT_FAILURE;
+}
+
+/**
  * Idle command
  */
 static int lgw_idle_cmd(int argc, char **argv) {
@@ -1695,8 +1711,9 @@ static void _lgw_cmd_usage(char **argv) {
     printf("%s eui        : Get the concentrator EUI\n", argv[0]);
     printf("%s instcnt    : Get the instruction counter\n", argv[0]);
     printf("%s rx         : Receive radio packet(s)\n", argv[0]);
-    printf("%s listen     : Receive radio packet(s) in background Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
-    printf("%s idle       : Stop to receive radio packet(s) in background\n", argv[0]);
+    printf("%s listen     : Receive radio packet(s) in background Stop to receive radio packet(s) in background \n", argv[0]);
+    printf("%s repeat     : Filter and repeat the received radio packet(s)\n", argv[0]);
+    printf("%s idle       : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
     printf("%s tx         : Transmit one radio packet\n", argv[0]);
     printf("%s bench      : Transmit a sequence of radio packets\n", argv[0]);
     printf("%s rfparams   : Print the RF params of concentrator\n", argv[0]);
@@ -1739,6 +1756,8 @@ int lgw_cmd(int argc, char **argv) {
 		return lgw_rx_cmd(argc-1, argv+1);
 	} else if (strcmp(argv[1], "listen") == 0) {
 		return lgw_listen_cmd(argc-1, argv+1);
+	} else if (strcmp(argv[1], "repeat") == 0) {
+		return lgw_repeat_cmd(argc-1, argv+1);
 	} else if (strcmp(argv[1], "idle") == 0) {
 		return lgw_idle_cmd(argc-1, argv+1);
 	} else if (strcmp(argv[1], "tx") == 0) {
