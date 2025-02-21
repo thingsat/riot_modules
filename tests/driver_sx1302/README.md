@@ -1,4 +1,4 @@
-# Semtech SX1302 Concentrator LoRa Driver Test
+# Semtech SX1302/SX1303 Concentrator LoRa Driver Test
 
 ## About
 
@@ -28,7 +28,7 @@ In Eclipse CDT IDE, Project→Properties Then C/C++ General→Paths and Symbols
 ```bash
 export RIOTBASE=~/github/RIOT-OS/RIOT
 cd ~/github/thingsat/riot_modules
-cd tests/test_up4_sx1302
+cd tests/sx1302_driver
 ```
 
 For Nucleo F446RE (default board)
@@ -85,6 +85,11 @@ For ESP32 WROOM (With RAK5146)
 gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 SX1302_LIB_VERSION=2_1_0 -j 8 flash term
 ```
 
+For  Arduino Nano ESP32 (With RAK5146)
+```bash
+gmake BUILD_IN_DOCKER=1 BOARD=esp32-nano SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+```
+
 
 ## Console
 ```bash
@@ -114,7 +119,22 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 * [x] Nucleo L476RG (`BOARD=nucleo-l476rg`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 * [x] Nucleo-L432KC (`BOARD=nucleo-l432kc`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 * [x] [ESP32-WROOM](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
+* [ ] [Arduino Nano ESP32](https://docs.arduino.cc/hardware/nano-esp32/) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 
+
+## SX1302 / SX1303 modules
+
+[list](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/sx1302_modules)
+
+Tested (with [Thingsat @ INISAT 📡 🚀](../2U-PCB-Com_Nucleo-L432kC/Com_Nucleo-L432kc)): 
+* [x] Semtech SX1302C868GW1 Corecell Devkit
+* [x] RAK5146 Gateway Concentrator Module for LoRaWAN SPI
+* [ ] RAK2287 WisLink LPWAN Concentrator SPI
+* [ ] RAK5166 WisLink LPWAN Concentrator SPI
+* [x] Nebra NBR-0094
+* [ ] Seeedstudio Wio-WM1302 Long Range Gateway Module
+* [ ] Seeedstudio Wio-WM1303 Long Range Gateway Module
+* [ ] Heltec HT1303
 
 ## Wiring
 
@@ -209,8 +229,10 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [ ] add fixed size into TX command (for beacon)
 * [ ] add timeout into rx_cmd and listen_cmd commands
 * [ ] add public operator name of the devaddr
-* [ ] test `eu433` configuration
+* [ ] test `eu433` configuration (for Semtech Corecell)
 * [x] add command for showing RF params
+* [ ] add command for filtering on devaddr/netid and repeating raw frames (`lgw repeat devaddr_mask`)
+* [ ] test SAUL with [X-NUCLEO-IKS4A1 MEMS shield](https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html)
 
 ## RX Thread Stack
 
@@ -247,7 +269,7 @@ Once the board is flashed and you are connected via serial to the shell, use the
 main(): This is RIOT! (Version: 2023.04-devel-682-gc4400)
 =========================================
 SX1302 Driver Test Application
-Copyright (c) 2021-2022 UGA CSUG LIG
+Copyright (c) 2021-2025 UGA CSUG LIG
 =========================================
 > saul
 ID      Class           Name
@@ -600,8 +622,6 @@ lgw tx 867500 12 500 8 22 on false 40341200FC00000202090A0B0C0D0E0F1011121314151
 
 # References
 
-- RPI : https://github.com/Lora-net/sx1302_hal/blob/6291e62ef9a161ae41037a0df1a86e9943a907b9/libloragw/src/loragw_spi.c
-- pierre : https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/riot-board/-/blob/thingsat-board_suit/drivers/sx1302/sx1302_internal.c#L157
 - stratagem : https://gitlab.com/stratg/software/device/esp32/components/esp32-sx1302-hal
 
 ## Development
@@ -611,7 +631,6 @@ There are many unimplemented features, you should get an error when running into
 ## Licence
 
 Most of the code come from Semtech's [sx1302_hal](https://github.com/Lora-net/sx1302_hal), in libloragw.
-
 
 ## Misc
 

@@ -8,7 +8,7 @@ APPLICATION=test_driver_sx1302
 BOARD ?= thingsat-up4-v2
 EXTERNAL_BOARD_DIRS ?= ../../boards
 
-BOARD_WHITELIST := thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
+BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
 
 EXTERNAL_MODULE_DIRS += ../../modules
 
@@ -56,6 +56,16 @@ endif
 ifeq ($(BOARD),esp32-wroom-32)
 RAK5146_ON_NUCLEO=yes
 endif
+
+ifeq ($(BOARD),esp32-nano)
+# WARNING! The following modules conflict with 'ztimer_periph_rtt': 'rtt_rtc'
+# To disable ztimer periph_rtt auto-inclusion add 'ztimer_no_periph_rtt' to 'USEMODULE'
+USEMODULE += ztimer_no_periph_rtt
+RAK5146_ON_NUCLEO=yes
+endif
+
+
+
 
 ifeq ($(BOARD),rpi-pico)
 RAK5146_ON_PICO=yes
