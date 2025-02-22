@@ -18,9 +18,6 @@
 
 #include "lgw_cmd.h"
 
-
-
-
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 
 #include "stts751.h"
@@ -140,6 +137,7 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
 	lgw_cmd(2, (char*[]){"lgw","listen"});
+//TODO	lgw_cmd(2, (char*[]){"lgw","repeat"});
 #else
 	/* start the shell */
 	char line_buf[SHELL_DEFAULT_BUFSIZE];
