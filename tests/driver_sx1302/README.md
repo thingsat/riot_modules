@@ -79,6 +79,10 @@ For Nucleo L432KC With RAK5146 on INISAT board
 gmake BOARD=nucleo-l432kc-inisat SX1302_LIB_VERSION=2_1_0 -j 8 flash term
 ```
 
+For Nucleo L432KC With RAK5146 on INISAT board with OpenLog
+```bash
+gmake BOARD=nucleo-l432kc-inisat SX1302_LIB_VERSION=2_1_0 OPENLOG_BAUDRATE=9600 -j 8 flash term
+```
 
 For ESP32 WROOM (With RAK5146)
 ```bash
@@ -118,6 +122,7 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 * [x] Nucleo F446RE (`BOARD=nucleo-f446re`) (+ SX1302 (Corecell))
 * [x] Nucleo L476RG (`BOARD=nucleo-l476rg`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 * [x] Nucleo-L432KC (`BOARD=nucleo-l432kc`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
+* [x] Nucleo-L432KC (`BOARD=nucleo-l432kc-inisat`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142))) on [Thingsat @ INISAT]()
 * [x] [ESP32-WROOM](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 * [ ] [Arduino Nano ESP32](https://docs.arduino.cc/hardware/nano-esp32/) (`BOARD=esp32-wroom-32`) (+ SX1303 ([RAK5146 (SPI + GPS)](https://store.rakwireless.com/products/wislink-concentrator-module-sx1303-rak5146-lorawan?variant=39667785171142)))
 

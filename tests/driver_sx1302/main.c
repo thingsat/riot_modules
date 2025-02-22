@@ -122,11 +122,10 @@ int main(void) {
 
 	puts("=========================================");
 	puts("SX1302/SX1303 Driver Test Application");
-	puts("Copyright (c) 2021-2024 UGA CSUG LIG");
+	puts("Copyright (c) 2021-2025 UGA CSUG LIG");
 	puts("=========================================");
 
 	puts("\nBOARD: " RIOT_BOARD "\n");
-
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();

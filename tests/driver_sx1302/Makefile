@@ -64,9 +64,6 @@ USEMODULE += ztimer_no_periph_rtt
 RAK5146_ON_NUCLEO=yes
 endif
 
-
-
-
 ifeq ($(BOARD),rpi-pico)
 RAK5146_ON_PICO=yes
 endif
@@ -152,12 +149,15 @@ USEMODULE += lps22hh
 
 endif 
 
+# OpenLog https://github.com/CampusIoT/tutorial/blob/master/openlogger/README.md
+OPENLOG_BAUDRATE ?= 115200
+CFLAGS += -DSTDIO_UART_BAUDRATE=$(OPENLOG_BAUDRATE)
+
 
 #USEMODULE += periph_rtc
 
 ENDPOINT_DEVADDR ?= 0xfc001234
 CFLAGS += -DENDPOINT_DEVADDR=$(ENDPOINT_DEVADDR)
-
 
 
 CFLAGS_DBG = 
