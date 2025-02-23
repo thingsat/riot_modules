@@ -94,9 +94,9 @@ For  Arduino Nano ESP32 (With RAK5146)
 gmake BUILD_IN_DOCKER=1 BOARD=esp32-nano -j 8 flash term
 ```
 
-### Setup for balloon flight 
+### Setup for [high altitude balloon flights](https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/public/-/blob/master/balloons/README.md) 📡📡📡📡📡🎈🎈🎈🎈🎈🎈
 
-Nucleo L432KC With RAK5146 on INISAT board with OpenLog
+Nucleo L432KC With RAK5146 on INISAT board with [OpenLog](https://github.com/CampusIoT/tutorial/tree/master/openlogger)
 
 ```bash
 export BOARD=nucleo-l432kc-inisat
