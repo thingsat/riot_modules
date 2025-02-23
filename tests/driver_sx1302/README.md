@@ -33,67 +33,75 @@ cd tests/sx1302_driver
 
 For Nucleo F446RE (default board)
 ```bash
-gmake -j 8 flash
+gmake SX1302_LIB_VERSION=1_0_4 -j 8 flash
 ```
 
 For Nucleo F429ZI
 ```bash
-gmake BOARD=nucleo-f429zi -j 8 flash
+gmake BOARD=nucleo-f429zi SX1302_LIB_VERSION=1_0_4 -j 8 flash
 ```
 
 For Nucleo F429ZI + [X-NUCLEO-IKS01A3 MEMS shield](https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf)
 ```bash
-gmake BOARD=nucleo-f429zi IKS01A3=yes -j 8 flash
+gmake BOARD=nucleo-f429zi SX1302_LIB_VERSION=1_0_4 IKS01A3=yes -j 8 flash
 ```
 
-### for V2.1.0
+### for V2.1.0 (Default version)
 
 ```bash
 export RIOTBASE=~/github/RIOT-OS/RIOT
 cd ~/github/thingsat/riot_modules
-cd tests/test_up4_sx1302
+cd tests/driver_sx1302
 ```
 
 For Thingsat UP4 (default board)
 ```bash
-gmake BOARD=thingsat-up4 SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+export BOARD=thingsat-up4
 ```
 
-For Nucleo F446RE (with Corecell)
+For Nucleo F446RE with Corecell
 ```bash
-gmake BOARD=nucleo-f446re SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+export BOARD=nucleo-f446re
 ```
 
-For Nucleo L476RG (With RAK5146)
+For Nucleo L476RG With RAK5146
 ```bash
-gmake BOARD=nucleo-l476rg SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+export BOARD=nucleo-l476rg
 ```
 
-For Nucleo L432KC (With RAK5146)
+For Nucleo L432KC With RAK5146
 ```bash
-gmake BOARD=nucleo-l432kc SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+export BOARD=nucleo-l432kc
 ```
 
 For Nucleo L432KC With RAK5146 on INISAT board
 ```bash
-gmake BOARD=nucleo-l432kc-inisat SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+export BOARD=nucleo-l432kc-inisat
 ```
 
-For Nucleo L432KC With RAK5146 on INISAT board with OpenLog
 ```bash
-gmake BOARD=nucleo-l432kc-inisat SX1302_LIB_VERSION=2_1_0 OPENLOG_BAUDRATE=9600 -j 8 flash term
+gmake BOARD=$BOARD -j 8 flash term
 ```
+
 
 For ESP32 WROOM (With RAK5146)
 ```bash
-gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 -j 8 flash term
 ```
 
 For  Arduino Nano ESP32 (With RAK5146)
 ```bash
-gmake BUILD_IN_DOCKER=1 BOARD=esp32-nano SX1302_LIB_VERSION=2_1_0 -j 8 flash term
+gmake BUILD_IN_DOCKER=1 BOARD=esp32-nano -j 8 flash term
 ```
 
+### Setup for balloon flight 
+
+Nucleo L432KC With RAK5146 on INISAT board with OpenLog
+
+```bash
+export BOARD=nucleo-l432kc-inisat
+gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 NO_SHELL=1 -j 8 flash term
+```
 
 ## Console
 ```bash
