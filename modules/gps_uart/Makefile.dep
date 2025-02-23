@@ -1,0 +1,34 @@
+
+# -----------------------------
+# GPS/GNSS Module
+# -----------------------------
+
+# https://github.com/kosma/minmea
+USEPKG += minmea
+USEMODULE += fmt
+USEMODULE += rtc_utilities
+
+GPS_UART_ENABLE_TRACE ?= 0
+CFLAGS += -DGPS_UART_ENABLE_TRACE=$(GPS_UART_ENABLE_TRACE)
+
+GPS_UART_DEV ?= 1
+GPS_UART_BAUDRATE ?= 9600
+
+CFLAGS += -DGPS_UART_DEV=$(GPS_UART_DEV)
+CFLAGS += -DGPS_UART_BAUDRATE=$(GPS_UART_BAUDRATE)
+
+ifdef GPS_POWER_PIN
+CFLAGS += -DGPS_POWER_PIN=$(GPS_POWER_PIN)
+endif
+
+ifdef GPS_STANDBY_PIN
+CFLAGS += -DGPS_STANDBY_PIN=$(GPS_STANDBY_PIN)
+endif
+
+ifdef GPS_RESET_PIN
+CFLAGS += -DGPS_RESET_PIN=$(GPS_RESET_PIN)
+endif
+
+ifdef GPS_PPS_INT_PIN
+CFLAGS += -DGPS_PPS_INT_PIN=$(GPS_PPS_INT_PIN)
+endif
