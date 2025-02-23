@@ -18,11 +18,15 @@
 
 #include "lgw_cmd.h"
 
+
+#if GPS_UART_ENABLE == 1
+#include "gps_uart.h"
+#endif
+
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 
 #include "stts751.h"
 #include "stts751_params.h"
-
 
 #include "board.h"
 
@@ -111,6 +115,9 @@ static const shell_command_t shell_commands[] = {
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
     { "temp", "Get the temperatures (Celsius)", sensors_get_all_temp },
 #endif
+#if ENABLE_GPS == 1
+    { "gps", "GPS commands", gps_cmd },
+#endif
 	{ NULL, NULL, NULL }
 };
 #endif
@@ -136,8 +143,8 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","start"});
 	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
+	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
 	lgw_cmd(2, (char*[]){"lgw","listen"});
-//TODO	lgw_cmd(2, (char*[]){"lgw","repeat"});
 #else
 	/* start the shell */
 	char line_buf[SHELL_DEFAULT_BUFSIZE];
