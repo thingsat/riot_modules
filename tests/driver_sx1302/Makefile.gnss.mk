@@ -1,0 +1,134 @@
+# -----------------------------
+# GPS/GNSS Module
+# -----------------------------
+USEMODULE += gps_uart
+
+GPS_ENABLE ?= 0
+GPS_UART_ENABLE_TRACE ?= 0
+
+ifeq ($(BOARD),thingsat-up4)
+# Set UART board for GNSS
+GPS_UART_DEV = 1
+CFLAGS += -DGPS_UART_DEV=$(GPS_UART_DEV)
+GPS_UART_BAUDRATE ?= 9600
+CFLAGS += -DGPS_UART_BAUDRATE=$(GPS_UART_BAUDRATE)
+endif
+
+ifeq ($(BOARD),thingsat-up1-f4)
+# Set UART board for GNSS
+GPS_UART_DEV = 1
+CFLAGS += -DGPS_UART_DEV=$(GPS_UART_DEV)
+GPS_UART_BAUDRATE ?= 9600
+CFLAGS += -DGPS_UART_BAUDRATE=$(GPS_UART_BAUDRATE)
+endif
+
+ifeq ($(RAK5146_ON_NUCLEO),yes)
+CFLAGS += -DRAK5146_ON_NUCLEO=1
+# No temperature Sensor on RAK5146
+# No PPS pin
+
+# Builtin GNSS on RAK5146
+#GPS_MODEL = "uBlox ZOE-M8Q-GPS"
+GPS_BAUDRATE = 9600
+GPS_UART_DEV = 1
+GPS_RESET_PIN = ARDUINO_PIN_6
+
+GPS_UART_ENABLE_TRACE = 0
+endif
+
+
+ifeq ($(BOARD),p-nucleo-wb55)
+# https://os.mbed.com/platforms/ST-Nucleo-WB55RG/
+CFLAGS += -DRAK5146_ON_NUCLEO=1
+# No temperature Sensor on RAK5146
+# No PPS pin
+
+# Builtin GNSS on RAK5146
+#GPS_MODEL = "uBlox ZOE-M8Q-GPS"
+GPS_BAUDRATE = 9600
+GPS_UART_DEV = 1
+#        .rx_pin     = GPIO_PIN(PORT_A, 3), ARDUINO_D0
+#        .tx_pin     = GPIO_PIN(PORT_A, 2), ARDUINO_D1
+GPS_RESET_PIN = GPIO_PIN\(PORT_A,8\)
+GPS_STANDBY_PIN = GPIO_PIN\(PORT_A,15\)
+GPS_UART_ENABLE_TRACE = 0
+endif
+
+ifeq ($(BOARD),nucleo-f446re)
+# https://os.mbed.com/platforms/ST-Nucleo-F446RE/
+CFLAGS += -DRAK5146_ON_NUCLEO=1
+# No temperature Sensor on RAK5146
+# No PPS pin
+
+# Builtin GNSS on RAK5146
+#GPS_MODEL = "uBlox ZOE-M8Q-GPS"
+GPS_BAUDRATE = 9600
+GPS_UART_DEV = 1
+#        .rx_pin     = GPIO_PIN(PORT_A, 10), ARDUINO_D3
+#        .tx_pin     = GPIO_PIN(PORT_A, 9), ARDUINO_D9
+GPS_RESET_PIN = GPIO_PIN\(PORT_B,10\)
+GPS_STANDBY_PIN = GPIO_PIN\(PORT_B,4\)
+GPS_UART_ENABLE_TRACE = 0
+endif
+
+
+ifeq ($(BOARD),nucleo-f401re)
+# https://os.mbed.com/platforms/ST-Nucleo-F446RE/
+CFLAGS += -DRAK5146_ON_NUCLEO=1
+# No temperature Sensor on RAK5146
+# No PPS pin
+
+# Builtin GNSS on RAK5146
+#GPS_MODEL = "uBlox ZOE-M8Q-GPS"
+GPS_BAUDRATE = 9600
+GPS_UART_DEV = 1
+#        .rx_pin     = GPIO_PIN(PORT_A, 10), ARDUINO_D3
+#        .tx_pin     = GPIO_PIN(PORT_A, 9), ARDUINO_D9
+GPS_RESET_PIN = GPIO_PIN\(PORT_B,10\)
+GPS_STANDBY_PIN = GPIO_PIN\(PORT_B,4\)
+GPS_UART_ENABLE_TRACE = 0
+endif
+
+
+ifeq ($(RAK5146_ON_NUCLEO32),yes)
+CFLAGS += -DRAK5146_ON_NUCLEO32=1
+# No temperature Sensor on RAK5146
+# No PPS pin
+
+# Builtin GNSS on RAK5146
+#GPS_MODEL = "uBlox ZOE-M8Q-GPS"
+GPS_BAUDRATE = 9600
+GPS_UART_DEV = 1
+GPS_RESET_PIN = ARDUINO_PIN_6
+GPS_UART_ENABLE_TRACE = 0
+endif
+
+ifdef GPS_ENABLE
+CFLAGS += -DGPS_ENABLE=$(GPS_ENABLE)
+endif
+
+ifdef GPS_MODEL
+CFLAGS += -DGPS_MODEL=$(GPS_MODEL)
+endif
+
+ifdef GPS_BAUDRATE
+CFLAGS += -DGPS_BAUDRATE=$(GPS_BAUDRATE)
+endif
+
+ifdef GPS_UART_DEV
+USEMODULE += gps_uart
+CFLAGS += -DGPS_UART_ENABLE_TRACE=$(GPS_UART_ENABLE_TRACE)
+CFLAGS += -DGPS_UART_DEV=$(GPS_UART_DEV)
+endif
+
+ifdef GPS_RESET_PIN
+CFLAGS += -DGPS_RESET_PIN=$(GPS_RESET_PIN)
+endif
+
+ifdef GPS_STANDBY_PIN
+CFLAGS += -DGPS_STANDBY_PIN=$(GPS_STANDBY_PIN)
+endif
+
+ifdef GPS_PPS_INT_PIN
+CFLAGS += -DGPS_PPS_INT_PIN=$(GPS_PPS_INT_PIN)
+endif

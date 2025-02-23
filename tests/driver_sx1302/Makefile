@@ -82,43 +82,20 @@ endif
 ifeq ($(RAK5146_ON_NUCLEO),yes)
 CFLAGS += -DRAK5146_ON_NUCLEO=1
 # No temperature Sensor on RAK5146
-
-# Builtin GNSS on RAK5146
-GPS_MODEL = "uBlox ZOE-M8Q-GPS"
-GPS_BAUDRATE = 115000
-GPS_UART_DEV = 2
 endif
-
 
 ifeq ($(RAK5146_ON_NUCLEO32),yes)
 CFLAGS += -DRAK5146_ON_NUCLEO32=1
 # No temperature Sensor on RAK5146
-
-# Builtin GNSS on RAK5146
-GPS_MODEL = "uBlox ZOE-M8Q-GPS"
-GPS_BAUDRATE = 115000
-GPS_UART_DEV = 2
 endif
 
 ifeq ($(RAK5146_ON_PICO),yes)
 CFLAGS += -DRAK5146_ON_PICO=1
-# No temperature Sensor on RAK5146
-
-# Builtin GNSS on RAK5146
-GPS_MODEL = "uBlox ZOE-M8Q-GPS"
-GPS_BAUDRATE = 115000
-GPS_UART_DEV = 1
 endif
 
 
 ifeq ($(RAK5146_ON_INISAT),yes)
 CFLAGS += -DRAK5146_ON_INISAT=1
-# No temperature Sensor on RAK5146
-
-# Builtin GNSS on RAK5146
-GPS_MODEL = "uBlox ZOE-M8Q-GPS"
-GPS_BAUDRATE = 115000
-GPS_UART_DEV = 1
 endif
 
 
@@ -204,6 +181,7 @@ USEMODULE += printf_float
 # SX1302 Lib 
 # -----------------------------
 
+# Default is 2.1.0
 SX1302_LIB_VERSION ?= 2_1_0
 #SX1302_LIB_VERSION ?= 1_0_4
 
@@ -240,6 +218,12 @@ CFLAGS += -DLGW_LISTEN_STACKSIZE=16384U
 endif
 
 # -----------------------------
+# For Repeat callback
+# -----------------------------
+
+CFLAGS += -DINVOKE_CALLBACKS=1
+
+# -----------------------------
 # Sx1302 Module footprint (TODO)
 # -----------------------------
 
@@ -252,6 +236,12 @@ CFLAGS += -DLGW_SX1302_LUT_DIG_GAIN=$(LGW_SX1302_LUT_DIG_GAIN)
 # For SX1257 only
 CFLAGS += -DLGW_SX1257_LUT_DAC_GAIN=3
 CFLAGS += -DLGW_SX1257_LUT_MIX_GAIN=10
+
+
+
+ifeq ($(ENABLE_GPS),1)
+include Makefile.gnss.mk
+endif
 
 # -----------------------------
 # Flags 
