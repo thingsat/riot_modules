@@ -45,11 +45,9 @@
 #ifndef PERIODIC_CALLBACK_IN_SEC
 #define PERIODIC_CALLBACK_IN_SEC		(60U)
 #endif
-extern void (*pkt_rx_cb)(const struct lgw_pkt_rx_s*, struct lgw_pkt_tx_s*);
-extern void (*pkt_period_cb)(struct lgw_pkt_tx_s*);
+void (*pkt_rx_cb)(const struct lgw_pkt_rx_s*, struct lgw_pkt_tx_s*) = NULL;
+void (*pkt_period_cb)(struct lgw_pkt_tx_s*) = NULL;
 #endif
-
-
 
 
 // Frequency plan : computed from concentrator channel
@@ -1281,7 +1279,8 @@ static int lgw_rx_cmd(int argc, char **argv) {
 
 
 #if INVOKE_CALLBACKS == 1
-				if(!same_as_previous && !is_last_tx_packet) {
+				if(pkt_rx_cb != NULL
+						&& !same_as_previous && !is_last_tx_packet) {
 					(*pkt_rx_cb)(rxpkt + i, &lgw_pkt_tx_to_send);
 					if(lgw_pkt_tx_to_send.size > 0) {
 						int res = _lgw_tx_pkt_tx(&lgw_pkt_tx_to_send);
@@ -1299,18 +1298,20 @@ static int lgw_rx_cmd(int argc, char **argv) {
 		}
 
 #if INVOKE_CALLBACKS == 1
-		// call periodically the period callback
-		ztimer_now_t now = ztimer_now(ZTIMER_SEC);
-		if(now > last_periodic_call + PERIODIC_CALLBACK_IN_SEC){
-			last_periodic_call = now;
+		if(pkt_period_cb != NULL) {
+			// call periodically the period callback
+			ztimer_now_t now = ztimer_now(ZTIMER_SEC);
+			if(now > last_periodic_call + PERIODIC_CALLBACK_IN_SEC){
+				last_periodic_call = now;
 
-			(*pkt_period_cb)(&lgw_pkt_tx_to_send);
+				(*pkt_period_cb)(&lgw_pkt_tx_to_send);
 
-			if(lgw_pkt_tx_to_send.size > 0) {
-				int res = _lgw_tx_pkt_tx(&lgw_pkt_tx_to_send);
-				if(res == EXIT_FAILURE) {
-					printf("ERROR: failed to send packet\n");
-					_lgw_stat.tx_abort++;
+				if(lgw_pkt_tx_to_send.size > 0) {
+					int res = _lgw_tx_pkt_tx(&lgw_pkt_tx_to_send);
+					if(res == EXIT_FAILURE) {
+						printf("ERROR: failed to send packet\n");
+						_lgw_stat.tx_abort++;
+					}
 				}
 			}
 		}
@@ -1440,6 +1441,62 @@ static int lgw_listen_cmd_with_ztimer(int argc, char **argv) {
 }
 #endif
 
+
+/**
+ * Devaddr to repeat
+ */
+//static uint32_t _devaddr_mask;
+
+/**
+ * Repeat callback
+ */
+static void _lgw_repeat_cb(const struct lgw_pkt_rx_s* pkt_rx,
+	struct lgw_pkt_tx_s* pkt_tx){
+
+		// for skipping received frame
+		pkt_tx->size = 0;
+
+		if(pkt_rx->status == STAT_CRC_BAD) {
+			// skip received frame
+			return;
+		}
+
+		if(pkt_rx->size == 0) {
+			// skip received frame
+			return;
+		}
+
+		if(pkt_rx->modulation != MOD_LORA) {
+			// skip received frame
+			return;
+		}
+
+		// TODO filter on devaddr
+
+		// TODO filter on SNR
+
+		printf("INFO: Repeat the received frame !\n");
+
+		pkt_tx->tx_mode = IMMEDIATE;
+		pkt_tx->rf_chain = 0; //only rf_chain 0 is able to tx
+		pkt_tx->rf_power = 14; //use the single entry of the txlut TODO Should be check
+	
+		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
+		pkt_tx->preamble = 8;	//  8 for LoRaWAN
+		pkt_tx->coderate = CR_LORA_4_5; // 4/5 for LoRaWAN
+
+		pkt_tx->freq_hz = pkt_rx->freq_hz;
+		pkt_tx->datarate = pkt_rx->datarate;
+		pkt_tx->bandwidth = pkt_rx->bandwidth;
+
+		pkt_tx->no_header = false; 		// Beacons have not header
+		pkt_tx->no_crc = false; 		// LoRaWAN : on for uplink and off for downlink
+		pkt_tx->invert_pol = false;
+
+		memcpy(pkt_tx->payload, pkt_rx->payload, pkt_rx->size);
+		pkt_tx->size = pkt_rx->size;
+}
+
 /**
  * Repeat command
  */
@@ -1447,13 +1504,23 @@ static int lgw_repeat_cmd(int argc, char **argv) {
     (void)argc;
     (void)argv;
 
-	if(!lgw_is_started()) {
-		printf("ERROR: the gateway is not started\n");
+	if (argc != 3) {
+		puts("usage: lgw repeat on");
+		puts("usage: lgw repeat on <devaddr_mask>");
+		puts("usage: lgw repeat off");
 		return EXIT_FAILURE;
 	}
 
-	printf("ERROR: the repeat command is not implemented yet !\n");
-	return EXIT_FAILURE;
+	if(strcmp(argv[2],"on") == 0) {
+		pkt_rx_cb = _lgw_repeat_cb;
+	} else if(strcmp(argv[2],"off") == 0) {
+		pkt_rx_cb = NULL;
+	} else {
+		puts("ERROR: unknown parameter");
+		return EXIT_FAILURE;
+	};
+
+	return EXIT_SUCCESS;
 }
 
 /**
@@ -1712,7 +1779,7 @@ static void _lgw_cmd_usage(char **argv) {
     printf("%s instcnt    : Get the instruction counter\n", argv[0]);
     printf("%s rx         : Receive radio packet(s)\n", argv[0]);
     printf("%s listen     : Receive radio packet(s) in background Stop to receive radio packet(s) in background \n", argv[0]);
-    printf("%s repeat     : Filter and repeat the received radio packet(s)\n", argv[0]);
+    printf("%s repeat     : Enable or disable the packet repeating\n", argv[0]);
     printf("%s idle       : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
     printf("%s tx         : Transmit one radio packet\n", argv[0]);
     printf("%s bench      : Transmit a sequence of radio packets\n", argv[0]);
