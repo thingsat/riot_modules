@@ -1445,7 +1445,24 @@ static int lgw_listen_cmd_with_ztimer(int argc, char **argv) {
 /**
  * Devaddr to repeat
  */
-//static uint32_t _devaddr_mask;
+#define DEVADDR_MASK_UNASSIGNED							(0xFFFFFFFF)
+#define DEVADDR_MASK_ALL								(0x00000000)
+#define DEVADDR_MASK_NETID1								(0xFE000000)
+#define DEVADDR_MASK_NETID3								(0xFFFE0000)
+#define DEVADDR_MASK_NETID6								(0xFFFFFC00)
+
+static uint32_t _devaddr_subnet = DEVADDR_MASK_ALL;
+static uint32_t _devaddr_mask = DEVADDR_MASK_ALL;
+ 
+
+#define IS_BELONGING_TO_NETWORK(devaddr,devaddr_subnet,devaddr_mask) ( devaddr_subnet == ( devaddr & devaddr_mask ))
+
+
+/**
+ * SNR threshold to repeat
+ */
+static int _snr_threshold = 20;
+
 
 /**
  * Repeat callback
@@ -1453,29 +1470,60 @@ static int lgw_listen_cmd_with_ztimer(int argc, char **argv) {
 static void _lgw_repeat_cb(const struct lgw_pkt_rx_s* pkt_rx,
 	struct lgw_pkt_tx_s* pkt_tx){
 
+
+		uint32_t inst_cnt_us;
+		lgw_get_instcnt(&inst_cnt_us);
+	
+		uint32_t trig_cnt_us;
+		lgw_get_trigcnt(&trig_cnt_us);
+	
+		printf("INFO: inst_cnt_us=%ld, trig_cnt_us=%ld\n",
+				inst_cnt_us, trig_cnt_us);
+	
+
 		// for skipping received frame
 		pkt_tx->size = 0;
 
 		if(pkt_rx->status == STAT_CRC_BAD) {
 			// skip received frame
+			printf("INFO: status is CRC_BAD : skip received frame\n");
 			return;
 		}
 
 		if(pkt_rx->size == 0) {
 			// skip received frame
+			printf("INFO: Paylaod is empty : skip received frame\n");
 			return;
 		}
 
 		if(pkt_rx->modulation != MOD_LORA) {
 			// skip received frame
+			printf("INFO: modulation is not LoRa : skip received frame\n");
 			return;
 		}
 
-		// TODO filter on devaddr
+		// filter on devaddr
+		if (lorawan_check_valid_frame_size(pkt_rx->payload, pkt_rx->size)
+			&& lorawan_is_dataframe(pkt_rx->payload, pkt_rx->size)) {
+			const uint32_t devaddr = lorawan_get_devaddr(pkt_rx->payload, pkt_rx->size);
 
-		// TODO filter on SNR
+			if(!IS_BELONGING_TO_NETWORK(devaddr,_devaddr_subnet,_devaddr_mask)) {
+				printf("INFO: devaddr %8lx is not belonging to filter : skip received frame\n", devaddr);
+				return;
+			}
+		} else {
+			printf("INFO: frame is not valid data frames : skip received frame\n");
+			return;
+		}
 
-		printf("INFO: Repeat the received frame !\n");
+		// filter on SNR
+		if(pkt_rx->modulation == MOD_LORA && pkt_rx->snr > _snr_threshold) {
+			printf("INFO: SNR (%.1f)  is higher than snr_threshold (%d) : skip received frame\n",
+				pkt_rx->snr, _snr_threshold);
+			return;
+		}
+
+		printf("INFO: Repeat the received frame\n");
 
 		pkt_tx->tx_mode = IMMEDIATE;
 		pkt_tx->rf_chain = 0; //only rf_chain 0 is able to tx
@@ -1497,23 +1545,83 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s* pkt_rx,
 		pkt_tx->size = pkt_rx->size;
 }
 
+
+
+inline static uint32_t h2d(const char c){
+	return (c & 0xF) + 9 * (c >> 6);
+}
+
+static uint32_t hex2dec(const char* s){
+	uint32_t v = 0;
+	const unsigned int l = strlen(s);
+	for(unsigned int i=0; i < l; i++){
+		v = v << 4;
+		v += h2d(s[i]);
+	}
+	return v;
+}
+
+/**
+ * Filter command
+ */
+static int lgw_filter_cmd(int argc, char **argv) {
+	// argv does not contain command name
+	if (argc == 1) {
+		// show current filter
+		printf("Filter devaddr in subnet: %8lx mask: %8lx\n",_devaddr_subnet, _devaddr_mask);
+
+	} else if(argc == 3) {
+		// set current filter
+
+		_devaddr_subnet = hex2dec(argv[1]);
+		_devaddr_mask = hex2dec(argv[2]);
+
+	} else {
+		puts("usage: lgw filter");
+		puts("usage: lgw filter <subnet> <mask>");
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
+}
+
+/**
+ * SNR threshold command
+ */
+static int lgw_snr_threshold_cmd(int argc, char **argv) {
+	if (argc == 1) {
+		// show current threshold
+		printf("SNR threshold : %d\n",_snr_threshold);
+
+	} else if(argc == 2) {
+		// set current threshold
+		_snr_threshold = atoi(argv[1]);
+
+	} else {
+		puts("usage: lgw snr_threshold");
+		puts("usage: lgw snr_threshold <threshold>");
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
+}
+	
+
 /**
  * Repeat command
  */
 static int lgw_repeat_cmd(int argc, char **argv) {
-    (void)argc;
-    (void)argv;
 
-	if (argc != 3) {
+	// argv does not contain command name
+	if (argc != 2) {
 		puts("usage: lgw repeat on");
-		puts("usage: lgw repeat on <devaddr_mask>");
 		puts("usage: lgw repeat off");
 		return EXIT_FAILURE;
 	}
 
-	if(strcmp(argv[2],"on") == 0) {
+	if(strcmp(argv[1],"on") == 0) {
 		pkt_rx_cb = _lgw_repeat_cb;
-	} else if(strcmp(argv[2],"off") == 0) {
+	} else if(strcmp(argv[1],"off") == 0) {
 		pkt_rx_cb = NULL;
 	} else {
 		puts("ERROR: unknown parameter");
@@ -1769,25 +1877,28 @@ static int lgw_reg_cmd(int argc, char **argv) {
 
 static void _lgw_cmd_usage(char **argv) {
 	(void)argv;
-    printf("%s reset      : Reset the SX1302/SX1303\n", argv[0]);
-    printf("%s status     : Get the SX1302/SX1303 status\n", argv[0]);
-    printf("%s freq_plan  : Get the frequencies plan\n", argv[0]);
-    printf("%s start      : Start the gateway\n", argv[0]);
-    printf("%s stop       : Stop the gateway\n", argv[0]);
-    printf("%s stat       : Get stats of the gateway\n", argv[0]);
-    printf("%s eui        : Get the concentrator EUI\n", argv[0]);
-    printf("%s instcnt    : Get the instruction counter\n", argv[0]);
-    printf("%s rx         : Receive radio packet(s)\n", argv[0]);
-    printf("%s listen     : Receive radio packet(s) in background Stop to receive radio packet(s) in background \n", argv[0]);
-    printf("%s repeat     : Enable or disable the packet repeating\n", argv[0]);
-    printf("%s idle       : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
-    printf("%s tx         : Transmit one radio packet\n", argv[0]);
-    printf("%s bench      : Transmit a sequence of radio packets\n", argv[0]);
-    printf("%s rfparams   : Print the RF params of concentrator\n", argv[0]);
-    printf("%s chantest   : Transmit a sequence of radio packets at various tx power\n", argv[0]);
-    printf("%s temp       : Get on-board temperature\n", argv[0]);
+    printf("%s reset         : Reset the SX1302/SX1303\n", argv[0]);
+    printf("%s status        : Get the SX1302/SX1303 status\n", argv[0]);
+    printf("%s freq_plan     : Get the frequencies plan\n", argv[0]);
+    printf("%s start         : Start the gateway\n", argv[0]);
+    printf("%s stop          : Stop the gateway\n", argv[0]);
+    printf("%s stat          : Get stats of the gateway\n", argv[0]);
+    printf("%s eui           : Get the concentrator EUI\n", argv[0]);
+    printf("%s instcnt       : Get the instruction counter\n", argv[0]);
+    printf("%s rx            : Receive radio packet(s)\n", argv[0]);
+    printf("%s listen        : Receive radio packet(s) in background Stop to receive radio packet(s) in background \n", argv[0]);
+    printf("%s repeat        : Enable or disable the packet repeating\n", argv[0]);
+    printf("%s snr_threshold : Enable or disable the packet repeating\n", argv[0]);
+    printf("%s filter        : Set the filter parameters for the packet repeating\n", argv[0]);
+    printf("%s aprs          : Enable or disable the period APRS frame transmit\n", argv[0]);
+    printf("%s idle          : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
+    printf("%s tx            : Transmit one radio packet\n", argv[0]);
+    printf("%s bench         : Transmit a sequence of radio packets\n", argv[0]);
+    printf("%s rfparams      : Print the RF params of concentrator\n", argv[0]);
+    printf("%s chantest      : Transmit a sequence of radio packets at various tx power\n", argv[0]);
+    printf("%s temp          : Get on-board temperature\n", argv[0]);
 #if ENABLE_LBT == 1
-    printf("%s lbt        : Start LBT\n", argv[0]);
+    printf("%s lbt           : Start LBT\n", argv[0]);
 #endif
 //    printf("%s spectral_scan : Start spectral scan\n", argv[0]);
 //    printf("%s beacon   : Transmit a beacon packet\n", argv[0]);
@@ -1825,6 +1936,10 @@ int lgw_cmd(int argc, char **argv) {
 		return lgw_listen_cmd(argc-1, argv+1);
 	} else if (strcmp(argv[1], "repeat") == 0) {
 		return lgw_repeat_cmd(argc-1, argv+1);
+	} else if (strcmp(argv[1], "filter") == 0) {
+		return lgw_filter_cmd(argc-1, argv+1);
+	} else if (strcmp(argv[1], "snr_threshold") == 0) {
+		return lgw_snr_threshold_cmd(argc-1, argv+1);
 	} else if (strcmp(argv[1], "idle") == 0) {
 		return lgw_idle_cmd(argc-1, argv+1);
 	} else if (strcmp(argv[1], "tx") == 0) {
