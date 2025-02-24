@@ -3,7 +3,7 @@
 # -----------------------------
 USEMODULE += gps_uart
 
-GPS_ENABLE ?= 0
+GPS_UART_ENABLE ?= 0
 GPS_UART_ENABLE_TRACE ?= 0
 
 ifeq ($(BOARD),thingsat-up4)
@@ -103,8 +103,8 @@ GPS_RESET_PIN = ARDUINO_PIN_6
 GPS_UART_ENABLE_TRACE = 0
 endif
 
-ifdef GPS_ENABLE
-CFLAGS += -DGPS_ENABLE=$(GPS_ENABLE)
+ifdef GPS_UART_ENABLE
+CFLAGS += -DGPS_UART_ENABLE=$(GPS_UART_ENABLE)
 endif
 
 ifdef GPS_MODEL
