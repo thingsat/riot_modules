@@ -1888,8 +1888,8 @@ static void _lgw_cmd_usage(char **argv) {
     printf("%s rx            : Receive radio packet(s)\n", argv[0]);
     printf("%s listen        : Receive radio packet(s) in background Stop to receive radio packet(s) in background \n", argv[0]);
     printf("%s repeat        : Enable or disable the packet repeating\n", argv[0]);
-    printf("%s snr_threshold : Enable or disable the packet repeating\n", argv[0]);
-    printf("%s filter        : Set the filter parameters for the packet repeating\n", argv[0]);
+    printf("%s snr_threshold : Set the SNR threshold for filtering the packet repeating\n", argv[0]);
+    printf("%s filter        : Set the devaddr subnet for filtering the packet repeating\n", argv[0]);
     printf("%s aprs          : Enable or disable the period APRS frame transmit\n", argv[0]);
     printf("%s idle          : Stop to receive radio packet(s) in background (remark: the sx1302 continue to buffer received messages)\n", argv[0]);
     printf("%s tx            : Transmit one radio packet\n", argv[0]);
