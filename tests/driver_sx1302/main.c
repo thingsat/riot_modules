@@ -144,6 +144,11 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
 	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
+	// Filter CampusIoT only
+	lgw_cmd(4, (char*[]){"lgw","filter","fc00ac00","fffffc00"});
+	lgw_cmd(2, (char*[]){"lgw","filter"});
+	lgw_cmd(3, (char*[]){"lgw","snr_threshold", "15"});
+	lgw_cmd(2, (char*[]){"lgw","snr_threshold"});
 	lgw_cmd(2, (char*[]){"lgw","listen"});
 #else
 	/* start the shell */
