@@ -17,8 +17,11 @@
 #include <stdlib.h>
 
 #include "lgw_config.h"
+#if MESHTASTIC == 1
+#include "lgw_config_868_meshtastic.h"
+#else
 #include "lgw_config_868.h"
-
+#endif
 /**
  * Default configuration for LoRaWAN EU868 with SX1250
  */

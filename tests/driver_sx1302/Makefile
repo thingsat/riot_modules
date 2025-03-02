@@ -12,6 +12,10 @@ BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-p
 
 EXTERNAL_MODULE_DIRS += ../../modules
 
+MESHTASTIC ?= 0
+CFLAGS += -DMESHTASTIC=$(MESHTASTIC)
+
+
 ifeq ($(BOARD),thingsat-up4-v2)
 EXTERNAL_MODULE_DIRS += ../../modules
 USEMODULE += stts751

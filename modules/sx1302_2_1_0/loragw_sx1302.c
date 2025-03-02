@@ -1167,6 +1167,16 @@ int sx1302_lora_syncword(bool public, uint8_t lora_service_sf) {
 	DEBUG_PRINTF("%s: enter\n", __func__);
     int err = LGW_REG_SUCCESS;
 
+#if MESHTASTIC == 1
+    printf("INFO: configuring LoRa (Multi-SF) SF5->SF6 with syncword MESHTASTIC (0x2B)\n");
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF5_PEAK1_POS_SF5, 4);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF5_PEAK2_POS_SF5, 22);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF6_PEAK1_POS_SF6, 4);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF6_PEAK2_POS_SF6, 22);
+	printf("INFO: configuring LoRa (Multi-SF) SF7->SF12 with syncword MESHTASTIC (0x2B)\n");
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF7TO12_PEAK1_POS_SF7TO12, 4);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF7TO12_PEAK2_POS_SF7TO12, 22);
+#else
     /* Multi-SF modem configuration */
     printf("INFO: configuring LoRa (Multi-SF) SF5->SF6 with syncword PRIVATE (0x12)\n");
     err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF5_PEAK1_POS_SF5, 2);
@@ -1182,7 +1192,7 @@ int sx1302_lora_syncword(bool public, uint8_t lora_service_sf) {
         err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF7TO12_PEAK1_POS_SF7TO12, 2);
         err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF7TO12_PEAK2_POS_SF7TO12, 4);
     }
-
+#endif
     /* LoRa Service modem configuration */
     if ((public == false) || (lora_service_sf == DR_LORA_SF5) || (lora_service_sf == DR_LORA_SF6)) {
     	printf("INFO: configuring LoRa (Service) SF%u with syncword PRIVATE (0x12)\n", lora_service_sf);

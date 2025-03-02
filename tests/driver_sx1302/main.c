@@ -130,6 +130,9 @@ int main(void) {
 	puts("=========================================");
 
 	puts("\nBOARD: " RIOT_BOARD "\n");
+#if MESHTASTIC == 1
+	puts("\nMESHTASTIC surveyor\n");
+#endif
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();
