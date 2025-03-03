@@ -1,0 +1,3 @@
+
+# For future : decoding the protobuf payload
+# USEMODULE += nanopb
