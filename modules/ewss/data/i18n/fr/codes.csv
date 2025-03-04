@@ -1,5 +1,5 @@
-18.1.1;C1;Emplacement du centre de l'ellipse affinée;Latitude  
-18.1.2;C2;Emplacement du centre de l'ellipse affinée;Longitude  
+18.1.1;C1;Emplacement du centre de l'ellipse affinée Latitude  
+18.1.2;C2;Emplacement du centre de l'ellipse affinée Longitude  
 18.1.3;C3;Longueur de l'axe semi-major de l'ellipse affinée  
 18.1.4;C4;Longueur de l'axe semi-mineur de l'ellipse affinée  
 18.2.1;C5;Delta-Latitude depuis le centre de l'ellipse principale  
@@ -8,10 +8,10 @@
 18.3.2;C8;Facteur homothétique de la deuxième ellipse  
 18.3.3;C9;Angle de direction de la deuxième ellipse  
 18.3.4;C10;Bibliothèque de guidage pour la deuxième ellipse  
-18.4.1;A18;B4 GEO;Séisme  
-18.4.2;A18;B4 GEO;Tsunami  
-18.4.3;A18;B4 MET;Vague de froid et vague de chaleur  
-18.4.4;A18;B4 MET;Cyclone tropical (ouragan)  
+18.4.1;A18 B4 GEO;Séisme  
+18.4.2;A18 B4 GEO;Tsunami  
+18.4.3;A18 B4 MET;Vague de froid et vague de chaleur  
+18.4.4;A18 B4 MET;Cyclone tropical (ouragan)  
 18.4.5;A15-B4 MET;Cyclone tropical (typhon)  
 18.4.6;A15-B4 MET;Tornade  
 18.4.7;A15-B4 MET;Tempête ou orage  
