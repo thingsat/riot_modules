@@ -15,7 +15,7 @@ NAME=camf_18_3_3; $CSV2H 2 $NAME $SRCDIR/18.3.3.csv > $TRGDIR/$NAME.h
 
 generate_i18n(){
 
-LANG=en
+LANG=$1
 SRCDIR=data/i18n/$LANG
 TRGDIR=build/include/i18n/$LANG
 
