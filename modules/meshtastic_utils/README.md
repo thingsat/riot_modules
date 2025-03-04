@@ -10,7 +10,7 @@ https://meshtastic.org
 
 ## Description
 
-This module provides preliminary functions for encoding/decoding Meshtactic messages.
+This module provides preliminary functions for encoding/decoding Meshtastic messages.
 
 ## ToDoList
 
