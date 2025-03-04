@@ -71,7 +71,7 @@ void meshtastic_get_pb_payload(const uint8_t *frame_buffer, const uint8_t size, 
 	memcpy(payload, ((MeshtasticHeader_t*)frame_buffer)->pb_payload, *payload_size);
 }
 
-/** Get Protobuf Payload */
+/** Print payload */
 void meshtastic_printf(const uint8_t *frame_buffer, const uint8_t size) {
 	(void)size;
 	const MeshtasticHeader_t*  m = (MeshtasticHeader_t*)frame_buffer;

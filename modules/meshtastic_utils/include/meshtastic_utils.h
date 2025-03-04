@@ -63,5 +63,7 @@ uint8_t meshtastic_get_channel_hash(const uint8_t *frame_buffer, const uint8_t s
 /** Get Protobuf Payload */
 void meshtastic_get_pb_payload(const uint8_t *frame_buffer, const uint8_t size, uint8_t *payload, uint8_t* payload_size);
 
+/** Print payload */
+void meshtastic_printf(const uint8_t *frame_buffer, const uint8_t size);
 
 #endif /* MODULES_MESHTASTIC_UTILS_INCLUDE_MESHTASTIC_UTILS_H_ */
