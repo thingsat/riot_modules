@@ -12,68 +12,68 @@
 #include "meshtastic_utils.h"
 
 /** Check Size */
-bool meshtastic_check_valid_frame_size(const uint8_t *frame_buffer, const uint8_t size) {
+bool meshtastic_check_valid_frame_size(const uint8_t *frame_buffer, const uint8_t frame_size) {
 	(void)frame_buffer;
-	return size >= 16;
+	return frame_size >= 16;
 }
 
 /** Get Destination Id */
-uint32_t meshtastic_get_destination_id(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+uint32_t meshtastic_get_destination_id(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->destination_id;
 }
 
 /** Get Source Id */
-uint32_t meshtastic_get_source_id(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+uint32_t meshtastic_get_source_id(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->source_id;
 }
 
 /** Get Packet Id */
-uint32_t meshtastic_get_packet_id(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+uint32_t meshtastic_get_packet_id(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->packet_id;
 }
 
 /** Get Hop Limit */
-uint8_t meshtastic_get_hop_limit(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+uint8_t meshtastic_get_hop_limit(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->hop_limit;
 }
 
 /** Get Hope Start */
-uint8_t meshtastic_get_hope_start(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+uint8_t meshtastic_get_hope_start(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->hope_start;
 }
 
 /** Is From MQTT */
-bool meshtastic_is_from_mqtt(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+bool meshtastic_is_from_mqtt(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->from_mqtt == 1;
 }
 
 /** Is Want Ack */
-bool meshtastic_is_want_ack(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+bool meshtastic_is_want_ack(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->want_ack == 1;
 }
 
 /** Get Channel Hash */
-uint8_t meshtastic_get_channel_hash(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+uint8_t meshtastic_get_channel_hash(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	return ((MeshtasticHeader_t*)frame_buffer)->channel_hash;
 }
 
 /** Get Protobuf Payload */
-void meshtastic_get_pb_payload(const uint8_t *frame_buffer, const uint8_t size, uint8_t *payload, uint8_t* payload_size) {
-	*payload_size = size - 16;
+void meshtastic_get_pb_payload(const uint8_t *frame_buffer, const uint8_t frame_size, uint8_t *payload, uint8_t* payload_size) {
+	*payload_size = frame_size - 16;
 	memcpy(payload, ((MeshtasticHeader_t*)frame_buffer)->pb_payload, *payload_size);
 }
 
 /** Print payload */
-void meshtastic_printf(const uint8_t *frame_buffer, const uint8_t size) {
-	(void)size;
+void meshtastic_printf(const uint8_t *frame_buffer, const uint8_t frame_size) {
+	(void)frame_size;
 	const MeshtasticHeader_t*  m = (MeshtasticHeader_t*)frame_buffer;
 
 	printf("destination_id: %8lx\n", m->destination_id);
