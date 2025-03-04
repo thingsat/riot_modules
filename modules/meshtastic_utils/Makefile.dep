@@ -1,3 +1,8 @@
 
 # For future : decoding the protobuf payload
+
+# For protobuf payload encoding/decoding 
 # USEMODULE += nanopb
+
+# For encoding/decoding protobuf payload using AES256-CTR https://doc.riot-os.org/ctr_8h.html#details
+# USEMODULE += crypto
