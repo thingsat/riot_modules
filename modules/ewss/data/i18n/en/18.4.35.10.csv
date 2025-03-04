@@ -1,6 +1,6 @@
-000;Category 1 - Very dangerous winds will produce some damage. Scale 1 and Intensity 1
-001;Category 2 - Extremely dangerous winds will cause extensive damage. Scale 1 and Intensity 2
-010;Category 3 - Devastating damage will occur. Scale 1 and Intensity 3
-011;Category 4 - Catastrophic damage will occur. Scale 2 and Intensity 1
-100;Category 5 - Catastrophic damage will occur. Scale 2 and Intensity 2
-101;Category 5 - Catastrophic damage will occur. Scale 3 and Intensity 3
+000;Category 1;Very dangerous winds will produce some damage. Scale 1 and Intensity 1
+001;Category 2;Extremely dangerous winds will cause extensive damage. Scale 1 and Intensity 2
+010;Category 3;Devastating damage will occur. Scale 1 and Intensity 3
+011;Category 4;Catastrophic damage will occur. Scale 2 and Intensity 1
+100;Category 5;Catastrophic damage will occur. Scale 2 and Intensity 2
+101;Category 5;Catastrophic damage will occur. Scale 3 and Intensity 3
