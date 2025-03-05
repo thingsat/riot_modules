@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/18.4.35.35.csv
 #ifndef _DEF_camf_18_4_35_35_en
 #define _DEF_camf_18_4_35_35_en
-const static char camf_18_4_35_35_en[][] = {
+#define camf_18_4_35_35_en_nb_cols 1
+const char* camf_18_4_35_35_en[][camf_18_4_35_35_en_nb_cols] = {
 { /* 000000 */ "Anthrax", },
 { /* 000001 */ "Avian influenza in humans", },
 { /* 000010 */ "Botulism", },
@@ -68,6 +69,5 @@ const static char camf_18_4_35_35_en[][] = {
 { /* 111110 */ "unidentified infection", },
 { /* 111111 */ "not used", },
 };
-const static char camf_18_4_35_35_en_nb_cols = 1;
-const static char camf_18_4_35_35_en_nb_rows = 64;
+#define camf_18_4_35_35_en_nb_rows  64
 #endif // _DEF_camf_18_4_35_35_en

@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/18.4.35.13.csv
 #ifndef _DEF_camf_18_4_35_13_en
 #define _DEF_camf_18_4_35_13_en
-const static char camf_18_4_35_13_en[][] = {
+#define camf_18_4_35_13_en_nb_cols 2
+const char* camf_18_4_35_13_en[][camf_18_4_35_13_en_nb_cols] = {
 { /* 0000 */ "Dense fog", "visibility < 20 m", },
 { /* 0001 */ "Thick fog", "20 m < visibility < 200 m", },
 { /* 0010 */ " moderate fog", "200 m < visibility < 500 m", },
@@ -14,6 +15,5 @@ const static char camf_18_4_35_13_en[][] = {
 { /* 1000 */ "Very clear", "20 km < visibility < 50 km", },
 { /* 1001 */ "Exceptionally clear", "visibility > 50 km", },
 };
-const static char camf_18_4_35_13_en_nb_cols = 2;
-const static char camf_18_4_35_13_en_nb_rows = 10;
+#define camf_18_4_35_13_en_nb_rows  10
 #endif // _DEF_camf_18_4_35_13_en

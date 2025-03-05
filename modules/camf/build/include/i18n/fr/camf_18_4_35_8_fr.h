@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.8.csv
 #ifndef _DEF_camf_18_4_35_8_fr
 #define _DEF_camf_18_4_35_8_fr
-const static char camf_18_4_35_8_fr[][] = {
+#define camf_18_4_35_8_fr_nb_cols 2
+const char* camf_18_4_35_8_fr[][camf_18_4_35_8_fr_nb_cols] = {
 { /* 0000 */ "Beaufort 0. 0 km/h < v < 1 km/h", "Calme ", },
 { /* 0001 */ "Beaufort 1. 1 km/h < v < 5 km/h", "Air léger ", },
 { /* 0010 */ "Beaufort 2. 6 km/h < v < 11 km/h", "Brise légère ", },
@@ -16,6 +17,5 @@ const static char camf_18_4_35_8_fr[][] = {
 { /* 1010 */ "Beaufort 10. 89 km/h < v < 102 km/h", "Orage ", },
 { /* 1011 */ "Beaufort 11. 103 km/h < v < 117 km/h", "Tempête violente ", },
 };
-const static char camf_18_4_35_8_fr_nb_cols = 2;
-const static char camf_18_4_35_8_fr_nb_rows = 12;
+#define camf_18_4_35_8_fr_nb_rows  12
 #endif // _DEF_camf_18_4_35_8_fr

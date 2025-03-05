@@ -14,7 +14,9 @@ echo "#define _DEF_$VAR"
 
 NROWS=0
 
-echo "const static char $VAR[][] = {"
+echo "#define ${VAR}_nb_cols $(expr $NCOLS - 1)"
+
+echo "const char* $VAR[][${VAR}_nb_cols] = {"
 
 if [ $NCOLS -eq 2 ] 
 then
@@ -43,7 +45,17 @@ do
     NROWS=$(expr $NROWS + 1)
 done < $FILENAME
 
+elif [ $NCOLS -eq 5 ] 
+then
+
+while IFS=';' read -r col1 col2 col3 col4 col5
+do
+    echo  '{' '/*' $col1 '*/' '"'$col2'",' '"'$col3'",' '"'$col4'",' '"'$col5'",' '},'
+    NROWS=$(expr $NROWS + 1)
+done < $FILENAME
+
 else
+
 
 echo "ERROR: can not proceed $NCOLS columns"
 exit -1
@@ -52,7 +64,6 @@ fi
 
 echo "};"
 
-echo "const static char ${VAR}_nb_cols = $(expr $NCOLS - 1);"
-echo "const static char ${VAR}_nb_rows = $NROWS;"
+echo "#define ${VAR}_nb_rows  $NROWS"
 
 echo "#endif // _DEF_$VAR"

@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/18.4.35.12.csv
 #ifndef _DEF_camf_18_4_35_12_en
 #define _DEF_camf_18_4_35_12_en
-const static char camf_18_4_35_12_en[][] = {
+#define camf_18_4_35_12_en_nb_cols 2
+const char* camf_18_4_35_12_en[][camf_18_4_35_12_en_nb_cols] = {
 { /* 0000 */ "H0 Hard hail", "Typical hail diameter of 5 mm; No damage", },
 { /* 0001 */ "H1 Potentially damaging", "Typical hail diameter of 5-15 mm;Slight general damage to plants, crops", },
 { /* 0010 */ "H2 Significant", "Typical hail diameter of 10-20 mm;Slight general damage to fruit, crops, vegetation", },
@@ -15,6 +16,5 @@ const static char camf_18_4_35_12_en[][] = {
 { /* 1001 */ "H9 Super Hailstorms", "Typical hail diameter of 75-100 mm (size of a grapefruit);Extensive structural damage. Risk of severe or even fatal injuries to persons caught in the open", },
 { /* 1010 */ "H10 Super Hailstorms", "Typical hail diameter > 100 mm (size of a melon);Extensive structural damage. Risk of severe or even fatal injuries to persons caught in the open", },
 };
-const static char camf_18_4_35_12_en_nb_cols = 2;
-const static char camf_18_4_35_12_en_nb_rows = 11;
+#define camf_18_4_35_12_en_nb_rows  11
 #endif // _DEF_camf_18_4_35_12_en

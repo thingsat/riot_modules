@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.12.csv
 #ifndef _DEF_camf_18_4_35_12_fr
 #define _DEF_camf_18_4_35_12_fr
-const static char camf_18_4_35_12_fr[][] = {
+#define camf_18_4_35_12_fr_nb_cols 2
+const char* camf_18_4_35_12_fr[][camf_18_4_35_12_fr_nb_cols] = {
 { /* 0000 */ "H0", "Grêle dure;Diamètre typique de la grêle de 5 mm, pas de dégâts ", },
 { /* 0001 */ "H1", "Potentiellement dommageable;Diamètre typique de la grêle de 5-15 mm. Légers dommages généraux aux plantes, cultures ", },
 { /* 0010 */ "H2", "Significatif;Diamètre typique de la grêle de 10-20 mm. Légers dommages généraux aux fruits, cultures, végétation ", },
@@ -15,6 +16,5 @@ const static char camf_18_4_35_12_fr[][] = {
 { /* 1001 */ "H9", "Super tempêtes de grêle;Diamètre typique de la grêle de 75-100 mm (taille d'un pamplemousse). Dommages structurels étendus. Risque de blessures graves, voire fatales, pour les personnes prises à découvert ", },
 { /* 1010 */ "H10", "Super tempêtes de grêle;Diamètre typique de la grêle > 100 mm (taille d'un melon). Dommages structurels étendus. Risque de blessures graves, voire fatales, pour les personnes prises à découvert", },
 };
-const static char camf_18_4_35_12_fr_nb_cols = 2;
-const static char camf_18_4_35_12_fr_nb_rows = 11;
+#define camf_18_4_35_12_fr_nb_rows  11
 #endif // _DEF_camf_18_4_35_12_fr

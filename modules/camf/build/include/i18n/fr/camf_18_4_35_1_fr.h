@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.1.csv
 #ifndef _DEF_camf_18_4_35_1_fr
 #define _DEF_camf_18_4_35_1_fr
-const static char camf_18_4_35_1_fr[][] = {
+#define camf_18_4_35_1_fr_nb_cols 2
+const char* camf_18_4_35_1_fr[][camf_18_4_35_1_fr_nb_cols] = {
 { /* 0000 */ "1.0-1.9", "Micro ", },
 { /* 0001 */ "2.0-2.9", "Mineur ", },
 { /* 0010 */ "3.0-3.9", "Mineur ", },
@@ -13,6 +14,5 @@ const static char camf_18_4_35_1_fr[][] = {
 { /* 0111 */ "8.0-8.9", "Très grand ", },
 { /* 1000 */ "9.0 et plus", "Très grand", },
 };
-const static char camf_18_4_35_1_fr_nb_cols = 2;
-const static char camf_18_4_35_1_fr_nb_rows = 9;
+#define camf_18_4_35_1_fr_nb_rows  9
 #endif // _DEF_camf_18_4_35_1_fr

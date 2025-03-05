@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.27.csv
 #ifndef _DEF_camf_18_4_35_27_fr
 #define _DEF_camf_18_4_35_27_fr
-const static char camf_18_4_35_27_fr[][] = {
+#define camf_18_4_35_27_fr_nb_cols 1
+const char* camf_18_4_35_27_fr[][camf_18_4_35_27_fr_nb_cols] = {
 { /* 0000 */ "40 < dB ≤ 45 ", },
 { /* 0001 */ "45 < dB ≤ 50 ", },
 { /* 0010 */ "50 < dB ≤ 60 ", },
@@ -16,6 +17,5 @@ const static char camf_18_4_35_27_fr[][] = {
 { /* 1010 */ "130 < dB ≤ 140 (seuil de la douleur) ", },
 { /* 1011 */ "dB > 140 (douleur)", },
 };
-const static char camf_18_4_35_27_fr_nb_cols = 1;
-const static char camf_18_4_35_27_fr_nb_rows = 12;
+#define camf_18_4_35_27_fr_nb_rows  12
 #endif // _DEF_camf_18_4_35_27_fr

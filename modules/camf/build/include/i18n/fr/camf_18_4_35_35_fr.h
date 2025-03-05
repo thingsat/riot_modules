@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.35.csv
 #ifndef _DEF_camf_18_4_35_35_fr
 #define _DEF_camf_18_4_35_35_fr
-const static char camf_18_4_35_35_fr[][] = {
+#define camf_18_4_35_35_fr_nb_cols 1
+const char* camf_18_4_35_35_fr[][camf_18_4_35_35_fr_nb_cols] = {
 { /* 000000 */ "Charbon (Anthrax) ", },
 { /* 000001 */ "Grippe aviaire chez l’homme ", },
 { /* 000010 */ "Botulisme ", },
@@ -68,6 +69,5 @@ const static char camf_18_4_35_35_fr[][] = {
 { /* 111110 */ "Infection non identifiée ", },
 { /* 111111 */ "Non utilisé ", },
 };
-const static char camf_18_4_35_35_fr_nb_cols = 1;
-const static char camf_18_4_35_35_fr_nb_rows = 64;
+#define camf_18_4_35_35_fr_nb_rows  64
 #endif // _DEF_camf_18_4_35_35_fr

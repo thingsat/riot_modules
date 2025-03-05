@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/11.a.csv
 #ifndef _DEF_camf_11_a_en
 #define _DEF_camf_11_a_en
-const static char camf_11_a_en[][] = {
+#define camf_11_a_en_nb_cols 2
+const char* camf_11_a_en[][camf_11_a_en_nb_cols] = {
 { /* 00000 */ "IC-A-01", "[empty]", },
 { /* 00001 */ "IC-A-02", "You are in the danger zone, leave the area immediately. Listen to radio or media for directions and information.", },
 { /* 00010 */ "IC-A-03", "You are in the danger zone, leave the area immediately and reach the evacuation point indicated by the area plotted in yellow. Listen to radio or media for directions and information.", },
@@ -36,6 +37,5 @@ const static char camf_11_a_en[][] = {
 { /* 11110 */ "IC-A-31", "This replaces the warning previously in effect for this area.", },
 { /* 11111 */ "IC-A-32", "Conditions have improved and are no longer expected to meet alert criteria", },
 };
-const static char camf_11_a_en_nb_cols = 2;
-const static char camf_11_a_en_nb_rows = 32;
+#define camf_11_a_en_nb_rows  32
 #endif // _DEF_camf_11_a_en

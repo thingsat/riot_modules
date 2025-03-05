@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/a4.csv
 #ifndef _DEF_camf_a4_en
 #define _DEF_camf_a4_en
-const static char camf_a4_en[][] = {
+#define camf_a4_en_nb_cols 3
+const char* camf_a4_en[][camf_a4_en_nb_cols] = {
 { /* 0000001 */ "CBRNE", "Air strike", "Attack performed by an aircraft, usually of military type, either by bombing (or similar), firing guns or missiles.", },
 { /* 0000010 */ "CBRNE", "Attack on IT systems", "Intentional attempt to expose, alter, disable, destroy, steal or gain unauthorized access to or make unauthorised use of IT equipment.", },
 { /* 0000011 */ "CBRNE", "Attack with nuclear weapons", "From www.dhs.gov 'Attack performed with a device producing a nuclear explosion.", },
@@ -117,6 +118,5 @@ const static char camf_a4_en[][] = {
 { /* 1110000 */ "TRANSPORT", "Tunnel accident", "Car crash or railway accident occurring in a tunnel.", },
 { /* 1110001 */ "OTHER", "Test alert", "Test alert message for end-to-end testing.", },
 };
-const static char camf_a4_en_nb_cols = 3;
-const static char camf_a4_en_nb_rows = 113;
+#define camf_a4_en_nb_rows  113
 #endif // _DEF_camf_a4_en

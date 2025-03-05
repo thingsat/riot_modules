@@ -2,7 +2,8 @@
 // Generated from data/values/18.3.3.csv
 #ifndef _DEF_camf_18_3_3
 #define _DEF_camf_18_3_3
-const static char camf_18_3_3[][] = {
+#define camf_18_3_3_nb_cols 1
+const char* camf_18_3_3[][camf_18_3_3_nb_cols] = {
 { /* 00000 */ "0", },
 { /* 00001 */ "11.25", },
 { /* 00010 */ "22.5", },
@@ -21,6 +22,5 @@ const static char camf_18_3_3[][] = {
 { /* 01111 */ "168.75", },
 { /* 10000 */ "180", },
 };
-const static char camf_18_3_3_nb_cols = 1;
-const static char camf_18_3_3_nb_rows = 17;
+#define camf_18_3_3_nb_rows  17
 #endif // _DEF_camf_18_3_3

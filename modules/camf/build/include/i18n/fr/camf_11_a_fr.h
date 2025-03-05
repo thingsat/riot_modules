@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/11.a.csv
 #ifndef _DEF_camf_11_a_fr
 #define _DEF_camf_11_a_fr
-const static char camf_11_a_fr[][] = {
+#define camf_11_a_fr_nb_cols 2
+const char* camf_11_a_fr[][camf_11_a_fr_nb_cols] = {
 { /* 00000 */ "IC-A-01", "[vide] ", },
 { /* 00001 */ "IC-A-02", "Vous êtes dans la zone de danger, quittez immédiatement la zone. Écoutez la radio ou les médias pour des instructions et informations. ", },
 { /* 00010 */ "IC-A-03", "Vous êtes dans la zone de danger, quittez immédiatement la zone et rejoignez le point d'évacuation indiqué par la zone tracée en jaune. Écoutez la radio ou les médias pour des instructions et informations. ", },
@@ -36,6 +37,5 @@ const static char camf_11_a_fr[][] = {
 { /* 11110 */ "IC-A-31", "Cela remplace l'alerte précédemment en vigueur pour cette zone. ", },
 { /* 11111 */ "IC-A-32", "Les conditions se sont améliorées et ne devraient plus répondre aux critères d'alerte.", },
 };
-const static char camf_11_a_fr_nb_cols = 2;
-const static char camf_11_a_fr_nb_rows = 32;
+#define camf_11_a_fr_nb_rows  32
 #endif // _DEF_camf_11_a_fr

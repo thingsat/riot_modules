@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.31.csv
 #ifndef _DEF_camf_18_4_35_31_fr
 #define _DEF_camf_18_4_35_31_fr
-const static char camf_18_4_35_31_fr[][] = {
+#define camf_18_4_35_31_fr_nb_cols 1
+const char* camf_18_4_35_31_fr[][camf_18_4_35_31_fr_nb_cols] = {
 { /* 0000 */ "Explosifs ", },
 { /* 0001 */ "Gaz inflammables ", },
 { /* 0010 */ "Aérosols inflammables et aérosols ", },
@@ -21,6 +22,5 @@ const static char camf_18_4_35_31_fr[][] = {
 { /* 1111 */ "Corrosif pour les métaux", },
 { /* */ "", },
 };
-const static char camf_18_4_35_31_fr_nb_cols = 1;
-const static char camf_18_4_35_31_fr_nb_rows = 17;
+#define camf_18_4_35_31_fr_nb_rows  17
 #endif // _DEF_camf_18_4_35_31_fr

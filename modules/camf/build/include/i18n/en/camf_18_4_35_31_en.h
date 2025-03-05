@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/18.4.35.31.csv
 #ifndef _DEF_camf_18_4_35_31_en
 #define _DEF_camf_18_4_35_31_en
-const static char camf_18_4_35_31_en[][] = {
+#define camf_18_4_35_31_en_nb_cols 1
+const char* camf_18_4_35_31_en[][camf_18_4_35_31_en_nb_cols] = {
 { /* 0000 */ "Explosives", },
 { /* 0001 */ "Flammable gases", },
 { /* 0010 */ "Flammable aerosols and aerosols", },
@@ -20,6 +21,5 @@ const static char camf_18_4_35_31_en[][] = {
 { /* 1110 */ "Organic peroxides", },
 { /* 1111 */ "Corrosive to metals", },
 };
-const static char camf_18_4_35_31_en_nb_cols = 1;
-const static char camf_18_4_35_31_en_nb_rows = 16;
+#define camf_18_4_35_31_en_nb_rows  16
 #endif // _DEF_camf_18_4_35_31_en

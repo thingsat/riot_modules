@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/18.4.35.13.csv
 #ifndef _DEF_camf_18_4_35_13_fr
 #define _DEF_camf_18_4_35_13_fr
-const static char camf_18_4_35_13_fr[][] = {
+#define camf_18_4_35_13_fr_nb_cols 2
+const char* camf_18_4_35_13_fr[][camf_18_4_35_13_fr_nb_cols] = {
 { /* 0000 */ "Brouillard dense", "visibilité < 20 m ", },
 { /* 0001 */ "Brouillard épais", "20 m < visibilité < 200 m ", },
 { /* 0010 */ "Brouillard modéré", "200 m < visibilité < 500 m ", },
@@ -14,6 +15,5 @@ const static char camf_18_4_35_13_fr[][] = {
 { /* 1000 */ "Très clair", "20 km < visibilité < 50 km ", },
 { /* 1001 */ "Exceptionnellement clair", "visibilité > 50 km", },
 };
-const static char camf_18_4_35_13_fr_nb_cols = 2;
-const static char camf_18_4_35_13_fr_nb_rows = 10;
+#define camf_18_4_35_13_fr_nb_rows  10
 #endif // _DEF_camf_18_4_35_13_fr

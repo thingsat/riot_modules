@@ -2,7 +2,8 @@
 // Generated from data/i18n/en/18.4.35.29.csv
 #ifndef _DEF_camf_18_4_35_29_en
 #define _DEF_camf_18_4_35_29_en
-const static char camf_18_4_35_29_en[][] = {
+#define camf_18_4_35_29_en_nb_cols 1
+const char* camf_18_4_35_29_en[][camf_18_4_35_29_en_nb_cols] = {
 { /* 00000 */ "0 < duration < 30 min", },
 { /* 00001 */ "30 min ≤ duration < 45 min", },
 { /* 00010 */ "45 min ≤ duration < 1 h", },
@@ -18,6 +19,5 @@ const static char camf_18_4_35_29_en[][] = {
 { /* 01100 */ "7 days ≤ duration", },
 { /* 01101 */ "Unknown", },
 };
-const static char camf_18_4_35_29_en_nb_cols = 1;
-const static char camf_18_4_35_29_en_nb_rows = 14;
+#define camf_18_4_35_29_en_nb_rows  14
 #endif // _DEF_camf_18_4_35_29_en

@@ -2,7 +2,8 @@
 // Generated from data/i18n/fr/a4.csv
 #ifndef _DEF_camf_a4_fr
 #define _DEF_camf_a4_fr
-const static char camf_a4_fr[][] = {
+#define camf_a4_fr_nb_cols 3
+const char* camf_a4_fr[][camf_a4_fr_nb_cols] = {
 { /* 0000001 */ "CBRNE", "Attaque aérienne", "Attaque effectuée par un aéronef, généralement de type militaire, soit par bombardement (ou similaire), tir de canons ou de missiles.", },
 { /* 0000010 */ "CBRNE", "Attaque sur les systèmes informatiques", "Tentative intentionnelle d'exposer, altérer, désactiver, détruire, voler ou obtenir un accès non autorisé ou d'utiliser de manière non autorisée des équipements informatiques.", },
 { /* 0000011 */ "CBRNE", "Attaque avec des armes nucléaires", "D'après www.dhs.gov 'Attaque réalisée avec un dispositif produisant une explosion nucléaire.", },
@@ -117,6 +118,5 @@ const static char camf_a4_fr[][] = {
 { /* 1110000 */ "TRANSPORT", "Accident de tunnel", "Accident de voiture ou de train survenant dans un tunnel.", },
 { /* 1110001 */ "OTHER", "Alerte de test", "Message d'alerte pour des tests de bout en bout.", },
 };
-const static char camf_a4_fr_nb_cols = 3;
-const static char camf_a4_fr_nb_rows = 113;
+#define camf_a4_fr_nb_rows  113
 #endif // _DEF_camf_a4_fr
