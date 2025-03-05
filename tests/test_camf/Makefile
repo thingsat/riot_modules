@@ -29,4 +29,6 @@ FEATURES_REQUIRED += periph_rtc
 USEMODULE += camf
 EXTERNAL_MODULE_DIRS += ../../modules/
 
+CFLAGS += -Wno-unused-variable
+
 include $(RIOTBASE)/Makefile.include
