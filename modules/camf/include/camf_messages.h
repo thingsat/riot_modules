@@ -30,3 +30,5 @@
 #if EWSS_CAMF_INCLUDE_FR == 1
 #include "camf_messages_fr.h"
 #endif
+
+#endif
