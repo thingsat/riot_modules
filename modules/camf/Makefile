@@ -1,4 +1,4 @@
-MODULE = ewss 
+MODULE = camf 
 
 # SRCXXEXT = cc
 
