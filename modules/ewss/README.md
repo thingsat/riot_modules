@@ -1,7 +1,7 @@
 # Common Alert Message Format (CAMF) for Emergency Warning Satellite Service (EWSS)
 
 This module provides [C headers](build/include) for interpreting the [Common Alert Message Format](https://www.gsc-europa.eu/sites/default/files/sites/all/files/EWSS-CAMF_v1.0.pdf
-) of the Emergency Warning Satellite Service
+) of the [Emergency Warning Satellite Service](https://www.unoosa.org/documents/pdf/icg/2023/ICG-17/icg17_wgb_20.pdf)
 
 ## The Common Alert Message Format (CAMF)
 
