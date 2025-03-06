@@ -74,16 +74,6 @@ For Nucleo L432KC With RAK5146
 export BOARD=nucleo-l432kc
 ```
 
-For Nucleo L432KC With RAK5146 on INISAT board
-```bash
-export BOARD=nucleo-l432kc-inisat
-```
-
-```bash
-gmake BOARD=$BOARD -j 8 flash term
-```
-
-
 For ESP32 WROOM (With RAK5146)
 ```bash
 gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 -j 8 flash term
@@ -92,6 +82,14 @@ gmake BUILD_IN_DOCKER=1 BOARD=esp32-wroom-32 -j 8 flash term
 For  Arduino Nano ESP32 (With RAK5146)
 ```bash
 gmake BUILD_IN_DOCKER=1 BOARD=esp32-nano -j 8 flash term
+```
+
+### Setup for [Thingsat INISAT](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/Thingsat_INISAT#carte-thingsat--inisat----obc--communication-avec-nucleo-l432kc--gateway-rak5146) 📡📡📡📡📡🎈🎈🎈🎈🎈🎈
+
+For Nucleo L432KC With RAK5146 on INISAT board
+```bash
+export BOARD=nucleo-l432kc-inisat
+gmake BOARD=$BOARD -j 8 flash term
 ```
 
 ### Setup for [high altitude balloon flights](https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/public/-/blob/master/balloons/README.md) 📡📡📡📡📡🎈🎈🎈🎈🎈🎈
@@ -146,7 +144,7 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 
 [list](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/sx1302_modules)
 
-Tested (with [Thingsat @ INISAT 📡 🚀](../2U-PCB-Com_Nucleo-L432kC/Com_Nucleo-L432kc)): 
+Tested (with [Thingsat @ INISAT 📡 🚀](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/Thingsat_INISAT#carte-thingsat--inisat----obc--communication-avec-nucleo-l432kc--gateway-rak5146)): 
 * [x] Semtech SX1302C868GW1 Corecell Devkit
 * [x] RAK5146 Gateway Concentrator Module for LoRaWAN SPI
 * [ ] RAK2287 WisLink LPWAN Concentrator SPI
