@@ -144,7 +144,6 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 
 [list](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/sx1302_modules)
 
-Tested (with [Thingsat @ INISAT 📡 🚀](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/Thingsat_INISAT#carte-thingsat--inisat----obc--communication-avec-nucleo-l432kc--gateway-rak5146)): 
 * [x] Semtech SX1302C868GW1 Corecell Devkit
 * [x] RAK5146 Gateway Concentrator Module for LoRaWAN SPI
 * [ ] RAK2287 WisLink LPWAN Concentrator SPI
