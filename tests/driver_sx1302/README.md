@@ -156,6 +156,8 @@ Tested (with [Thingsat @ INISAT 📡 🚀](../2U-PCB-Com_Nucleo-L432kC/Com_Nucle
 * [ ] Seeedstudio Wio-WM1303 Long Range Gateway Module
 * [ ] Heltec HT1303
 
+See also [mSATA / Mini PCIe adapter to breadboard](https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/seed/-/tree/main/minipcie_adapter?ref_type=heads#msata--mini-pcie-adapter-to-breadboard)
+
 ## Wiring
 
 ### [Semtech Corecell (SX1302CxxxGW1)](https://www.semtech.fr/products/wireless-rf/lora-core/sx1302cxxxgw1)
