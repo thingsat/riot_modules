@@ -37,7 +37,7 @@ float get_Ellipse_Azimuth_Angle(uint32_t v);
 /**
  * @brief check if a point (x, y) is inside an ellipse with center (h, k) and semi-axes a and b
  */
-bool camf_is_into_ellipse(float x, float y, float h, float k, float a, float b);
+bool camf_is_into_ellipse(float x, float y, float h, float k, float a, float b, float theta);
 
 void camf_message_printf(const CommonAlertMessageFormat_t* m);
 
