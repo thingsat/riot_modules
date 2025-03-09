@@ -103,7 +103,7 @@ export BOARD=nucleo-l432kc-inisat
 gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 NO_SHELL=1 -j 8 flash term
 ```
 
-### Setup for [Meshtactic](https://meshtastic.org)
+### Setup for [Meshtastic](https://meshtastic.org)
 
 ```bash
 export BOARD=nucleo-l432kc-inisat
