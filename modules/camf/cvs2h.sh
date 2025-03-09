@@ -54,6 +54,15 @@ do
     NROWS=$(expr $NROWS + 1)
 done < $FILENAME
 
+elif [ $NCOLS -eq 6 ] 
+then
+
+while IFS=';' read -r col1 col2 col3 col4 col5 col6
+do
+    echo  '{' '/*' $col1 '*/' '"'$col2'",' '"'$col3'",' '"'$col4'",' '"'$col5'",' '"'$col6'",' '},'
+    NROWS=$(expr $NROWS + 1)
+done < $FILENAME
+
 else
 
 
