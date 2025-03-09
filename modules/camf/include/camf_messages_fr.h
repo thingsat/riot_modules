@@ -36,4 +36,7 @@
 #include "i18n/fr/camf_18_4_35_13_fr.h"
 #include "i18n/fr/camf_18_4_35_12_fr.h"
 #include "i18n/fr/camf_18_4_35_10_fr.h"
+
+#include "i18n/fr/camf_d7_fr.h"
+#include "i18n/fr/camf_d23_fr.h"
 #endif
