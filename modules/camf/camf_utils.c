@@ -11,6 +11,7 @@
  */
 
 #include <stdio.h>
+#include <math.h>
 
 #include "camf_messages.h"
 #include "camf_utils.h"
@@ -66,11 +67,21 @@ float get_Ellipse_Azimuth_Angle(uint32_t v) {
 /**
  * @brief check if a point (x, y) is inside an ellipse with center (h, k) and semi-axes a and b
  */
-bool camf_is_into_ellipse(float x, float y, float h, float k, float a, float b) {
-    //  ((x - h)² / a²) + ((y - k)² / b²) <= 1
-    float e = ((x - h) * (x - h)) / (a * a) + ((y - k) * (y - k)) / (b * b);
+bool camf_is_into_ellipse(float x, float y, float h, float k, float a, float b, float theta) {
+    const float cos_theta = cos(theta);
+    const float sin_theta = sin(theta);
+    
+    const float dx = x - h;
+    const float dy = y - k;
+
+    const float x_rot = cos_theta * dx + sin_theta * dy;
+    const float y_rot = -sin_theta * dx + cos_theta * dy;
+    
+    const float e = (x_rot * x_rot) / (a * a) + (y_rot * y_rot) / (b * b);
+
     return e <= 1.0;
 }
+
 
 void camf_message_printf(const CommonAlertMessageFormat_t* m) {
     printf("message_type:                    %d (%s)\n",m->message_type, camf_a1_en[m->message_type][0]); // TODO check camf_a1_en_nb_rows
