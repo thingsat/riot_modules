@@ -1,0 +1,4 @@
+00;Unknown
+01;Duration < 6
+10;6 <= Duration < 12
+11;12 <= Duration < 24
