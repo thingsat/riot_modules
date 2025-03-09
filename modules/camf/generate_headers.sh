@@ -49,7 +49,9 @@ NAME=camf_a11a_$LANG; $CSV2H 3 $NAME $SRCDIR/a11a.csv > $TRGDIR/$NAME.h
 NAME=camf_a11b_$LANG; $CSV2H 3 $NAME $SRCDIR/a11b.csv > $TRGDIR/$NAME.h
 NAME=camf_a17_$LANG; $CSV2H 4 $NAME $SRCDIR/a17.csv > $TRGDIR/$NAME.h
 NAME=camf_d7_$LANG; $CSV2H 4 $NAME $SRCDIR/d7.csv > $TRGDIR/$NAME.h
-NAME=camf_d23_$LANG; $CSV2H 4 $NAME $SRCDIR/d23.csv > $TRGDIR/$NAME.h
+NAME=camf_d23_$LANG; $CSV2H 3 $NAME $SRCDIR/d23.csv > $TRGDIR/$NAME.h
+NAME=camf_d27_$LANG; $CSV2H 2 $NAME $SRCDIR/d27.csv > $TRGDIR/$NAME.h
+NAME=camf_d28_$LANG; $CSV2H 5 $NAME $SRCDIR/d28.csv > $TRGDIR/$NAME.h
 }
 
 mkdir -p build/include/values
