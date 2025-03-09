@@ -90,6 +90,106 @@ in the EWM (e.g. for adding more severity levels, or more instructions).
 #define CAMF_MAIN_SUBJECT_QUANT_DETAILS_INFO			0b11
 
 
+#define hazard_onset_time_of_week(m) (m->hazard_onset_time_of_week_lsb | (m->hazard_onset_time_of_week_msb<<6))
+
+#define guidance_instructions_a(m) (m->guidance_instructions_a_lsb | (m->guidance_instructions_a_msb<<2))
+
+#define ellipse_centre_latitude(m) (m->ellipse_centre_latitude_lsb | (m->ellipse_centre_latitude_msb<<8))
+
+#define ellipse_centre_longitude(m) (m->ellipse_centre_longitude_lsb | (m->ellipse_centre_longitude_msb<<8))
+
+#define ellipse_semi_minor_axis_length(m) (m->ellipse_semi_minor_axis_length_lsb | (m->ellipse_semi_minor_axis_length_msb<<2))
+
+#define specific_settings(m) (m->specific_settings_lsb | (m->specific_settings_msb<<5))
+
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B1 – Improved resolution of main ellipse
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B1 {
+
+	uint16_t c1_latitude_of_centre_of_main_ellipse :3;
+	uint16_t c2_Longitude_of_centre_of_main_ellipse :3;
+	uint16_t c3_semi_major_axis :3;
+	uint16_t c4_semi_minor_axis :3;
+	uint16_t reserved :3;
+};
+typedef struct CAMF_SpecificSettings_B1 CAMF_SpecificSettings_B1_t;
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B2 – Position of centre of hazard
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B2 {
+
+	uint16_t c5_delta_latitude_from_main_ellipse_centre: 7;
+	uint16_t c6_delta_longitude_from_main_ellipse_centre: 7;
+	uint16_t reserved: 1;
+};
+typedef struct CAMF_SpecificSettings_B2 CAMF_SpecificSettings_B2_t;
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B3 – Secondary ellipse definition
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B3 {
+
+	uint16_t c7_shift_of_second_ellipse_centre : 2;
+	uint16_t c8_homothetic_factor_of_second_ellipse : 3;
+	uint16_t c9_bearing_angle_of_second_ellipse : 5;
+	uint16_t c10_guidance_library_for_second_ellipse : 5;
+};
+typedef struct CAMF_SpecificSettings_B3 CAMF_SpecificSettings_B3_t;
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B4 – Quantitative and detailed information related to hazard - Earthquake
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B4_Earthquake {
+
+	uint16_t d1_magnitude_on_richter_scale: 4;
+	uint16_t d2_seismic_coefficient: 3;
+	uint16_t d3_azimuth_from_centre_of_main_ellipse_to_epicentre: 4;
+	uint16_t d4_vector_length_between_centre_of_main_ellipse_and_epicentre : 4;
+};
+typedef struct CAMF_SpecificSettings_B4_Earthquake CAMF_SpecificSettings_B4_Earthquake_t;
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B4 – Quantitative and detailed information related to hazard - Tsunami / tidal wave
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B4_Tsunami {
+
+	uint16_t d5_wave_height: 3;
+	uint16_t reserved: 12;
+};
+typedef struct CAMF_SpecificSettings_B4_Tsunami CAMF_SpecificSettings_B4_Tsunami_t;
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B4 – Quantitative and detailed information related to hazard - Cold wave / heat wave
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B4_Temp_wave {
+
+	uint16_t d6_temperature_range: 4;
+	uint16_t reserved: 11;
+};
+typedef struct CAMF_SpecificSettings_B4_Temp_wave CAMF_SpecificSettings_B4_Temp_wave_t;
+
+/*
+ * @brief Main Subject for Specific Settings (A17)
+ * B4 – Quantitative and detailed information related to hazard - Tropical cyclone (hurricane)
+ */
+struct __attribute__((__packed__)) CAMF_SpecificSettings_B4_Tropical_cyclone {
+
+	uint16_t d7_hurricane_categories: 3;
+	uint16_t d8_wind_speed: 4;
+	uint16_t d9_rainfall_amounts: 9;
+	uint16_t reserved: 5;
+};
+typedef struct CAMF_SpecificSettings_B4_Tropical_cyclone CAMF_SpecificSettings_B4_Tropical_cyclone_t;
+
 /**
  * @brief Common Alert Message Format
  */
@@ -111,14 +211,16 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	uint16_t provider_id :5;
 
 	/*
-	 * @brief 4. Hazard category & type (A4)
-	 */
-	uint16_t hazard_category :9;
-
-	/*
 	 * @brief 5. Severity (A5)
 	 */
 	uint16_t severity :2;
+
+	/*
+	 * @brief 4. Hazard category & type (A4)
+	 * @see Common Alerting Protocol http://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2.html
+	 * @see Common Alerting Protocol https://en.wikipedia.org/wiki/Common_Alerting_Protocol
+	 */
+	uint16_t hazard_category :7;
 
 	/*
 	 * @brief 6. Hazard onset: week number (A6)
@@ -128,7 +230,8 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	/*
 	 * @brief 7. Hazard onset: time of the week
 	 */
-	uint16_t hazard_onset_time_of_week :14;
+	uint16_t hazard_onset_time_of_week_lsb :6;
+	uint16_t hazard_onset_time_of_week_msb :8;
 
 	/*
 	 * @brief 8. Hazard duration (A8)
@@ -148,7 +251,8 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	/*
 	 * @brief 11. Guidance instructions (A11)
 	 */
-	uint16_t guidance_instructions_a : 5;
+	uint16_t guidance_instructions_a_lsb : 2;
+	uint16_t guidance_instructions_a_msb : 3;
 
 	/*
 	 * @brief 11. Guidance instructions (A11)
@@ -158,12 +262,14 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	/*
 	 * @brief 12. Ellipse centre latitude (A12)
 	 */
-	uint16_t ellipse_centre_latitude :16;
+	uint16_t ellipse_centre_latitude_lsb :8;
+	uint16_t ellipse_centre_latitude_msb :8;
 
 	/*
 	 * @brief 13. Ellipse centre longitude (A13)
 	 */
-	uint32_t ellipse_centre_longitude :17;
+	uint16_t ellipse_centre_longitude_lsb :8;
+	uint16_t ellipse_centre_longitude_msb :9;
 
 	/*
 	 * @brief 14. Ellipse semi-major axis length (A14)
@@ -173,7 +279,8 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	/*
 	 * @brief 15. Ellipse semi-minor axis length (A15)
 	 */
-	uint16_t ellipse_semi_minor_axis_length :5;
+	uint16_t ellipse_semi_minor_axis_length_lsb :2;
+	uint16_t ellipse_semi_minor_axis_length_msb :3;
 
 	/*
 	 * @brief 16. Ellipse azimuth angle (A16)
@@ -188,8 +295,11 @@ struct __attribute__((__packed__)) CommonAlertMessageFormat
 	/*
 	 * @brief 18. Specific settings (A18)
 	 */
-	uint16_t specific_settings :15;
+	uint16_t specific_settings_lsb :5;
+	uint16_t specific_settings_msb :10;
 
+	uint16_t padding :6;
+	
 };
 
 typedef struct CommonAlertMessageFormat CommonAlertMessageFormat_t;

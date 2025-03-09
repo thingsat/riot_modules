@@ -9,8 +9,17 @@
 #ifndef _CAMF_MESSAGES_FR_H_
 #define _CAMF_MESSAGES_FR_H_
 
-#include "i18n/fr/camf_a4_fr.h"
 #include "i18n/fr/camf_a1_fr.h"
+#include "i18n/fr/camf_a2_fr.h"
+#include "i18n/fr/camf_a4_fr.h"
+#include "i18n/fr/camf_a5_fr.h"
+#include "i18n/fr/camf_a6_fr.h"
+#include "i18n/fr/camf_a8_fr.h"
+#include "i18n/fr/camf_a9_fr.h"
+#include "i18n/fr/camf_a11a_fr.h"
+#include "i18n/fr/camf_a11b_fr.h"
+#include "i18n/fr/camf_a17_fr.h"
+#include "i18n/fr/camf_18_3_4_fr.h"
 #include "i18n/fr/camf_18_4_35_8_fr.h"
 #include "i18n/fr/camf_18_4_35_36_fr.h"
 #include "i18n/fr/camf_18_4_35_35_fr.h"
@@ -27,5 +36,4 @@
 #include "i18n/fr/camf_18_4_35_13_fr.h"
 #include "i18n/fr/camf_18_4_35_12_fr.h"
 #include "i18n/fr/camf_18_4_35_10_fr.h"
-#include "i18n/fr/camf_11_a_fr.h"
 #endif
