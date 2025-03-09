@@ -39,4 +39,6 @@
 
 #include "i18n/fr/camf_d7_fr.h"
 #include "i18n/fr/camf_d23_fr.h"
+#include "i18n/fr/camf_d27_fr.h"
+#include "i18n/fr/camf_d28_fr.h"
 #endif
