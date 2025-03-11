@@ -146,11 +146,11 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
 
 * [x] Semtech SX1302C868GW1 Corecell Devkit
 * [x] RAK5146 Gateway Concentrator Module for LoRaWAN SPI
-* [ ] RAK2287 WisLink LPWAN Concentrator SPI
+* [ ] RAK2287 WisLink LPWAN Concentrator SPI (probably since RAK5146)
 * [ ] RAK5166 WisLink LPWAN Concentrator SPI
 * [x] Nebra NBR-0094
-* [ ] Seeedstudio Wio-WM1302 Long Range Gateway Module
-* [ ] Seeedstudio Wio-WM1303 Long Range Gateway Module
+* [x] Seeedstudio Wio-WM1303 Long Range Gateway Module
+* [ ] Seeedstudio Wio-WM1302 Long Range Gateway Module (probably since Wio-WM1303)
 * [ ] Heltec HT1303
 
 See also [mSATA / Mini PCIe adapter to breadboard](https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/seed/-/tree/main/minipcie_adapter?ref_type=heads#msata--mini-pcie-adapter-to-breadboard)
