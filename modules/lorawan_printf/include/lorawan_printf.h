@@ -55,7 +55,7 @@ typedef enum eLoRaMacFrameType
     FRAME_TYPE_PROPRIETARY           = 0x07,
 } LoRaMacFrameType_t;
 
-/** Get Type */
+/** Check Size */
 bool lorawan_check_valid_frame_size(const uint8_t *frame_buffer, const uint8_t size);
 
 /** Is LoRaWAN Size  */
@@ -127,8 +127,6 @@ uint8_t lorawan_get_datarate(uint8_t sf, uint32_t bw);
 void lorawan_printf_jreq(const uint8_t *frame_buffer, const uint8_t size);
 
 void lorawan_printf_payload(const uint8_t *frame_buffer, const uint8_t size);
-
-
 
 
 #if 0

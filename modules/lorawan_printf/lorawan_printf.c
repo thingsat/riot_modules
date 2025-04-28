@@ -303,7 +303,7 @@ void lorawan_printf_jreq(const uint8_t *frame_buffer, const uint8_t size) {
 
 	char eui_hex[20] = { 0 };
 	fmt_u64_hex(eui_hex, deveui);
-	printf("JREQ: deveui=0x%s", eui_hex);
+	printf("JREQ: deveui=%s", eui_hex);
 	fmt_u64_hex(eui_hex, joineui);
 	printf(" joineui=0%s devnonce=%04X mic=%08lX", eui_hex, devnonce, mic);
 }
