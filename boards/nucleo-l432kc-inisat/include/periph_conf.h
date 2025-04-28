@@ -8,11 +8,11 @@
  */
 
 /**
- * @ingroup     boards_nucleo-l432kc
+ * @ingroup     boards_nucleo-l432kc-inisat
  * @{
  *
  * @file
- * @brief       Peripheral MCU configuration for the nucleo-l432kc board for INISAT RAK4671
+ * @brief       Peripheral MCU configuration for the nucleo-l432kc board for INISAT with RAK5146 LoRa Gateway module 
  * @see 		https://os.mbed.com/platforms/ST-Nucleo-L432KC/#arduino-nano-compatible-headers
  * @author      Didier Donsez <didier.donsez@univ-grenoble-alpes.fr>
  */
@@ -45,7 +45,8 @@ static const uart_conf_t uart_config[] = {
         .dev        = USART2,
         .rcc_mask   = RCC_APB1ENR1_USART2EN,
         .rx_pin     = GPIO_PIN(PORT_A, 15),
-        .tx_pin     = GPIO_PIN(PORT_A, 2),
+        //.rx_pin     = GPIO_PIN(PORT_A, 3),  // A2
+        .tx_pin     = GPIO_PIN(PORT_A, 2),  // A7
         .rx_af      = GPIO_AF3,
         .tx_af      = GPIO_AF7,
         .bus        = APB1,
@@ -53,7 +54,7 @@ static const uart_conf_t uart_config[] = {
         .type       = STM32_USART,
         .clk_src    = 0, /* Use APB clock */
     },
-    {
+        {
         .dev        = USART1,
         .rcc_mask   = RCC_APB2ENR_USART1EN,
         .rx_pin     = GPIO_PIN(PORT_B, 7),  // D4
@@ -140,27 +141,6 @@ static const i2c_conf_t i2c_config[] = {
 
 #define RAK5146_ON_NUCLEO 1
 /** @} */
-
-
-
-/**
- * @name    ADC configuration
- *
- * Only the internal VBAT channel
- * @{
- */
-static const adc_conf_t adc_config[] = {
-    { .pin = GPIO_UNDEF, 	  .dev = 0, .chan = 18 }, /* VBAT */
-};
-
-/**
-* @brief Number of ADC devices
-*/
-#define ADC_NUMOF           ARRAY_SIZE(adc_config)
-
-#define VBAT_ADC            ADC_LINE(0) /**< VBAT ADC line */
-
-// TODO Add ADC for STM32 internal temperature sensor
 
 #ifdef __cplusplus
 }
