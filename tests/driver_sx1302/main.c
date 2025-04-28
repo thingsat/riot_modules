@@ -17,7 +17,9 @@
 #include "shell.h"
 
 #include "lgw_cmd.h"
-
+#include "git_utils.h"
+#include "board.h"
+#include "i2c_scan.h"
 
 #if GPS_UART_ENABLE == 1
 #include "gps_uart.h"
@@ -111,6 +113,7 @@ int sensors_get_all_temp(int argc, char **argv)
 
 #ifndef NO_SHELL
 static const shell_command_t shell_commands[] = {
+		{ "git", "Show git info", git_cmd },
 		{ "lgw", "LoRa gateway commands", lgw_cmd },
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
     { "temp", "Get the temperatures (Celsius)", sensors_get_all_temp },
@@ -129,10 +132,24 @@ int main(void) {
 	puts("Copyright (c) 2021-2025 UGA CSUG LIG");
 	puts("=========================================");
 
+
 	puts("\nBOARD: " RIOT_BOARD "\n");
 #if MESHTASTIC == 1
-	puts("\nMESHTASTIC surveyor\n");
+	puts("\nMESHTASTIC EU868 gateway configuration\n");
+#else
+	puts("\nLoRaWAN EU868 gateway configuration\n");
 #endif
+
+#ifdef NO_SHELL
+	print_git();
+#endif
+
+
+	for (int idx = 0; idx < (int) I2C_NUMOF; idx++) {
+		(void) mission_i2c_scan(idx);
+		(void) mission_i2c_scan_and_check(idx);
+	}
+
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();
@@ -147,9 +164,13 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
 	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
+#if MESHTASTIC == 1
+	lgw_cmd(2, (char*[]){"lgw","filter"});
+#else
 	// Filter CampusIoT only
 	lgw_cmd(4, (char*[]){"lgw","filter","fc00ac00","fffffc00"});
 	lgw_cmd(2, (char*[]){"lgw","filter"});
+#endif
 	lgw_cmd(3, (char*[]){"lgw","snr_threshold", "15"});
 	lgw_cmd(2, (char*[]){"lgw","snr_threshold"});
 	lgw_cmd(2, (char*[]){"lgw","listen"});

@@ -13,7 +13,10 @@ BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-p
 EXTERNAL_MODULE_DIRS += ../../modules
 
 MESHTASTIC ?= 0
+ifeq ($(MESHTASTIC),1)
 CFLAGS += -DMESHTASTIC=$(MESHTASTIC)
+USEMODULE += meshtastic_utils
+endif
 
 
 ifeq ($(BOARD),thingsat-up4-v2)
@@ -179,7 +182,8 @@ USEMODULE += ps
 USEMODULE += fmt
 USEMODULE += printf_float
 
-
+USEMODULE += git
+USEMODULE += i2c_scan_utils
 
 # -----------------------------
 # SX1302 Lib 
