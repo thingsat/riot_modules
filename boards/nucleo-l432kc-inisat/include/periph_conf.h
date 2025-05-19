@@ -41,12 +41,13 @@ extern "C" {
  * @{
  */
 static const uart_conf_t uart_config[] = {
+	// Console (or OpenLog)
     {
         .dev        = USART2,
         .rcc_mask   = RCC_APB1ENR1_USART2EN,
         .rx_pin     = GPIO_PIN(PORT_A, 15),
-        //.rx_pin     = GPIO_PIN(PORT_A, 3),  // A2
-        .tx_pin     = GPIO_PIN(PORT_A, 2),  // A7
+        //.rx_pin     = GPIO_PIN(PORT_A, 3),  // A2 ARDUINO_PIN_2
+        .tx_pin     = GPIO_PIN(PORT_A, 2),    // A7
         .rx_af      = GPIO_AF3,
         .tx_af      = GPIO_AF7,
         .bus        = APB1,
@@ -54,11 +55,11 @@ static const uart_conf_t uart_config[] = {
         .type       = STM32_USART,
         .clk_src    = 0, /* Use APB clock */
     },
-        {
+	{
         .dev        = USART1,
         .rcc_mask   = RCC_APB2ENR_USART1EN,
-        .rx_pin     = GPIO_PIN(PORT_B, 7),  // D4
-        .tx_pin     = GPIO_PIN(PORT_B, 6),	// D5
+        .rx_pin     = GPIO_PIN(PORT_B, 7),  // D4 ARDUINO_PIN_4
+        .tx_pin     = GPIO_PIN(PORT_B, 6),	// D5 ARDUINO_PIN_5
         .rx_af      = GPIO_AF7,
         .tx_af      = GPIO_AF7,
         .bus        = APB2,

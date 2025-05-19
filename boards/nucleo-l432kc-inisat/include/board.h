@@ -39,11 +39,10 @@ extern "C" {
 #define LED0_PORT_NUM       PORT_B
 
 
-
-
-//Chip select
-#define CS_MK   GPIO_PIN(PORT_A,5)
-#define CS_RAK  GPIO_PIN(PORT_B,1)   
+// Chip select Mikrobus Slot
+#define CS_MK   GPIO_PIN(PORT_A,5) // A5
+// Chip select RAK5134 miniPCI-e
+#define CS_RAK  GPIO_PIN(PORT_B,1) // B1
 
 
 // nucleo L432KC SPI #3 (Lora Core[RAK5146] : SX1303)
@@ -90,6 +89,18 @@ extern "C" {
 // https://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
 #define MCP9808_I2C_ADDRESS                 (0x18)
 #endif
+
+
+
+#ifndef CAN_RX_PIN
+// Nano Pin D10
+#define CAN_RX_PIN                 ARDUINO_PIN_10
+#endif
+#ifndef CAN_TX_PIN
+// Nano Pin D2
+#define CAN_TX_PIN                 ARDUINO_PIN_2
+#endif
+
 
 
 
