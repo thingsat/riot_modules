@@ -144,6 +144,7 @@ int main(void) {
 	print_git();
 #endif
 
+	// I2C scan
 
 	for (int idx = 0; idx < (int) I2C_NUMOF; idx++) {
 		(void) mission_i2c_scan(idx);
@@ -163,17 +164,27 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","start"});
 	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
+
+	puts("Repeating is on");
 	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
 #if MESHTASTIC == 1
 	lgw_cmd(2, (char*[]){"lgw","filter"});
 #else
 	// Filter CampusIoT only
+	puts("Set filter on RX frames");
 	lgw_cmd(4, (char*[]){"lgw","filter","fc00ac00","fffffc00"});
 	lgw_cmd(2, (char*[]){"lgw","filter"});
 #endif
+	puts("Set filter on SNR threshold");
 	lgw_cmd(3, (char*[]){"lgw","snr_threshold", "15"});
 	lgw_cmd(2, (char*[]){"lgw","snr_threshold"});
+
+	puts("Starting listening ...");
 	lgw_cmd(2, (char*[]){"lgw","listen"});
+
+	puts("Starting TX bench ...");
+	lgw_cmd(11, (char*[]){"lgw","bench","100000","7","125","8","12","on","false","32","10000"});
+
 #else
 	/* start the shell */
 	char line_buf[SHELL_DEFAULT_BUFSIZE];
