@@ -128,6 +128,11 @@ static const i2c_dev_info_t known_i2c_dev[] = {
 #endif
 };
 
+#elif defined(BOARD_NUCLEO_L432KC_INISAT)
+static const i2c_dev_info_t known_i2c_dev[] = {
+    {MCP9808_I2C_ADDRESS,	    "Temperature sensor (MCP9808)"},
+};
+
 #else
 
 static const i2c_dev_info_t known_i2c_dev[] = {
