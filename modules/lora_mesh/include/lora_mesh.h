@@ -23,7 +23,7 @@
 #define LORAMESH_PAYLOAD_TYPE_RELAYHEARTRATE	(0b10)
 
 /**
- * MeshLoRa MHDR
+ * MeshLoRa MHDR (common MHDR between uplink, downlink and realy heartbeat)
  */
 typedef struct {
 
@@ -38,7 +38,7 @@ typedef struct {
 typedef struct MeshLoRa_MHDR MeshLoRa_MHDR_t;
 
 /**
- * MeshLoRa Uplink
+ * MeshLoRa Uplink (without MIC)
  */
 typedef struct {
 
@@ -67,7 +67,7 @@ typedef struct {
 typedef struct MeshLoRa_Uplink MeshLoRa_Uplink_t;
 
 /**
- * MeshLoRa Downlink
+ * MeshLoRa Downlink (without MIC)
  */
 typedef struct {
 
@@ -96,7 +96,7 @@ typedef struct {
 typedef struct MeshLoRa_Downlink MeshLoRa_Downlink_t;
 
 /**
- * MeshLoRa Relay Heartbeat
+ * MeshLoRa Relay Heartbeat (without MIC)
  */
 typedef struct {
 
