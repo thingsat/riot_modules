@@ -696,10 +696,10 @@ static int lgw_bench_cmd(int argc, char **argv) {
 
 	// Set the payload
 	pkt.payload[0] = 0x40; 	/* Confirmed Data Up */
-	pkt.payload[1] = (ENDPOINT_DEVADDR && 0xff);
-	pkt.payload[2] = ((ENDPOINT_DEVADDR >> 8) && 0xff);
-	pkt.payload[3] = ((ENDPOINT_DEVADDR >> 16) && 0xff);
-	pkt.payload[4] = ((ENDPOINT_DEVADDR >> 24) && 0xff);
+	pkt.payload[1] = (ENDPOINT_DEVADDR 			& 0xff);
+	pkt.payload[2] = ((ENDPOINT_DEVADDR >> 8) 	& 0xff);
+	pkt.payload[3] = ((ENDPOINT_DEVADDR >> 16) 	& 0xff);
+	pkt.payload[4] = ((ENDPOINT_DEVADDR >> 24) 	& 0xff);
 	pkt.payload[5] = 0x00; 	/* FCTrl (FOptLen = 0) */
 	pkt.payload[6] = 0; 	/* FCnt */
 	pkt.payload[7] = 0; 	/* FCnt */
@@ -1502,6 +1502,12 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s* pkt_rx,
 			return;
 		}
 
+
+#if MESHTASTIC == 1
+		// check meshtastic_check_valid_frame_size
+		// filter meshtastic_get_srcid
+		// filter meshtastic_get_destid
+#else
 		// filter on devaddr
 		if (lorawan_check_valid_frame_size(pkt_rx->payload, pkt_rx->size)
 			&& lorawan_is_dataframe(pkt_rx->payload, pkt_rx->size)) {
@@ -1515,7 +1521,7 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s* pkt_rx,
 			printf("INFO: frame is not valid data frames : skip received frame\n");
 			return;
 		}
-
+#endif
 		// filter on SNR
 		if(pkt_rx->modulation == MOD_LORA && pkt_rx->snr > _snr_threshold) {
 			printf("INFO: SNR (%.1f)  is higher than snr_threshold (%d) : skip received frame\n",
@@ -1527,15 +1533,26 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s* pkt_rx,
 
 		pkt_tx->tx_mode = IMMEDIATE;
 		pkt_tx->rf_chain = 0; //only rf_chain 0 is able to tx
-		pkt_tx->rf_power = 14; //use the single entry of the txlut TODO Should be check
-	
-		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
-		pkt_tx->preamble = 8;	//  8 for LoRaWAN
-		pkt_tx->coderate = CR_LORA_4_5; // 4/5 for LoRaWAN
 
 		pkt_tx->freq_hz = pkt_rx->freq_hz;
 		pkt_tx->datarate = pkt_rx->datarate;
 		pkt_tx->bandwidth = pkt_rx->bandwidth;
+
+#if MESHTASTIC == 1
+		if(pkt_rx->freq_hz == 869525000) {
+			pkt_tx->rf_power = 27;
+		} else {
+			pkt_tx->rf_power = 14;
+		}
+		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
+		pkt_tx->preamble = 16;
+		pkt_tx->coderate = CR_LORA_4_8;
+#else
+		pkt_tx->rf_power = 14; //use the single entry of the txlut TODO Should be check
+		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
+		pkt_tx->preamble = 8;	//  8 for LoRaWAN
+		pkt_tx->coderate = CR_LORA_4_5; // 4/5 for LoRaWAN
+#endif
 
 		pkt_tx->no_header = false; 		// Beacons have not header
 		pkt_tx->no_crc = false; 		// LoRaWAN : on for uplink and off for downlink
@@ -1902,7 +1919,6 @@ static void _lgw_cmd_usage(char **argv) {
 #endif
 //    printf("%s spectral_scan : Start spectral scan\n", argv[0]);
 //    printf("%s beacon   : Transmit a beacon packet\n", argv[0]);
-//    printf("%s repeater : Repeat received packet(s)\n", argv[0]);
 #if ENABLE_REGTEST == 1
     printf("%s reg_test   : Test writing and reading from registers\n", argv[0]);
 #endif
