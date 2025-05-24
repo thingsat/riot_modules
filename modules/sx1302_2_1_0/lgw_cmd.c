@@ -34,6 +34,12 @@
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
 
+#ifdef MODULE_LORA_MESH
+#include "lora_mesh.h"
+#endif
+
+
+
 #include "loragw_sx1302.h"
 
 #ifndef ENDPOINT_DEVADDR
@@ -1174,7 +1180,16 @@ static void _printf_rxpkt(struct lgw_pkt_rx_s *rxpkt) {
 		printf("%02X ", rxpkt->payload[j]);
 	}
 	printf("\n");
+
+#ifdef MODULE_LORA_MESH
+	if(lora_mesh_check_valid_frame(rxpkt->payload,rxpkt->size)) {
+		lora_mesh_printf_frame(rxpkt->payload,rxpkt->size);
+	} else {
+		lorawan_printf_payload(rxpkt->payload,rxpkt->size);
+	}
+#else
 	lorawan_printf_payload(rxpkt->payload,rxpkt->size);
+#endif
 }
 
 //#define MAX_RX_PKT 4

@@ -12,12 +12,15 @@ BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-p
 
 EXTERNAL_MODULE_DIRS += ../../modules
 
+# Meshtastic Messages
 MESHTASTIC ?= 0
 ifeq ($(MESHTASTIC),1)
 CFLAGS += -DMESHTASTIC=$(MESHTASTIC)
 USEMODULE += meshtastic_utils
 endif
 
+# LoRa Chirpstack Messages
+USEMODULE += lora_mesh
 
 ifeq ($(BOARD),thingsat-up4-v2)
 EXTERNAL_MODULE_DIRS += ../../modules
