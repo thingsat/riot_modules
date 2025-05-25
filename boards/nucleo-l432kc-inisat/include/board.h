@@ -34,74 +34,105 @@ extern "C" {
  * @name Macros for controlling the on-board LED (LD3).
  * @{
  */
-#define LED0_PIN_NUM        3
-#define LED0_PORT           GPIO_PORT_B /**< GPIO port of LED 0 */
-#define LED0_PORT_NUM       PORT_B
+// Nano D13
+#define LED0_PIN_NUM        					3
+#define LED0_PORT           					GPIO_PORT_B /**< GPIO port of LED 0 */
+#define LED0_PORT_NUM       					PORT_B
 
 
 // Chip select Mikrobus Slot
-#define CS_MK   GPIO_PIN(PORT_A,5) // A5
+#define SPI_CS_MK   							GPIO_PIN(PORT_A,5) // Nano A4
 // Chip select RAK5134 miniPCI-e
-#define CS_RAK  GPIO_PIN(PORT_B,1) // B1
+#define SPI_CS_RAK  							GPIO_PIN(PORT_B,1) // Nano D6
 
 
 // nucleo L432KC SPI #3 (Lora Core[RAK5146] : SX1303)
 // REMARK : leave SX1302_ in define even if the component is a SX1303
-#define SX1302_PARAM_SPI             (SPI_DEV(0))
-#define SX1302_PARAM_SPI_NSS         CS_RAK
-#define SX1302_PARAM_SPI_CLK_SPEED	 SPI_CLK_5MHZ
+#define SX1302_PARAM_SPI             			(SPI_DEV(0))
+#define SX1302_PARAM_SPI_NSS         			SPI_CS_RAK
+#define SX1302_PARAM_SPI_CLK_SPEED	 			SPI_CLK_5MHZ
 
-#define SX1302_PARAM_RESET_PIN       GPIO_PIN(PORT_B,0)
+#define SX1302_PARAM_RESET_PIN       			GPIO_PIN(PORT_B,0) // Nano D3
+
+#define SX1302_GPIO6_PIN       		 			GPIO_PIN(PORT_A,4) // Nano A3
 
 
 // nucleo L432KC SPI #3 (Mikrobus[LAMBDA80] : SX1280)
 
 #ifndef SX1280_PARAM_SPI
-#define SX1280_PARAM_SPI                    SPI_DEV(0)      /**< default SPI device */
+#define SX1280_PARAM_SPI                    	SPI_DEV(0)      /**< default SPI device */
 #endif
 
 #ifndef SX1280_PARAM_SPI_CLK
-#define SX1280_PARAM_SPI_CLK                SPI_CLK_5MHZ    /**< default SPI speed */
+#define SX1280_PARAM_SPI_CLK                	SPI_CLK_5MHZ    /**< default SPI speed */
 #endif
 
 #ifndef SX1280_PARAM_SPI_MODE
-#define SX1280_PARAM_SPI_MODE               SPI_MODE_0      /**< default SPI mode for sx1280 */
+#define SX1280_PARAM_SPI_MODE               	SPI_MODE_0      /**< default SPI mode for sx1280 */
 #endif
 
 #ifndef SX1280_PARAM_SPI_NSS
-#define SX1280_PARAM_SPI_NSS                CS_MK           /**< SPI NSS pin */
+#define SX1280_PARAM_SPI_NSS                	SPI_CS_MK       /**< SPI NSS pin */
 #endif
 
 #ifndef SX1280_PARAM_RESET
-#define SX1280_PARAM_RESET                  GPIO_UNDEF      /**< Reset pin */
+#define SX1280_PARAM_RESET                  	GPIO_UNDEF      /**< Reset pin */
 #endif
 
 #ifndef SX1280_PARAM_DIO0
-#define SX1280_PARAM_DIO0                   GPIO_UNDEF      /**< DIO0 */
+#define SX1280_PARAM_DIO0                  		GPIO_UNDEF      /**< DIO0 */
 #endif
 
 #ifndef SX1280_PARAM_DIO1
-#define SX1280_PARAM_DIO1                   GPIO_PIN(PORT_B, 8) /**< DIO1 */
+#define SX1280_PARAM_DIO1                  		 GPIO_PIN(PORT_B,8) /**< DIO1 */
 #endif
 
 #ifndef MCP9808_I2C_ADDRESS
 // On board temperature sensor
 // https://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
-#define MCP9808_I2C_ADDRESS                 (0x18)
+#define MCP9808_I2C_ADDRESS                 	(0x18)
 #endif
-
-
 
 #ifndef CAN_RX_PIN
 // Nano Pin D10
-#define CAN_RX_PIN                 ARDUINO_PIN_10
+#define CAN_RX_PIN                 				GPIO_PIN(PORT_1,12) // Nano D10
 #endif
 #ifndef CAN_TX_PIN
 // Nano Pin D2
-#define CAN_TX_PIN                 ARDUINO_PIN_2
+#define CAN_TX_PIN                 				GPIO_PIN(PORT_A,11) // Nano D2
+#endif
+
+// INT1 (Nano A6)
+#ifndef INT1_PIN
+#define INT1_PIN	                 			GPIO_PIN(PORT_A,7)
+#endif
+
+// PWM1 (Nano D9)
+#ifndef PWM1_PIN
+#define PWM1_PIN                 				GPIO_PIN(PORT_A,8)
+#endif
+
+// PWM2 (Nano A5)
+#ifndef PWM2_PIN
+#define PWM2_PIN                 				GPIO_PIN(PORT_A,6)
+#endif
+
+// SENS1 (Nano A1)
+#ifndef SENS1_PIN
+#define SENS1_PIN                 				GPIO_PIN(PORT_A,1)
+#endif
+
+// SENS2 (Nano A0)
+#ifndef SENS2_PIN
+#define SENS2_PIN                 				GPIO_PIN(PORT_A,0)
 #endif
 
 
+#ifndef GNSS_UART_DEV
+#define GNSS_UART_DEV                 			1
+#endif
+
+#define GNSS_PPS_PIN                 			INT1_PIN
 
 
 /** @} */

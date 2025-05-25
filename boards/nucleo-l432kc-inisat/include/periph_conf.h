@@ -21,7 +21,6 @@
 #define PERIPH_CONF_H
 
 
-
 /* Add specific clock configuration (HSE, LSE) for this board here */
 #ifndef CONFIG_BOARD_HAS_LSE
 #define CONFIG_BOARD_HAS_LSE            1
@@ -45,9 +44,9 @@ static const uart_conf_t uart_config[] = {
     {
         .dev        = USART2,
         .rcc_mask   = RCC_APB1ENR1_USART2EN,
-        .rx_pin     = GPIO_PIN(PORT_A, 15),
-        //.rx_pin     = GPIO_PIN(PORT_A, 3),  // A2 ARDUINO_PIN_2
-        .tx_pin     = GPIO_PIN(PORT_A, 2),    // A7
+        .rx_pin     = GPIO_PIN(PORT_A, 15), // Nano A2
+        //.rx_pin     = GPIO_PIN(PORT_A, 3),  // Nano A2
+        .tx_pin     = GPIO_PIN(PORT_A, 2),    // Nano A7
         .rx_af      = GPIO_AF3,
         .tx_af      = GPIO_AF7,
         .bus        = APB1,
@@ -55,11 +54,12 @@ static const uart_conf_t uart_config[] = {
         .type       = STM32_USART,
         .clk_src    = 0, /* Use APB clock */
     },
+	// MiniPCIe xor Mikrobus (according JP3 and JP4 jumpers)
 	{
         .dev        = USART1,
         .rcc_mask   = RCC_APB2ENR_USART1EN,
-        .rx_pin     = GPIO_PIN(PORT_B, 7),  // D4 ARDUINO_PIN_4
-        .tx_pin     = GPIO_PIN(PORT_B, 6),	// D5 ARDUINO_PIN_5
+        .rx_pin     = GPIO_PIN(PORT_B, 6),  // Nano D4
+        .tx_pin     = GPIO_PIN(PORT_B, 7),	// Nano D5
         .rx_af      = GPIO_AF7,
         .tx_af      = GPIO_AF7,
         .bus        = APB2,
@@ -140,7 +140,7 @@ static const i2c_conf_t i2c_config[] = {
 #define I2C_NUMOF           ARRAY_SIZE(i2c_config)
 /** @} */
 
-#define RAK5146_ON_NUCLEO 1
+#define RAK5146_ON_NUCLEO32 1
 /** @} */
 
 #ifdef __cplusplus
