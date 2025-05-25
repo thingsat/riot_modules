@@ -710,9 +710,11 @@ static int lgw_bench_cmd(int argc, char **argv) {
 
 	const uint32_t devaddr = lgw_sx130x_endpoint->devaddr;
 
-	const uint8_t fpayload[] = "This is a test from driver_sx1302 !!";
+	// APRS (https://www.aprs.org/doc/APRS101.PDF) like text message.
+	const uint8_t fpayload[] = "@sx1302@world :This is a simple test$GPGGA,045104.000,3014.1985,N,09749.2873,W,1,09,1.2,211.6,M,-22.5,M,,0000*62";
 	const uint8_t fpayload_size = sizeof(fpayload);
 	const uint8_t fPort  = 100; // For Thingsat decoder (Plaintext)
+	// Note: fpayload can contains an APRS string
 
 	while (nb_remaining_packets_to_transmit--) {
 
