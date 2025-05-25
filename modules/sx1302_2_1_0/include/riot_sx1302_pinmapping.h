@@ -96,7 +96,7 @@
 
 #elif RAK5146_ON_NUCLEO32 == 1
 
-#include "arduino_board.h"
+//#include "arduino_board.h"
 
 #ifndef SX1302_PARAM_SPI
 #define SX1302_PARAM_SPI                    	(SPI_DEV(0))
