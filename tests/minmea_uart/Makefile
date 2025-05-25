@@ -1,5 +1,11 @@
 include $(RIOTBASE)/tests/Makefile.tests_common
 
+
+BOARD ?= nucleo-l432kc-inisat
+
+EXTERNAL_BOARD_DIRS ?= ../../boards
+
+
 FEATURES_REQUIRED += periph_uart
 FEATURES_OPTIONAL += periph_lpuart  # STM32 L0 and L4 provides lpuart support
 FEATURES_OPTIONAL += periph_uart_modecfg
