@@ -17,6 +17,7 @@
 #include "shell.h"
 
 #include "lgw_cmd.h"
+#include "loragw_hal.h"
 #include "git_utils.h"
 #include "board.h"
 #include "i2c_scan.h"
@@ -125,6 +126,45 @@ static const shell_command_t shell_commands[] = {
 };
 #endif
 
+
+
+#ifndef ENDPOINT_DEVADDR
+
+#include "endpoints.h"
+
+static int _set_endpoint(void) {
+
+	if(!lgw_is_started()) {
+		printf("ERROR: the gateway is not started\n");
+		return EXIT_FAILURE;
+	}
+
+	uint64_t eui;
+	int err = lgw_get_eui(&eui);
+	if (err != 0) {
+		printf("ERROR: failed to get SX130x EUI\n");
+		return EXIT_FAILURE;
+	}
+	lgw_sx130x_endpoint = NULL;
+
+	for(unsigned int i=0; i<ARRAY_SIZE(lgw_sx130x_endpoints); i++) {
+		if(eui == lgw_sx130x_endpoints[i].gweui) {
+			lgw_sx130x_endpoint = lgw_sx130x_endpoints + i;
+		}
+	}
+
+	if(lgw_sx130x_endpoint == NULL) {
+		printf("ERROR: no endpoint defined for SX130x EUI\n");
+		return EXIT_FAILURE;
+	} else {
+		printf("INFO: endpoint with devaddr=%08lx defined for SX130x EUI\n", lgw_sx130x_endpoint->devaddr);
+		return EXIT_SUCCESS;
+	}
+}
+
+#endif
+
+
 int main(void) {
 
 	puts("=========================================");
@@ -165,6 +205,10 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","eui"});
 	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
 
+#ifndef ENDPOINT_DEVADDR
+	_set_endpoint();
+#endif
+
 	puts("Repeating is on");
 	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
 #if MESHTASTIC == 1
@@ -176,15 +220,19 @@ int main(void) {
 	lgw_cmd(2, (char*[]){"lgw","filter"});
 #endif
 	puts("Set filter on SNR threshold");
-	lgw_cmd(3, (char*[]){"lgw","snr_threshold", "15"});
+	lgw_cmd(3, (char*[]){"lgw","snr_threshold", "5"});
 	lgw_cmd(2, (char*[]){"lgw","snr_threshold"});
 
 	puts("Starting listening ...");
 	lgw_cmd(2, (char*[]){"lgw","listen"});
 
-	puts("Starting TX bench ...");
-	lgw_cmd(11, (char*[]){"lgw","bench","100000","7","125","8","12","on","false","32","10000"});
-
+	if(lgw_sx130x_endpoint == NULL) {
+		puts("ERROR: lgw_sx130x_endpoint is null : Can not start TX bench");
+	} else {
+		puts("Starting TX bench ...");
+		// every 30 seconds
+		lgw_cmd(11, (char*[]){"lgw","bench","100000","7","125","8","12","on","false","32","30000"});
+	}
 #else
 	/* start the shell */
 	char line_buf[SHELL_DEFAULT_BUFSIZE];
