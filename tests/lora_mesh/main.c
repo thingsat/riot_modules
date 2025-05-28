@@ -15,7 +15,6 @@
 
 #include "lora_mesh.h"
 
-
 #include "shell.h"
 
 
@@ -23,36 +22,55 @@ static const shell_command_t shell_commands[] = {
 	{ NULL, NULL, NULL }
 };
 
+uint8_t lora_mesh_phypayload[LORAWAN_PHYPAYLOAD_LEN - 14U];
+
+uint8_t signing_key[]= {0xca, 0xfe, 0xba, 0xbe, 0x12, 0x34, 0x56, 0x78, 0xca, 0xfe, 0xba, 0xbe, 0x12, 0x34, 0x56, 0x78};
 
 
-const MeshLoRa_Uplink_t uplink = {
-	.mtype = LORAMESH_MTYPE_PROPRIETARY,
-	.payload_type = LORAMESH_PAYLOAD_TYPE_UPLINK,
-	.hop_count = 2,
-	.uplink_id = 1234,
-	.datarate = 1,
-	.rssi = 120,
-	.snr = 10,
-	.channel = 1,
-	.relay_id = 0x12345678,
-};
+uint8_t buf[LORAWAN_PHYPAYLOAD_LEN];
+uint8_t buf_size;
 
-	uint8_t lora_mesh_phypayload[LORAWAN_PHYPAYLOAD_LEN - 14U];
 
-	uint8_t frame[] = {0x00, 0x01, 0x02, 0x03};
+static uint8_t _encode(void){
 
+	// https://en.wikipedia.org/wiki/Hexspeak
+	uint8_t frame[] = {0xca, 0xfe, 0xba, 0xbe, 0xde, 0xad, 0xbe, 0xef};
+
+	lora_mesh_build_uplink(
+		buf,
+		&buf_size,
+		2,
+		0x1234,
+		5,
+		130,
+		10,
+		0,
+		0xdeedbeef,
+		frame,
+		sizeof(frame),
+		signing_key
+	);
+
+	return buf_size;
+}
+
+static void _decode(void){
+
+	bool res = lora_mesh_check_mic(buf, buf_size, signing_key);
+	if (res) {
+		puts("MIC check: SUCCESS");
+	} else {
+		puts("MIC check: FAILED");
+	}
+
+	lora_mesh_printf_frame(buf, buf_size);
+}
 
 
 int main(void) {
 
-	uint8_t buf[LORAWAN_PHYPAYLOAD_LEN];
-	uint32_t mic = 0x0A0B0C0D;
-
-	memcpy(buf, &uplink, 10);
-	memcpy(buf + 10, frame, sizeof(frame));
-	memcpy(buf + 10 + sizeof(frame), &mic, sizeof(mic));
-
-	lora_mesh_printf_frame(buf, 10 + sizeof(frame) + sizeof(mic));
+	(void)_encode();
+	(void)_decode();
 
 
 	puts("");

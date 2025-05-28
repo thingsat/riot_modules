@@ -18,12 +18,41 @@
 #include "lora_mesh.h"
 
 
-static bool _check_mic(const uint8_t *buf, const size_t buf_len,
-		const uint8_t *cmac_key) {
-	mic_t mic_to_check;
-	memcpy(&mic_to_check, buf + (buf_len - sizeof(mic_t)), sizeof(mic_t));
-	return Cmac_check_mic(buf, cmac_key, buf_len - sizeof(mic_t), mic_to_check);
-}
+bool lora_mesh_build_uplink(
+		uint8_t *frame_buffer,
+		uint8_t *size,
+		const uint8_t hop_count,
+		const uint16_t uplink_id,
+		const uint8_t datarate,
+		const uint8_t rssi,
+		const uint8_t snr,
+		const uint8_t channel,
+		const uint32_t relay_id,
+		const uint8_t *phypayload,
+		const uint8_t phypayload_size,
+		const uint8_t *signing_key
+) {
+	MeshLoRa_Uplink_t *uplink = (MeshLoRa_Uplink_t*)frame_buffer;
+	*size = 14 + phypayload_size;
+
+	uplink->mtype = LORAMESH_MTYPE_PROPRIETARY;
+	uplink->payload_type = LORAMESH_PAYLOAD_TYPE_UPLINK;
+	uplink->hop_count = hop_count;
+	uplink->uplink_id = uplink_id;
+	uplink->datarate = datarate;
+	uplink->rssi = rssi;
+	uplink->snr = snr;
+	uplink->channel = channel;
+	uplink->relay_id = relay_id;
+
+	memcpy(frame_buffer+10, phypayload, phypayload_size);
+
+	uint32_t mic;
+	Cmac_calculate_mic(frame_buffer, signing_key, (10+phypayload_size), &mic);
+	memcpy(frame_buffer+(10+phypayload_size), &mic, sizeof(mic));
+
+	return true;
+};
 
 
 /** Check valid mesh frame */
