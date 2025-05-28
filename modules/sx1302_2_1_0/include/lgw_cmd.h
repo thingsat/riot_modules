@@ -10,7 +10,15 @@
 #ifndef _LGW_CMD_H
 #define _LGW_CMD_H
 
-
 int lgw_cmd(int argc, char **argv);
+
+#if INVOKE_CALLBACKS == 1
+
+#include "loragw_hal.h"
+
+extern void (*pkt_rx_cb)(const struct lgw_pkt_rx_s*, struct lgw_pkt_tx_s*);
+extern void (*pkt_period_cb)(struct lgw_pkt_tx_s*);
+#endif
+
 
 #endif //_LGW_CMD_H
