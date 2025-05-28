@@ -262,9 +262,7 @@ include Makefile.gnss.mk
 endif
 
 
-ifeq ($(ENABLE_CHIRPSTACKMESH),1)
-include Makefile.chirpstackmesh.mk
-endif
+include Makefile.repeat.mk
 
 
 # -----------------------------

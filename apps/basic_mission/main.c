@@ -1,6 +1,6 @@
 /*
- SX1302/SX1303 LGW commands
- Copyright (c) 2021-2024 UGA CSUG LIG
+ Basic Mission
+ Copyright (c) 2021-2025 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -18,6 +18,8 @@
 
 #include "lgw_cmd.h"
 #include "loragw_hal.h"
+#include "repeat.h"
+
 #include "git_utils.h"
 #include "board.h"
 #include "i2c_scan.h"
@@ -113,20 +115,16 @@ int sensors_get_all_temp(int argc, char **argv)
 #endif
 
 #ifndef NO_SHELL
-static const shell_command_t shell_commands[] = {
-		{ "git", "Show git info", git_cmd },
-		{ "lgw", "LoRa gateway commands", lgw_cmd },
+static const shell_command_t shell_commands[] = { { "git", "Show git info",
+		git_cmd }, { "lgw", "LoRa gateway commands", lgw_cmd },
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
     { "temp", "Get the temperatures (Celsius)", sensors_get_all_temp },
 #endif
 #if ENABLE_GPS == 1
     { "gps", "GPS commands", gps_cmd },
 #endif
-	{ NULL, NULL, NULL }
-};
+		{ NULL, NULL, NULL } };
 #endif
-
-
 
 #ifndef ENDPOINT_DEVADDR
 
@@ -134,7 +132,7 @@ static const shell_command_t shell_commands[] = {
 
 static int _set_endpoint(void) {
 
-	if(!lgw_is_started()) {
+	if (!lgw_is_started()) {
 		printf("ERROR: the gateway is not started\n");
 		return EXIT_FAILURE;
 	}
@@ -147,23 +145,23 @@ static int _set_endpoint(void) {
 	}
 	lgw_sx130x_endpoint = NULL;
 
-	for(unsigned int i=0; i<ARRAY_SIZE(lgw_sx130x_endpoints); i++) {
-		if(eui == lgw_sx130x_endpoints[i].gweui) {
+	for (unsigned int i = 0; i < ARRAY_SIZE(lgw_sx130x_endpoints); i++) {
+		if (eui == lgw_sx130x_endpoints[i].gweui) {
 			lgw_sx130x_endpoint = lgw_sx130x_endpoints + i;
 		}
 	}
 
-	if(lgw_sx130x_endpoint == NULL) {
+	if (lgw_sx130x_endpoint == NULL) {
 		printf("ERROR: no endpoint defined for SX130x EUI\n");
 		return EXIT_FAILURE;
 	} else {
-		printf("INFO: endpoint with devaddr=%08lx defined for SX130x EUI\n", lgw_sx130x_endpoint->devaddr);
+		printf("INFO: endpoint with devaddr=%08lx defined for SX130x EUI\n",
+				lgw_sx130x_endpoint->devaddr);
 		return EXIT_SUCCESS;
 	}
 }
 
 #endif
-
 
 int main(void) {
 
@@ -171,7 +169,6 @@ int main(void) {
 	puts("SX1302/SX1303 Driver Test Application");
 	puts("Copyright (c) 2021-2025 UGA CSUG LIG");
 	puts("=========================================");
-
 
 	puts("\nBOARD: " RIOT_BOARD "\n");
 #if MESHTASTIC == 1
@@ -191,7 +188,6 @@ int main(void) {
 		(void) mission_i2c_scan_and_check(idx);
 	}
 
-
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();
 #endif
@@ -210,18 +206,18 @@ int main(void) {
 #endif
 
 	puts("Repeating is on");
-	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
+	basic_mission_repeat(true);
+
 #if MESHTASTIC == 1
-	lgw_cmd(2, (char*[]){"lgw","filter"});
+	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET, REPEAT_FILTER_DEVADDR_MASK);
 #else
 	// Filter CampusIoT only
 	puts("Set filter on RX frames");
-	lgw_cmd(4, (char*[]){"lgw","filter","fc00ac00","fffffc00"});
-	lgw_cmd(2, (char*[]){"lgw","filter"});
+	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET, REPEAT_FILTER_DEVADDR_MASK);
 #endif
+
 	puts("Set filter on SNR threshold");
-	lgw_cmd(3, (char*[]){"lgw","snr_threshold", "5"});
-	lgw_cmd(2, (char*[]){"lgw","snr_threshold"});
+	basic_mission_snr_threshold(REPEAT_FILTER_SNR_THRESHOLD);
 
 	puts("Starting listening ...");
 	lgw_cmd(2, (char*[]){"lgw","listen"});

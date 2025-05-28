@@ -3,12 +3,14 @@
 * [x] LoRaWAN repeater (with devaddr filtering)
 * [ ] App Clock Sync
 * [ ] Chirpstack Mesk Relay
-* [ ] Periodic telemetry (with GNSS position and temperature) using both Cayenne LPP and APRS format (with XOR redundancy)
+* [ ] Periodic telemetry (with GNSS position and temperature) using LoRaWAN with Cayenne LPP (and XOR redundancy)
+* [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry
+* [ ] Periodic telemetry (with GNSS position and temperature) using APRS format
 * [ ] Periodic two-way ranging with other Thingsat boards
+* [ ] LoRa 2G4 backhaul when SX1280 module is present
 
 
 ## Setup
-
 
 ```bash
 export RIOTBASE=~/github/RIOT-OS/RIOT
