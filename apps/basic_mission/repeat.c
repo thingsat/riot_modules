@@ -45,8 +45,8 @@ static int _snr_threshold = 20;
 
 #if CHIRPSTACK_MESH_ENABLE == 1
 
-uint16_t uplink_id = 1;
-const uint8_t signing_key[] = CHIRPSTACK_MESH_SIGNING_KEY;
+static uint16_t uplink_id = 1;
+static const uint8_t signing_key[] = CHIRPSTACK_MESH_SIGNING_KEY;
 
 #endif
 
@@ -91,6 +91,10 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		// filter meshtastic_get_srcid
 		// filter meshtastic_get_destid
 #else
+
+	// TODO filter on relayed mic
+	// TODO valid and correct mic and hop
+
 	// filter on devaddr
 	if (lorawan_check_valid_frame_size(pkt_rx->payload, pkt_rx->size)
 			&& lorawan_is_dataframe(pkt_rx->payload, pkt_rx->size)) {
@@ -127,7 +131,7 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 	lora_mesh_build_uplink(
 		pkt_tx->payload,
 		&size,
-		1,
+		1, // first hop
 		uplink_id++,
 		12 - pkt_rx->datarate,
 		-1*floor(pkt_rx->rssic),
