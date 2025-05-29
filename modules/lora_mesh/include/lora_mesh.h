@@ -29,11 +29,11 @@
  */
 struct __attribute__((packed)) MeshLoRa_MHDR {
 
-	unsigned int mtype :3;
+	uint8_t hop_count :3;
 
-	unsigned int payload_type :2;
+	uint8_t payload_type :2;
 
-	unsigned int hop_count :3;
+	uint8_t mtype :3;
 };
 
 typedef struct MeshLoRa_MHDR MeshLoRa_MHDR_t;
@@ -43,15 +43,15 @@ typedef struct MeshLoRa_MHDR MeshLoRa_MHDR_t;
  */
 struct __attribute__((packed)) MeshLoRa_Uplink {
 
-	unsigned int mtype :3;
+	uint8_t hop_count :3;
 
-	unsigned int payload_type :2;
+	uint8_t payload_type :2;
 
-	unsigned int hop_count :3;
+	uint8_t mtype :3;
 
-	unsigned int uplink_id :12;
+	uint16_t datarate :4;
 
-	unsigned int datarate :4;
+	uint16_t uplink_id :12;
 
 	uint8_t rssi;
 
@@ -72,21 +72,21 @@ typedef struct MeshLoRa_Uplink MeshLoRa_Uplink_t;
  */
 struct __attribute__((packed)) MeshLoRa_Downlink {
 
-	unsigned int mtype :3;
+	uint8_t hop_count :3;
 
-	unsigned int payload_type :2;
+	uint8_t payload_type :2;
 
-	unsigned int hop_count :3;
+	uint8_t mtype :3;
 
-	unsigned int uplink_id :12;
+	uint16_t downlink_datarate :4;
 
-	unsigned int downlink_datarate :4;
+	uint16_t uplink_id :12;
 
-	unsigned int downlink_frequency :24;
+	uint32_t delay :4;
 
-	unsigned int tx_power :4;
+	uint32_t tx_power :4;
 
-	unsigned int delay :4;
+	uint32_t downlink_frequency :24;
 
 	uint32_t relay_id;
 
@@ -101,11 +101,11 @@ typedef struct MeshLoRa_Downlink MeshLoRa_Downlink_t;
  */
 struct __attribute__((packed)) MeshLoRa_RelayHeartbeat {
 
-	unsigned int mtype :3;
+	uint8_t hop_count :3;
 
-	unsigned int payload_type :2;
+	uint8_t payload_type :2;
 
-	unsigned int hop_count :3;
+	uint8_t mtype :3;
 
 	uint32_t timestamp;
 
