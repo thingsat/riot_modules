@@ -1,0 +1,5 @@
+
+USEPKG += minmea
+USEMODULE += fmt
+
+#USEMODULE += printf_float

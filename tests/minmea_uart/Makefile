@@ -19,15 +19,29 @@ FEATURES_OPTIONAL += periph_uart_rxstart_irq
 USEMODULE += shell
 USEMODULE += xtimer
 
-USEPKG += minmea
-USEMODULE += fmt
+USEMODULE += minmea_utils
+
+# OpenLog https://github.com/CampusIoT/tutorial/blob/master/openlogger/README.md
+OPENLOG_BAUDRATE ?= 115200
+CFLAGS += -DOPENLOG_BAUDRATE=$(OPENLOG_BAUDRATE)
+CFLAGS += -DSTDIO_UART_BAUDRATE=$(OPENLOG_BAUDRATE)
+
+
+GNSS_UART_DEV ?= 1
+GNSS_BAUDRATE ?= 9600
+CFLAGS += -DGNSS_UART_DEV=$(GNSS_UART_DEV)
+CFLAGS += -DGNSS_BAUDRATE=$(GNSS_BAUDRATE)
+
+
+
+# USEPKG += minmea
+# USEMODULE += fmt
+
 #USEMODULE += printf_float
 
 #CFLAGS += -DISR_STACKSIZE=2048U
 
 CFLAGS += -Wno-switch
-
-CFLAGS += -DSTDIO_UART_BAUDRATE=115200
 
 # avoid running Kconfig by default
 SHOULD_RUN_KCONFIG ?=

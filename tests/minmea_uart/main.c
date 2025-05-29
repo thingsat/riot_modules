@@ -37,7 +37,7 @@
 #include "stdio_uart.h"
 #endif
 
-#include "minmea_print.h"
+#include "minmea_utils.h"
 
 
 #ifndef SHELL_BUFSIZE
@@ -161,6 +161,39 @@ static int _self_test(uart_t dev, unsigned baud) {
 	return 0;
 }
 
+#ifdef OPENLOG_BAUDRATE
+
+static void* printer(void *arg) {
+	(void) arg;
+	msg_t msg;
+	msg_t msg_queue[8];
+	msg_init_queue(msg_queue, 8);
+
+	while (1) {
+		msg_receive(&msg);
+		uart_t dev = (uart_t) msg.content.value;
+		char c;
+
+		do {
+			c = (int) ringbuffer_get_one(&(ctx[dev].rx_buf));
+
+			if (c == '\n') {
+				printf("\n");
+			} else if (c == '\r') {
+				//printf("\\r");
+			} else if (c >= ' ' && c <= '~') {
+				printf("%c", c);
+			} else {
+				printf("0x%02x", (unsigned char) c);
+			}
+		} while (c != '\n');
+	}
+
+	/* this should never be reached */
+	return NULL;
+}
+#else
+
 static void* printer(void *arg) {
 	(void) arg;
 	msg_t msg;
@@ -178,7 +211,7 @@ static void* printer(void *arg) {
 
 
 			// Add the char for parsing the potential NMEA sentence
-			(void)parse_nmea(c);
+			(void)minmea_parse_and_print(c);
 
 			if (c == '\n') {
 				printf("\\n");
@@ -196,6 +229,7 @@ static void* printer(void *arg) {
 	/* this should never be reached */
 	return NULL;
 }
+#endif
 
 static void sleep_test(int num, uart_t uart) {
 	printf("UARD_DEV(%i): test uart_poweron() and uart_poweroff()  ->  ", num);
@@ -395,8 +429,13 @@ int main(void) {
 	printer_pid = thread_create(printer_stack, sizeof(printer_stack),
 	PRINTER_PRIO, 0, printer, NULL, "printer");
 
+
+#ifdef OPENLOG_BAUDRATE
+	(void)cmd_init(3, (char*[]){"init","GNSS_UART_DEV", "GNSS_BAUDRATE"});
+#endif
 	/* run the shell */
 	char line_buf[SHELL_BUFSIZE];
 	shell_run(shell_commands, line_buf, SHELL_BUFSIZE);
+
 	return 0;
 }

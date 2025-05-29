@@ -1,16 +1,21 @@
 /*
- * minmea_parse.c
- *
- *  Created on: May 25, 2025
- *      Author: donsez
+ * Copyright (C) 2025 Université Grenoble Alpes
  */
+
+/*
+ * Utils for MINMEA
+ *      Author: Didier Donsez
+ *
+ */
+
+#include "minmea_utils.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "fmt.h"
 #include "minmea.h"
-#include "minmea_print.h"
 
 static bool parse_nmea_gll(const char *sentence) {
 	struct minmea_sentence_gll frame;
@@ -330,7 +335,7 @@ static bool parse_nmea_gst(const char *sentence) {
 static uint8_t nema_buffer[NMEA_BUFFER_SIZE];
 static int nema_buffer_idx = 0;
 
-bool parse_nmea(uint8_t c) {
+bool minmea_parse_and_print(uint8_t c) {
 
 	if (nema_buffer_idx == 0) {
 		memset(nema_buffer, 0, NMEA_BUFFER_SIZE);
@@ -432,3 +437,21 @@ bool parse_nmea(uint8_t c) {
 
 	return true;
 }
+
+/*
+
+TODO
+
+static bool valid = false;
+static bool date = ;
+static float latitude  = ;
+static float longitude = ;
+static float altitude = ;
+static int satellites = ;
+
+
+bool minmea_get_postion() {
+
+}
+ */
+
