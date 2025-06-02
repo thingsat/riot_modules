@@ -3,9 +3,9 @@
 #
 RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
 
-APPLICATION=test_driver_sx1302
+APPLICATION=thingsat_basic_mission
 
-BOARD ?= thingsat-up4-v2
+BOARD ?= nucleo-l432kc-inisat
 EXTERNAL_BOARD_DIRS ?= ../../boards
 
 BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
