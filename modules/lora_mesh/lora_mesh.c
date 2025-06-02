@@ -27,6 +27,18 @@ float lora_mesh_get_snr_f(const uint8_t snr) {
 	return (float)((int8_t) (snr << 2));
 }
 
+
+uint8_t lora_mesh_get_channel(const uint32_t freq_hz, const uint32_t* frequency_plan, const uint32_t frequency_plan_len) {
+	uint8_t i;
+	for(i=0; i<frequency_plan_len; i++) {
+		if(frequency_plan[i] == freq_hz) {
+			return i;
+		}
+	}
+	return 0xffU;
+}
+
+
 bool lora_mesh_build_uplink(
 		uint8_t *frame_buffer,
 		uint8_t *size,

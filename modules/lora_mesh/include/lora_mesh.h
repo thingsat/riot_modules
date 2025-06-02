@@ -186,6 +186,9 @@ uint8_t lora_mesh_get_snr_u(const float snr);
 /** get SNR as float */
 float lora_mesh_get_snr_f(const uint8_t snr);
 
+/** get the channel from the frequency */
+uint8_t lora_mesh_get_channel(const uint32_t freq_hz, const uint32_t* frequency_plan, const uint32_t frequency_plan_len);
+
 /** Get LoRaWAN PhyPayload */
 const uint8_t* lora_mesh_get_payload(const uint8_t *frame_buffer,
 		const uint8_t size, uint8_t *lorawan_phypayload_size);
