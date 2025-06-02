@@ -1,4 +1,4 @@
- /*
+/*
  Basic Mission
  Copyright (c) 2021-2025 UGA CSUG LIG
 
@@ -21,8 +21,6 @@
 #ifdef CHIRPSTACK_MESH_ENABLE
 #include "lora_mesh.h"
 #endif
-
-
 
 /**
  * Devaddr to repeat
@@ -86,32 +84,6 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		return;
 	}
 
-#if MESHTASTIC == 1
-		// check meshtastic_check_valid_frame_size
-		// filter meshtastic_get_srcid
-		// filter meshtastic_get_destid
-#else
-
-	// TODO filter on relayed mic
-	// TODO valid and correct mic and hop
-
-	// filter on devaddr
-	if (lorawan_check_valid_frame_size(pkt_rx->payload, pkt_rx->size)
-			&& lorawan_is_dataframe(pkt_rx->payload, pkt_rx->size)) {
-		const uint32_t devaddr = lorawan_get_devaddr(pkt_rx->payload,
-				pkt_rx->size);
-
-		if (!IS_BELONGING_TO_NETWORK(devaddr, _devaddr_subnet, _devaddr_mask)) {
-			printf(
-					"INFO: devaddr %8lx is not belonging to filter : skip received frame\n",
-					devaddr);
-			return;
-		}
-	} else {
-		printf("INFO: frame is not valid data frames : skip received frame\n");
-		return;
-	}
-#endif
 	// filter on SNR
 	if (pkt_rx->modulation == MOD_LORA && pkt_rx->snr > _snr_threshold) {
 		printf(
@@ -120,51 +92,133 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		return;
 	}
 
+#if MESHTASTIC == 1
+		// check meshtastic_check_valid_frame_size
+		// filter meshtastic_get_srcid
+		// filter meshtastic_get_destid
+#else
+
 #if CHIRPSTACK_MESH_ENABLE == 1
-	printf("INFO: Repeat the received frame into a Chirpstack Mesh uplink\n");
 
-	// TODO if mesage is a chirpstack mesh uplink and hop < CHIRPSTACK_MESH_MAX_HOP
+	if (lora_mesh_check_valid_frame(pkt_rx->payload, pkt_rx->size)) {
 
-	// TODO check pkt_tx->size < 255 - 14
+		uint32_t relay_id = lora_mesh_get_relay_id(pkt_rx->payload,
+				pkt_rx->size);
+		if (relay_id == CHIRPSTACK_MESH_RELAY_ID) {
+			printf(
+					"INFO: frame with own relay_id 0x%8lx: skip received frame\n",
+					relay_id);
+			return;
+		}
 
-	uint8_t size;
-	lora_mesh_build_uplink(
-		pkt_tx->payload,
-		&size,
-		1, // first hop
-		uplink_id++,
-		12 - pkt_rx->datarate,
-		-1*floor(pkt_rx->rssic),
-		floor(pkt_rx->snr),
-		0, //  channel TODO
-		CHIRPSTACK_MESH_RELAY_ID,
-		pkt_rx->payload,
-		pkt_rx->size,
-		signing_key
-	);
-	pkt_tx->size = size;
+		const uint8_t hop_count = lora_mesh_get_hop_count(pkt_rx->payload,
+				pkt_rx->size);
+		if (hop_count > CHIRPSTACK_MESH_MAX_HOP) {
+			printf(
+					"INFO: frame with hop_count too high %d: skip received frame\n",
+					hop_count);
+			return;
+		}
 
+		// note: for saving cpu cycles, mic is checked after previous tests
+		if (!lora_mesh_check_mic(pkt_rx->payload, pkt_rx->size, signing_key)) {
+			printf(
+					"INFO: mic of relayed mesh frame is not valid : skip received frame\n");
+			return;
+		}
 
-	lora_mesh_printf_frame(pkt_tx->payload, pkt_tx->size);
-	printf("\n");
+		if (lora_mesh_is_uplink(pkt_rx->payload, pkt_rx->size)) {
+			// build new uplink
+			uint8_t size;
 
+			uint8_t lorawan_phypayload_size;
+			const uint8_t *lorawan_phypayload = lora_mesh_get_payload(
+					pkt_rx->payload, pkt_rx->size, &lorawan_phypayload_size);
+
+			if (lora_mesh_build_uplink(pkt_tx->payload, &size, hop_count + 1, // first hop
+			uplink_id++, 12 - pkt_rx->datarate, pkt_rx->rssic, pkt_rx->snr,
+					0, //  channel TODO
+					CHIRPSTACK_MESH_RELAY_ID, lorawan_phypayload,
+					lorawan_phypayload_size, signing_key)) {
+				printf(
+						"ERROR: Fail to build uplink frame : skip received frame\n");
+				return;
+			}
+			pkt_tx->size = size;
+
+			lora_mesh_printf_frame(pkt_tx->payload, pkt_tx->size);
+			printf("\n");
+
+		} else if (lora_mesh_is_downlink(pkt_rx->payload, pkt_rx->size)) {
+			printf(
+					"WARN: processing mesh downlink frame is not implemented : skip received frame\n");
+			return;
+		} else if (lora_mesh_is_relay_heartbeat(pkt_rx->payload,
+				pkt_rx->size)) {
+			printf(
+					"WARN: processing mesh relay heartbeat frame is not implemented : skip received frame\n");
+			return;
+		} else {
+			printf(
+					"WARN: unknown relay frame : skip received frame\n");
+			return;
+		}
+	} else
+#endif
+	// case of LoRaWAN frame
+	if (lorawan_check_valid_frame_size(pkt_rx->payload, pkt_rx->size)
+			&& lorawan_is_dataframe(pkt_rx->payload, pkt_rx->size)) {
+		const uint32_t devaddr = lorawan_get_devaddr(pkt_rx->payload,
+				pkt_rx->size);
+		// filter on devaddr
+		if (!IS_BELONGING_TO_NETWORK(devaddr, _devaddr_subnet, _devaddr_mask)) {
+			printf(
+					"INFO: devaddr %8lx is not belonging to filter : skip received frame\n",
+					devaddr);
+			return;
+		}
+
+#if CHIRPSTACK_MESH_ENABLE == 1
+		printf(
+				"INFO: Repeat the received frame into a Chirpstack Mesh uplink\n");
+
+		// TODO if mesage is a chirpstack mesh uplink and hop < CHIRPSTACK_MESH_MAX_HOP
+
+		uint8_t size;
+		if (!lora_mesh_build_uplink(pkt_tx->payload, &size,
+				1, // first hop
+				uplink_id++, 12 - pkt_rx->datarate, pkt_rx->rssic, pkt_rx->snr,
+				0, //  channel TODO
+				CHIRPSTACK_MESH_RELAY_ID, pkt_rx->payload, pkt_rx->size,
+				signing_key)) {
+			printf("ERROR: Fail to build uplink frame : skip received frame\n");
+			return;
+		}
+		pkt_tx->size = size;
+
+		lora_mesh_printf_frame(pkt_tx->payload, pkt_tx->size);
+		printf("\n");
 
 #else
-	printf("INFO: Repeat the received frame\n");
+		printf("INFO: Repeat the received frame\n");
 
-	memcpy(pkt_tx->payload, pkt_rx->payload, pkt_rx->size);
-	pkt_tx->size = pkt_rx->size;
+		memcpy(pkt_tx->payload, pkt_rx->payload, pkt_rx->size);
+		pkt_tx->size = pkt_rx->size;
 
+#endif
+
+	} else {
+		printf("INFO: frame is not valid data frames : skip received frame\n");
+		return;
+	}
 #endif
 
 	pkt_tx->tx_mode = IMMEDIATE;
 	pkt_tx->rf_chain = 0; //only rf_chain 0 is able to tx
 
-
 	pkt_tx->freq_hz = pkt_rx->freq_hz;
 	pkt_tx->datarate = REPEAT_SF; //
 	pkt_tx->bandwidth = REPEAT_BW;
-
 
 #if MESHTASTIC == 1
 		if(pkt_rx->freq_hz == 869525000) {
@@ -183,18 +237,14 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 #endif
 
 	pkt_tx->no_header = false; 		// Beacons have not header
-	pkt_tx->no_crc = false; 	// LoRaWAN : on for uplink and off for downlink
+	pkt_tx->no_crc = false; 		// LoRaWAN : on for uplink and off for downlink
 	pkt_tx->invert_pol = false;
-
-
 }
-
 
 /**
  * Filter
  */
-void basic_mission_filter(uint32_t devaddr_subnet,
-		uint32_t devaddr_mask) {
+void basic_mission_filter(uint32_t devaddr_subnet, uint32_t devaddr_mask) {
 
 	_devaddr_subnet = devaddr_subnet;
 	_devaddr_mask = devaddr_mask;
