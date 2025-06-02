@@ -222,7 +222,7 @@ int main(void) {
 	} else {
 		puts("Starting TX bench ...");
 		// every 30 seconds
-		lgw_cmd(11, (char*[]){"lgw","bench","100000","7","125","8","12","on","false","32","30000"});
+		lgw_cmd(11, (char*[]){"lgw","bench","100000","7","125","8","12","on","false","32","120000"});
 	}
 #else
 	/* start the shell */
