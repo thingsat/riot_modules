@@ -11,12 +11,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include "fmt.h"
 
 #include "cmac_utils.h"
 
 #include "lora_mesh.h"
 
+uint8_t lora_mesh_get_snr_u(const float snr) {
+	int8_t _snr = floor(snr);
+	return _snr >> 2;
+}
+
+float lora_mesh_get_snr_f(const uint8_t snr) {
+	return (float)((int8_t) (snr << 2));
+}
 
 bool lora_mesh_build_uplink(
 		uint8_t *frame_buffer,
@@ -24,14 +33,18 @@ bool lora_mesh_build_uplink(
 		const uint8_t hop_count,
 		const uint16_t uplink_id,
 		const uint8_t datarate,
-		const uint8_t rssi,
-		const uint8_t snr,
+		const float rssi,
+		const float snr,
 		const uint8_t channel,
 		const uint32_t relay_id,
 		const uint8_t *phypayload,
 		const uint8_t phypayload_size,
 		const uint8_t *signing_key
 ) {
+	if(phypayload_size > LORAWAN_PHYPAYLOAD_LEN - 14) {
+		return false;
+	}
+
 	MeshLoRa_Uplink_t *uplink = (MeshLoRa_Uplink_t*)frame_buffer;
 	*size = 14 + phypayload_size;
 
@@ -40,8 +53,8 @@ bool lora_mesh_build_uplink(
 	uplink->hop_count = hop_count;
 	uplink->uplink_id = uplink_id;
 	uplink->datarate = datarate;
-	uplink->rssi = rssi;
-	uplink->snr = snr;
+	uplink->rssi = floor(rssi)*-1;
+	uplink->snr = lora_mesh_get_snr_u(snr);
 	uplink->channel = channel;
 	uplink->relay_id = relay_id;
 
@@ -146,6 +159,42 @@ bool lora_mesh_is_relay_heartbeat(const uint8_t *frame_buffer,
 	return mhdr->payload_type == LORAMESH_PAYLOAD_TYPE_RELAYHEARTRATE;
 }
 
+/** get hop count */
+bool lora_mesh_get_hop_count(const uint8_t *frame_buffer,
+		const uint8_t size) {
+	(void) size;
+
+	const MeshLoRa_MHDR_t *mhdr = (const MeshLoRa_MHDR_t*) frame_buffer;
+	return mhdr->hop_count;
+}
+
+
+/** Get Relay Id */
+uint32_t lora_mesh_get_relay_id(const uint8_t *frame_buffer,
+		const uint8_t size) {
+	(void) size;
+
+	const MeshLoRa_MHDR_t *mhdr = (const MeshLoRa_MHDR_t*) frame_buffer;
+
+	uint32_t relay_id = 0;
+
+	switch (mhdr->payload_type) {
+	case LORAMESH_PAYLOAD_TYPE_UPLINK:
+		relay_id  = ((MeshLoRa_Uplink_t*) frame_buffer)->relay_id;
+		break;
+	case LORAMESH_PAYLOAD_TYPE_DOWNLINK:
+		relay_id  = ((MeshLoRa_Downlink_t*) frame_buffer)->relay_id;
+		break;
+	case LORAMESH_PAYLOAD_TYPE_RELAYHEARTRATE:
+		relay_id  = ((MeshLoRa_RelayHeartbeat_t*) frame_buffer)->relay_id;
+		break;
+	default:
+		break;
+	}
+	return relay_id;
+}
+
+
 /** Get LoRaWAN PhyPayload */
 uint8_t lora_mesh_get_payload_size(const uint8_t *frame_buffer,
 		const uint8_t size) {
@@ -201,9 +250,9 @@ void lora_mesh_printf_uplink(const uint8_t *frame_buffer, const uint8_t size) {
 	const MeshLoRa_Uplink_t *uplink = (const MeshLoRa_Uplink_t*) frame_buffer;
 
 	printf(
-			"LoRaMesh Uplink: hopcount=%d uplink_id=%u datarate=%u rssi=%d snr=%d channel=%d relay_id=%08lX mic=%08lX payload=",
+			"LoRaMesh Uplink: hopcount=%d uplink_id=%u datarate=%u rssi=%0.1f snr=%0.1f channel=%d relay_id=%08lX mic=%08lX payload=",
 			uplink->hop_count, uplink->uplink_id, uplink->datarate,
-			-uplink->rssi, uplink->snr, uplink->channel,
+			(float)-1.0*uplink->rssi, lora_mesh_get_snr_f(uplink->snr), uplink->channel,
 			uplink->relay_id, lora_mesh_get_mic(frame_buffer, size));
 	printf_ba(frame_buffer+10, size-14);
 }
@@ -217,7 +266,6 @@ void lora_mesh_printf_downlink(const uint8_t *frame_buffer, const uint8_t size) 
 			-downlink->downlink_frequency, downlink->tx_power, downlink->delay,
 			downlink->relay_id, lora_mesh_get_mic(frame_buffer, size));
 	printf_ba(frame_buffer+11, size-15);
-
 }
 
 void lora_mesh_printf_relay_heartbeat(const uint8_t *frame_buffer,

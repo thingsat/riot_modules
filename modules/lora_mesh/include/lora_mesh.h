@@ -55,7 +55,9 @@ struct __attribute__((packed)) MeshLoRa_Uplink {
 
 	uint8_t rssi;
 
-	uint8_t snr;
+	uint8_t snr :6;
+
+	uint8_t rfu :2;
 
 	uint8_t channel;
 
@@ -117,7 +119,6 @@ struct __attribute__((packed)) MeshLoRa_RelayHeartbeat {
 
 typedef struct MeshLoRa_RelayHeartbeat MeshLoRa_RelayHeartbeat_t;
 
-
 /**
  * MeshLoRa Stats (Extension proposal)
  */
@@ -148,7 +149,6 @@ struct __attribute__((packed)) MeshLoRa_Stats {
 
 typedef struct MeshLoRa_Stats MeshLoRa_Stats_t;
 
-
 /** Check valid mesh frame */
 bool lora_mesh_check_valid_frame(const uint8_t *frame_buffer,
 		const uint8_t size);
@@ -173,9 +173,22 @@ bool lora_mesh_is_downlink(const uint8_t *frame_buffer, const uint8_t size);
 bool lora_mesh_is_relay_heartbeat(const uint8_t *frame_buffer,
 		const uint8_t size);
 
+/** get hop count */
+bool lora_mesh_get_hop_count(const uint8_t *frame_buffer, const uint8_t size);
+
+/** Get Relay Id */
+uint32_t lora_mesh_get_relay_id(const uint8_t *frame_buffer,
+		const uint8_t size);
+
+/** get SNR as encoded value */
+uint8_t lora_mesh_get_snr_u(const float snr);
+
+/** get SNR as float */
+float lora_mesh_get_snr_f(const uint8_t snr);
+
 /** Get LoRaWAN PhyPayload */
-const uint8_t* lora_mesh_get_payload(const uint8_t *frame_buffer, const uint8_t size,
-		uint8_t *lorawan_phypayload_size);
+const uint8_t* lora_mesh_get_payload(const uint8_t *frame_buffer,
+		const uint8_t size, uint8_t *lorawan_phypayload_size);
 
 /** Get LoRaWAN PhyPayload size */
 uint8_t lora_mesh_get_payload_size(const uint8_t *frame_buffer,
@@ -190,21 +203,11 @@ void lora_mesh_printf_relay_heartbeat(const uint8_t *frame_buffer,
 
 void lora_mesh_printf_frame(const uint8_t *frame_buffer, const uint8_t size);
 
-
-bool lora_mesh_build_uplink(
-	uint8_t *frame_buffer,
-	uint8_t *size,
-	const uint8_t hop_count,
-	const uint16_t uplink_id,
-	const uint8_t datarate,
-	const uint8_t rssi,
-	const uint8_t snr,
-	const uint8_t channel,
-	const uint32_t relay_id,
-	const uint8_t *phypayload,
-	const uint8_t phypayload_size,
-	const uint8_t *signing_key
-);
-
+bool lora_mesh_build_uplink(uint8_t *frame_buffer, uint8_t *size,
+		const uint8_t hop_count, const uint16_t uplink_id,
+		const uint8_t datarate, const float rssi, const float snr,
+		const uint8_t channel, const uint32_t relay_id,
+		const uint8_t *phypayload, const uint8_t phypayload_size,
+		const uint8_t *signing_key);
 
 #endif
