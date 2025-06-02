@@ -18,6 +18,8 @@
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
 
+//#define CHIRPSTACK_MESH_ENABLE  1
+
 #ifdef CHIRPSTACK_MESH_ENABLE
 #include "lora_mesh.h"
 #endif
@@ -45,6 +47,15 @@ static int _snr_threshold = 20;
 
 static uint16_t uplink_id = 1;
 static const uint8_t signing_key[] = CHIRPSTACK_MESH_SIGNING_KEY;
+
+
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+#endif
+
+// TODO set the frequency_plan from the concentrator configuration
+static const uint32_t frequency_plan[] = CHIRPSTACK_MESH_CHANNELS;
+static const uint32_t frequency_plan_len = ARRAY_SIZE(frequency_plan);
 
 #endif
 
@@ -74,7 +85,7 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 
 	if (pkt_rx->size == 0) {
 		// skip received frame
-		printf("INFO: Paylaod is empty : skip received frame\n");
+		printf("INFO: Payload is empty : skip received frame\n");
 		return;
 	}
 
@@ -92,6 +103,10 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		return;
 	}
 
+	printf(
+			"INFO: SNR (%.1f) is lower than snr_threshold (%d)\n",
+			pkt_rx->snr, _snr_threshold);
+
 #if MESHTASTIC == 1
 		// check meshtastic_check_valid_frame_size
 		// filter meshtastic_get_srcid
@@ -106,10 +121,14 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 				pkt_rx->size);
 		if (relay_id == CHIRPSTACK_MESH_RELAY_ID) {
 			printf(
-					"INFO: frame with own relay_id 0x%8lx: skip received frame\n",
+					"INFO: mesh frame from my relay_id=0x%8lx: skip received frame\n",
 					relay_id);
 			return;
 		}
+
+		printf(
+				"INFO: mesh frame from relay_id 0x%8lx\n",
+				relay_id);
 
 		const uint8_t hop_count = lora_mesh_get_hop_count(pkt_rx->payload,
 				pkt_rx->size);
@@ -119,6 +138,9 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 					hop_count);
 			return;
 		}
+		printf(
+				"INFO: frame with hop_count (%d) lower to max (%d)\n",
+				hop_count, CHIRPSTACK_MESH_MAX_HOP);
 
 		// note: for saving cpu cycles, mic is checked after previous tests
 		if (!lora_mesh_check_mic(pkt_rx->payload, pkt_rx->size, signing_key)) {
@@ -127,9 +149,14 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 			return;
 		}
 
+		printf(
+				"INFO: mic of relayed mesh frame is valid\n");
+
 		if (lora_mesh_is_uplink(pkt_rx->payload, pkt_rx->size)) {
 			// build new uplink
 			uint8_t size;
+
+			const uint8_t channel = lora_mesh_get_channel(pkt_rx->freq_hz, frequency_plan, frequency_plan_len);
 
 			uint8_t lorawan_phypayload_size;
 			const uint8_t *lorawan_phypayload = lora_mesh_get_payload(
@@ -137,7 +164,7 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 
 			if (lora_mesh_build_uplink(pkt_tx->payload, &size, hop_count + 1, // first hop
 			uplink_id++, 12 - pkt_rx->datarate, pkt_rx->rssic, pkt_rx->snr,
-					0, //  channel TODO
+			channel,
 					CHIRPSTACK_MESH_RELAY_ID, lorawan_phypayload,
 					lorawan_phypayload_size, signing_key)) {
 				printf(
@@ -177,18 +204,22 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 					devaddr);
 			return;
 		}
+		printf(
+				"INFO: devaddr %8lx is belonging to filter\n",
+				devaddr);
+
 
 #if CHIRPSTACK_MESH_ENABLE == 1
 		printf(
 				"INFO: Repeat the received frame into a Chirpstack Mesh uplink\n");
 
-		// TODO if mesage is a chirpstack mesh uplink and hop < CHIRPSTACK_MESH_MAX_HOP
+		const uint8_t channel = lora_mesh_get_channel(pkt_rx->freq_hz, frequency_plan, frequency_plan_len);
 
 		uint8_t size;
 		if (!lora_mesh_build_uplink(pkt_tx->payload, &size,
 				1, // first hop
 				uplink_id++, 12 - pkt_rx->datarate, pkt_rx->rssic, pkt_rx->snr,
-				0, //  channel TODO
+				channel,
 				CHIRPSTACK_MESH_RELAY_ID, pkt_rx->payload, pkt_rx->size,
 				signing_key)) {
 			printf("ERROR: Fail to build uplink frame : skip received frame\n");

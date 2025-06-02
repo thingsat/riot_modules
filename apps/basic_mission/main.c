@@ -208,13 +208,8 @@ int main(void) {
 	puts("Repeating is on");
 	basic_mission_repeat(true);
 
-#if MESHTASTIC == 1
-	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET, REPEAT_FILTER_DEVADDR_MASK);
-#else
-	// Filter CampusIoT only
 	puts("Set filter on RX frames");
 	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET, REPEAT_FILTER_DEVADDR_MASK);
-#endif
 
 	puts("Set filter on SNR threshold");
 	basic_mission_snr_threshold(REPEAT_FILTER_SNR_THRESHOLD);
