@@ -1,7 +1,8 @@
 # -----------------------------
 # GPS/GNSS Module
 # -----------------------------
-USEMODULE += gps_uart
+#USEMODULE += gps_uart
+USEMODULE += minmea_utils
 
 GPS_UART_ENABLE ?= 0
 GPS_UART_ENABLE_TRACE ?= 0

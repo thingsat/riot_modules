@@ -17,16 +17,21 @@
 #include "shell.h"
 
 #include "lgw_cmd.h"
-#include "loragw_hal.h"
 #include "repeat.h"
+#include "endpoints.h"
+#include "mission.h"
 
 #include "git_utils.h"
 #include "board.h"
 #include "i2c_scan.h"
 
-#if GPS_UART_ENABLE == 1
-#include "gps_uart.h"
-#endif
+//#define NO_SHELL 1
+
+/*
+ #if GPS_UART_ENABLE == 1
+ #include "gps_uart.h"
+ #endif
+ */
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 
@@ -117,57 +122,28 @@ int sensors_get_all_temp(int argc, char **argv)
 #ifndef NO_SHELL
 static const shell_command_t shell_commands[] = { { "git", "Show git info",
 		git_cmd }, { "lgw", "LoRa gateway commands", lgw_cmd },
+
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
     { "temp", "Get the temperatures (Celsius)", sensors_get_all_temp },
 #endif
+
 #if ENABLE_GPS == 1
     { "gps", "GPS commands", gps_cmd },
 #endif
 		{ NULL, NULL, NULL } };
 #endif
 
-#ifndef ENDPOINT_DEVADDR
-
-#include "endpoints.h"
-
-static int _set_endpoint(void) {
-
-	if (!lgw_is_started()) {
-		printf("ERROR: the gateway is not started\n");
-		return EXIT_FAILURE;
-	}
-
-	uint64_t eui;
-	int err = lgw_get_eui(&eui);
-	if (err != 0) {
-		printf("ERROR: failed to get SX130x EUI\n");
-		return EXIT_FAILURE;
-	}
-	lgw_sx130x_endpoint = NULL;
-
-	for (unsigned int i = 0; i < ARRAY_SIZE(lgw_sx130x_endpoints); i++) {
-		if (eui == lgw_sx130x_endpoints[i].gweui) {
-			lgw_sx130x_endpoint = lgw_sx130x_endpoints + i;
-		}
-	}
-
-	if (lgw_sx130x_endpoint == NULL) {
-		printf("ERROR: no endpoint defined for SX130x EUI\n");
-		return EXIT_FAILURE;
-	} else {
-		printf("INFO: endpoint with devaddr=%08lx defined for SX130x EUI\n",
-				lgw_sx130x_endpoint->devaddr);
-		return EXIT_SUCCESS;
-	}
+void _pkt_period_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s) {
+	(void) lgw_pkt_tx_s;
+	printf("INFO: call _pkt_period_cb\n");
+	mission(lgw_pkt_tx_s);
 }
-
-#endif
 
 int main(void) {
 
 	puts("=========================================");
-	puts("SX1302/SX1303 Driver Test Application");
-	puts("Copyright (c) 2021-2025 UGA CSUG LIG");
+	puts("Thingsat :: Basic Mission");
+	puts("Copyright (c) 2021-2025 GINP UGA CSUG LIG");
 	puts("=========================================");
 
 	puts("\nBOARD: " RIOT_BOARD "\n");
@@ -177,9 +153,11 @@ int main(void) {
 	puts("\nLoRaWAN EU868 gateway configuration\n");
 #endif
 
-#ifdef NO_SHELL
-	print_git();
+#if MESHTASTIC == 1
+	puts("\nChirpstack mesh is enabled\n");
 #endif
+
+	print_git();
 
 	// I2C scan
 
@@ -192,38 +170,34 @@ int main(void) {
 	sensors_init_all();
 #endif
 
-#ifdef NO_SHELL
+#if NO_SHELL == 1
 	puts("Starting the gateway ...");
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	lgw_cmd(1, (char*[]){"temp"});
 #endif
-	lgw_cmd(2, (char*[]){"lgw","start"});
-	lgw_cmd(2, (char*[]){"lgw","eui"});
-	lgw_cmd(2, (char*[]){"lgw","freq_plan"});
+	lgw_cmd(2, (char*[] ) { "lgw", "start" });
+	lgw_cmd(2, (char*[] ) { "lgw", "eui" });
+	lgw_cmd(2, (char*[] ) { "lgw", "freq_plan" });
 
 #ifndef ENDPOINT_DEVADDR
-	_set_endpoint();
+	set_endpoint();
 #endif
 
 	puts("Repeating is on");
 	basic_mission_repeat(true);
 
 	puts("Set filter on RX frames");
-	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET, REPEAT_FILTER_DEVADDR_MASK);
+	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET,
+			REPEAT_FILTER_DEVADDR_MASK);
 
 	puts("Set filter on SNR threshold");
 	basic_mission_snr_threshold(REPEAT_FILTER_SNR_THRESHOLD);
 
-	puts("Starting listening ...");
-	lgw_cmd(2, (char*[]){"lgw","listen"});
+	pkt_period_cb = _pkt_period_cb;
 
-	if(lgw_sx130x_endpoint == NULL) {
-		puts("ERROR: lgw_sx130x_endpoint is null : Can not start TX bench");
-	} else {
-		puts("Starting TX bench ...");
-		// every 30 seconds
-		lgw_cmd(11, (char*[]){"lgw","bench","100000","7","125","8","12","on","false","32","120000"});
-	}
+	puts("Starting listening ...");
+	lgw_cmd(2, (char*[] ) { "lgw", "listen" });
+
 #else
 	/* start the shell */
 	char line_buf[SHELL_DEFAULT_BUFSIZE];

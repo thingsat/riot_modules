@@ -257,11 +257,12 @@ CFLAGS += -DLGW_SX1257_LUT_MIX_GAIN=10
 
 
 
-ifeq ($(ENABLE_GPS),1)
+ifeq ($(GPS_UART_ENABLE),1)
 include Makefile.gnss.mk
 endif
 
 
+include Makefile.mission.mk
 include Makefile.repeat.mk
 
 

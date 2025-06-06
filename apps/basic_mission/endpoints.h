@@ -14,42 +14,11 @@
 #ifndef TESTS_DRIVER_SX1302_ENDPOINTS_H_
 #define TESTS_DRIVER_SX1302_ENDPOINTS_H_
 
-#define DEFAULT_NWKSKEY 	{0xBA,0xBE,0xCA,0xFE,0x12,0x34,0x56,0x78,0xBA,0xBE,0xCA,0xFE,0x12,0x34,0x56,0x78}
-#define DEFAULT_APPSKEY 	{0xCA,0xFE,0xBA,0xBE,0x12,0x34,0x56,0x78,0xCA,0xFE,0xBA,0xBE,0x12,0x34,0x56,0x78}
-
+#include <stdbool.h>
 #include "lgw_endpoint.h"
 
-lgw_sx130x_endpoint_t lgw_sx130x_endpoints[] = {
-		{
-				.module = RAK5146_SPI_GNSS,
-				.devaddr = 0xfc00af5e,
-				.gweui = 0x0016c001f136e359,
-				// BABECAFE12345678BABECAFE12345678
-				.nwkskey = DEFAULT_NWKSKEY,
-				// CAFEBABE12345678CAFEBABE12345678
-				.appskey = DEFAULT_APPSKEY,
-		},
-		{
-				.module = RAK5146_SPI_GNSS,
-				.devaddr = 0xfc00ac92,
-				.gweui = 0x0016C001F136EAC8,
-				// BABECAFE12345678BABECAFE12345678
-				.nwkskey = DEFAULT_NWKSKEY,
-				// CAFEBABE12345678CAFEBABE12345678
-				.appskey = DEFAULT_APPSKEY,
-		},
-		{
-				.module = RAK5146_SPI_GNSS,
-				.devaddr = 0xfc00af2b,
-				.gweui = 0x0016c001f136effd,
-				// BABECAFE12345678BABECAFE12345678
-				.nwkskey = DEFAULT_NWKSKEY,
-				// CAFEBABE12345678CAFEBABE12345678
-				.appskey = DEFAULT_APPSKEY,
-		},
-};
+extern lgw_sx130x_endpoint_t *lgw_sx130x_endpoint;
 
-
-lgw_sx130x_endpoint_t *lgw_sx130x_endpoint = NULL;
+bool set_endpoint(void);
 
 #endif /* TESTS_DRIVER_SX1302_ENDPOINTS_H_ */

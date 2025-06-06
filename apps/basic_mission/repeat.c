@@ -10,11 +10,11 @@
 #include <math.h>
 
 #include "repeat.h"
-#include "lgw_cmd.h"
 
 #include "lgw_config.h"
 #include "lgw_cmd.h"
 #include "lgw_endpoint.h"
+
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
 
