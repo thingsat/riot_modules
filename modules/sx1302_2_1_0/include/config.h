@@ -39,7 +39,10 @@
 #define ENABLE_MOD_CW			0
 #endif
 
+#ifndef ENABLE_GPS
 #define ENABLE_GPS				0
+#endif
+
 #define ENABLE_LBT				0
 #define ENABLE_SX1261			0
 #define ENABLE_STTS751			0
