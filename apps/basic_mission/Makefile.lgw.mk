@@ -1,0 +1,40 @@
+# -----------------------------
+# SX1302 Lib 
+# -----------------------------
+
+SX1302_LIB_VERSION ?= 2_1_0
+
+ifeq ($(SX1302_LIB_VERSION),1_0_4)
+USEMODULE += sx1302_$(SX1302_LIB_VERSION)
+endif
+
+ifeq ($(SX1302_LIB_VERSION),2_1_0)
+USEMODULE += sx1302_$(SX1302_LIB_VERSION)
+endif
+
+FEATURES_REQUIRED += periph_rtc
+FEATURES_OPTIONAL += periph_rtc_ms
+FEATURES_OPTIONAL += periph_rtc_mem
+
+# DISABLE_MODULE += periph_init_rtc
+
+#32768U 16384U
+#ifndef STTS751
+#CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192U
+
+CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192U
+
+ifeq ($(BOARD),nucleo-l432kc)
+CFLAGS += -DLGW_LISTEN_STACKSIZE=10240U
+else
+CFLAGS += -DLGW_LISTEN_STACKSIZE=8192U
+#CFLAGS += -DLGW_LISTEN_STACKSIZE=16384U
+endif
+
+# -----------------------------
+# Sx1302 Module footprint (TODO)
+# -----------------------------
+
+CFLAGS += -DLGW_SX1302_LUT_DIG_GAIN=0
+CFLAGS += -DLGW_SX1257_LUT_DAC_GAIN=3
+CFLAGS += -DLGW_SX1257_LUT_MIX_GAIN=10
