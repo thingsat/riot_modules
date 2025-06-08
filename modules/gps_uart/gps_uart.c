@@ -38,7 +38,7 @@
 #define SHELL_BUFSIZE       (128U)
 #endif
 #ifndef UART_BUFSIZE
-#define UART_BUFSIZE        (128U)
+#define UART_BUFSIZE        (512U)
 #endif
 
 #define PRINTER_PRIO        (THREAD_PRIORITY_MAIN - 1)

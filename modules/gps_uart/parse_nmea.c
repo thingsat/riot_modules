@@ -69,14 +69,24 @@ static struct minmea_sentence_gsa sentence_gsa;
 static bool has_sentence_gst = false;
 static struct minmea_sentence_gst sentence_gst;
 
+static uint32_t parse_nmea_global_badchecksum = 0;
+static uint32_t parse_nmea_global_valid = 0;
 static uint32_t parse_nmea_global_error = 0;
 static uint32_t parse_nmea_global_unknown = 0;
 
-static void parse_nmea_incr_global_error(void) {
+inline static void parse_nmea_incr_global_badchecksum(void) {
+	parse_nmea_global_badchecksum++;
+}
+
+inline static void parse_nmea_incr_global_valid(void) {
+	parse_nmea_global_valid++;
+}
+
+inline static void parse_nmea_incr_global_error(void) {
 	parse_nmea_global_error++;
 }
 
-static void parse_nmea_incr_global_unknown(void) {
+inline static void parse_nmea_incr_global_unknown(void) {
 	parse_nmea_global_unknown++;
 }
 
@@ -476,13 +486,19 @@ void parse_nmea(uint8_t c) {
 #endif
 
 		if (minmea_check((const char*) nmea_buffer, true) == false) {
-			printf("BAD CHECKSUM: %s\n", nmea_buffer);
+			printf("ERROR: NMEA BAD CHECKSUM: %s\n", nmea_buffer);
+
+			// TODO Try to recover by finding next sentence starting with $
+
 			// clear buffer
+			parse_nmea_incr_global_badchecksum();
 			nmea_buffer_idx = 0;
+
+
 		} else {
 			char talker[3];
 			if (minmea_talker_id(talker, (const char*) nmea_buffer) == false) {
-				printf("No TalkerId\n");
+				printf("ERROR: NMEA No TalkerId\n");
 			} else {
 				// Determine sentence identifier.
 				enum minmea_sentence_id s = minmea_sentence_id(
@@ -497,6 +513,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_gll((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -507,6 +525,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_gsv((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -517,6 +537,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_vtg((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -527,6 +549,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_zda((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -537,6 +561,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_gga((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -547,6 +573,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_rmc((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -557,6 +585,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_gsa((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -567,6 +597,8 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_gst((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
@@ -577,10 +609,11 @@ void parse_nmea(uint8_t c) {
 					if (!parse_nmea_gbs((const char*) nmea_buffer)) {
 						error_cnt++;
 						parse_nmea_incr_global_error();
+					} else {
+						parse_nmea_incr_global_valid();
 					}
 					;
 					break;
-
 				case MINMEA_INVALID:
 					printf(
 							"ERROR: Can not parse NMEA Invalid sentence %s : %d.\n",
@@ -636,19 +669,17 @@ void gps_print(void) {
 	const uint16_t seconds_since_last_fix = gps_get_seconds_since_last_fix();
 	if (!gps_get_fix() && seconds_since_last_fix > 2) {
 		printf("WARN: GNSS no fix\n");
-		printf("INFO: GNSS Parse NMEA errors   : %lu\n",
-				parse_nmea_global_error);
-		printf("INFO: GNSS Parse NMEA unknowns : %lu\n",
-				parse_nmea_global_unknown);
-		printf("INFO: GNSS last fix time : %lu (%u seconds ago)\n",
-				last_fix_time, seconds_since_last_fix);
-		return;
 	}
 
-	printf("INFO: GNSS Parse NMEA errors   : %lu\n", parse_nmea_global_error);
-	printf("INFO: GNSS Parse NMEA unknowns : %lu\n", parse_nmea_global_unknown);
-	printf("INFO: GNSS last fix time : %lu (%u seconds ago)\n", last_fix_time,
+	printf("INFO: GNSS Stats valid=%lu badchecksum=%lu error=%lu unknown=%lu\n",
+			parse_nmea_global_valid, parse_nmea_global_badchecksum,
+			parse_nmea_global_error, parse_nmea_global_unknown);
+	printf("INFO: GNSS Last fix time : %lu (%u seconds ago)\n", last_fix_time,
 			seconds_since_last_fix);
+
+	if (!gps_get_fix() && seconds_since_last_fix > 2) {
+		return;
+	}
 
 	bool res;
 	struct timespec ts;
@@ -693,7 +724,8 @@ void gps_print(void) {
 	if (!res) {
 		printf("WARN: GNSS no DOP available\n");
 	} else {
-		printf("INFO: GNSS pdop=%.2f, hdop=%.2f, vdop=%.2f\n", pdop, hdop, vdop);
+		printf("INFO: GNSS pdop=%.2f, hdop=%.2f, vdop=%.2f\n", pdop, hdop,
+				vdop);
 	}
 
 	int fix_quality, satellites_tracked;
@@ -701,7 +733,7 @@ void gps_print(void) {
 	if (!res) {
 		printf("WARN: GNSS no quality available\n");
 	} else {
-		printf("INFO: GNSS fix_quality=%d, satellites_tracked=%d\n", fix_quality,
-				satellites_tracked);
+		printf("INFO: GNSS fix_quality=%d, satellites_tracked=%d\n",
+				fix_quality, satellites_tracked);
 	}
 }
