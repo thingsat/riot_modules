@@ -11,6 +11,11 @@
 #ifndef APPS_BASIC_MISSION_MISSION_H_
 #define APPS_BASIC_MISSION_MISSION_H_
 
+#define RANGE1_PAYLOAD			0
+#define TELEMETRY_PAYLOAD		1
+#define APRS_PAYLOAD			2
+#define EWSS_PAYLOAD			3
+
 #include "loragw_hal.h"
 
 void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
