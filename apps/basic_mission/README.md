@@ -1,11 +1,12 @@
 # Thingsat :: Basic Mission
 
+* [x] GNSS on UART parsing
 * [x] LoRaWAN repeater (with devaddr filtering)
 * [ ] App Clock Sync
-* [ ] Chirpstack Mesk Relay
+* [x] Chirpstack Mesk Relay (SHOULD BE TESTED)
 * [ ] Periodic telemetry (with GNSS position and temperature) using LoRaWAN with Cayenne LPP (and XOR redundancy)
 * [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry
-* [ ] Periodic telemetry (with GNSS position and temperature) using APRS format
+* [ ] Periodic telemetry (with GNSS position and temperature) using APRS format (not fake)
 * [ ] Periodic two-way ranging with other Thingsat boards
 * [ ] LoRa 2G4 backhaul when SX1280 module is present
 
@@ -62,20 +63,24 @@ Nucleo L432KC With RAK5146 on INISAT board with [OpenLog](https://github.com/Cam
 
 ```bash
 export BOARD=nucleo-l432kc-inisat
-gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 NO_SHELL=1 -j 8 flash term
+gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 NO_SHELL=1 -j 8 flash term
 ```
+
+> Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
 
 ### Setup for [Meshtastic](https://meshtastic.org)
 
 ```bash
 export BOARD=nucleo-l432kc-inisat
-gmake BOARD=$BOARD MESHTASTIC=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 NO_SHELL=1 -j 8 flash term
+gmake BOARD=$BOARD MESHTASTIC=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 NO_SHELL=1 -j 8 flash term
 ```
+> Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
 
 ## Console
 ```bash
 tio -L
-tio -b 115200 -m INLCRNL /dev/tty.usbmodem142xxx
+tio -b 115200 -m INLCRNL /dev/tty.usbmodem1xxx
+tio -b 9600 -m INLCRNL /dev/tty.usbmodem1xxx
 ```
 
 ## RX Thread Stack
