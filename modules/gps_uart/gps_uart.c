@@ -23,7 +23,7 @@
 #include "shell.h"
 #include "thread.h"
 #include "msg.h"
-#include "ringbuffer.h"
+#include "tsrb.h"
 #include "periph/uart.h"
 #include "xtimer.h"
 #include "ztimer.h"
@@ -38,7 +38,7 @@
 #define SHELL_BUFSIZE       (128U)
 #endif
 #ifndef UART_BUFSIZE
-#define UART_BUFSIZE        (256U)
+#define UART_BUFSIZE        (128U)
 #endif
 
 #define PRINTER_PRIO        (THREAD_PRIORITY_MAIN - 1)
@@ -60,14 +60,15 @@
 #endif
 
 typedef struct {
-    char rx_mem[UART_BUFSIZE];
-    ringbuffer_t rx_buf;
+	uint8_t rx_mem[UART_BUFSIZE];
+    //ringbuffer_t rx_buf;
+    tsrb_t rx_buf;
 } uart_ctx_t;
 
 static uart_ctx_t ctx[UART_NUMOF];
 
 static kernel_pid_t printer_pid;
-static char printer_stack[THREAD_STACKSIZE_MAIN];
+static char printer_stack[THREAD_STACKSIZE_MAIN / 2];
 
 static bool test_mode;
 
@@ -94,13 +95,18 @@ static void rxs_cb(void *arg)
 
 bool stop_gps_uart = false;
 
-static void rx_cb(void *arg, uint8_t data)
+static void rx_cb(void *arg, uint8_t c)
 {
     uart_t dev = (uart_t)(uintptr_t)arg;
 
-    ringbuffer_add_one(&ctx[dev].rx_buf, data);
+    if(tsrb_full(&ctx[dev].rx_buf)) {
+    	// drop char
+    	// printf("DROP\n");
+    } else {
+        tsrb_add_one(&ctx[dev].rx_buf, c);
+    }
 
-    if (!test_mode && data == '\n') {
+    if (!test_mode) {
         msg_t msg;
         msg.content.value = (uint32_t)dev;
         msg_send(&msg, printer_pid);
@@ -117,25 +123,12 @@ static void *printer(void *arg)
     while (1) {
         msg_receive(&msg);
         uart_t dev = (uart_t)msg.content.value;
-        char c;
-        //printf("Success: UART_DEV(%i) RX: [", dev);
-        do {
-        	c = (int)ringbuffer_get_one(&(ctx[dev].rx_buf));
-
-            /*
-        	if (c == '\n') {
-                puts("]\\n");
+        while(!tsrb_empty(&(ctx[dev].rx_buf))) {
+        	int c = tsrb_get_one(&(ctx[dev].rx_buf));
+            if(c > 0) {
+            	parse_nmea((uint8_t)c);
             }
-            else if (c >= ' ' && c <= '~') {
-                printf("%c", c);
-            }
-            else {
-                printf("0x%02x", (unsigned char)c);
-            }
-			*/
-            parse_nmea((uint8_t)c);
-
-        } while (c != '\n');
+        }
     }
 
     /* this should never be reached */
@@ -212,7 +205,7 @@ static uint32_t _gnss_pss_cnt = 1;
 
 static void _gnss_pps_int_handle(void *arg){
 	(void)arg;
-	printf("\nINFO: GNSS PPS Signal #%ld\n", _gnss_pss_cnt++);
+	printf("\nINFO: GPS PPS Signal #%ld\n", _gnss_pss_cnt++);
 }
 
 static void _gnss_pps_int_init(void){
@@ -246,10 +239,9 @@ int gps_start(const unsigned dev, const uint32_t baudrate)
 #endif
 
 
-    // TOD0 optimize to one ringbuffer
-    /* initialize ringbuffers */
+    /* initialize thread-safe ring buffers */
     for (unsigned i = 0; i < UART_NUMOF; i++) {
-        ringbuffer_init(&(ctx[i].rx_buf), ctx[i].rx_mem, UART_BUFSIZE);
+        tsrb_init(&(ctx[i].rx_buf), ctx[i].rx_mem, UART_BUFSIZE);
     }
 
     /* start the printer thread */
@@ -280,7 +272,7 @@ int gps_restart(void)
 {
     printf("INFO: Restart UART_DEV(%i) at BAUD %"PRIu32"\n", gps_dev, gps_baudrate);
 
-    ringbuffer_remove(&(ctx[gps_dev].rx_buf), UART_BUFSIZE);
+    tsrb_clear(&(ctx[gps_dev].rx_buf));
 
     /* initialize UART */
     gps_power_off_on();
