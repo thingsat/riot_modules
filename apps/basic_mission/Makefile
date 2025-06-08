@@ -11,16 +11,11 @@ EXTERNAL_BOARD_DIRS ?= ../../boards
 BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
 
 EXTERNAL_MODULE_DIRS += ../../modules
+EXTERNAL_MODULE_DIRS += ../../public_modules
 
-# Meshtastic Messages
-MESHTASTIC ?= 0
-ifeq ($(MESHTASTIC),1)
-CFLAGS += -DMESHTASTIC=$(MESHTASTIC)
-USEMODULE += meshtastic_utils
-endif
-
-# LoRa Chirpstack Messages
-USEMODULE += lora_mesh
+# -----------------------------
+# Board Configuration
+# -----------------------------
 
 ifeq ($(BOARD),thingsat-up4-v2)
 EXTERNAL_MODULE_DIRS += ../../modules
@@ -103,16 +98,81 @@ ifeq ($(RAK5146_ON_PICO),yes)
 CFLAGS += -DRAK5146_ON_PICO=1
 endif
 
-
 ifeq ($(RAK5146_ON_INISAT),yes)
 CFLAGS += -DRAK5146_ON_INISAT=1
 endif
 
 
+# -----------------------------
+# Watchdog Timer
+# -----------------------------
+
+ENABLE_WDT_ZTIMER ?= 1
+
+ifeq ($(ENABLE_WDT_ZTIMER),1)
+FEATURES_REQUIRED += periph_wdt
+CFLAGS += -DENABLE_WDT_ZTIMER=$(ENABLE_WDT_ZTIMER)
+CFLAGS += -DWDT_UTILS_KICK_PERIOD=5000
+CFLAGS += -DWDT_UTILS_TIMEOUT=30000
+endif
+
+# -----------------------------
+# Common 
+# -----------------------------
+
+USEMODULE += ztimer
+USEMODULE += ztimer_sec
+USEMODULE += ztimer_msec
+
+# -----------------------------
+# Modules 
+# -----------------------------
+
+USEMODULE += shell
+USEMODULE += shell_cmds_default
+
+USEMODULE += ps
+
+USEMODULE += fmt
+USEMODULE += printf_float
+
+USEMODULE += git
+USEMODULE += i2c_scan_utils
+
+# -----------------------------
+# Sx1302 Module
+# -----------------------------
+include Makefile.lgw.mk
+
+# -----------------------------
+# GNSS Module
+# -----------------------------
+ifeq ($(GPS_UART_ENABLE),1)
+include Makefile.gnss.mk
+endif
+
+# -----------------------------
+# Mission & Repeat 
+# -----------------------------
+CFLAGS += -DINVOKE_CALLBACKS=1
+include Makefile.mission.mk
+include Makefile.repeat.mk
+
+
+# -----------------------------
+# Sensors
+# -----------------------------
+
 USEMODULE += saul_default
 #USEMODULE += senml_saul
 USEMODULE += senml_phydat
 USEMODULE += printf_float
+
+
+ifeq ($(BOARD),nucleo-l432kc-inisat)
+USEMODULE += jc42
+endif
+
 
 # https://www.st.com/resource/en/data_brief/x-nucleo-iks01a3.pdf
 ifeq ($(IKS01A3),yes)
@@ -132,9 +192,9 @@ USEMODULE += lps22hh
 # LIS2MDL 3-axis magnetometer
 
 # LIS2DW12 3-axis accelerometer
+endif
 
 
-endif 
 
 # OpenLog https://github.com/CampusIoT/tutorial/blob/master/openlogger/README.md
 OPENLOG_BAUDRATE ?= 115200
@@ -142,21 +202,14 @@ CFLAGS += -DSTDIO_UART_BAUDRATE=$(OPENLOG_BAUDRATE)
 
 #USEMODULE += periph_rtc
 
-# If ENDPOINT_DEVADDR is defined, ENDPOINT_DEVADDR replace the devaddr defined for the SX130x EUI of the concentrator
-# ENDPOINT_DEVADDR ?= 0xfc001234
-# ENDPOINT_GWEUI ?= 0x0000000000000000
-# ENDPOINT_NWKSKEY ?= \{0xBA,0xBE,0xCA,0xFE,0x12,0x34,0x56,0x78,0xBA,0xBE,0xCA,0xFE,0x12,0x34,0x56,0x78\}
-# ENDPOINT_APPSKEY ?= \{0xCA,0xFE,0xBA,0xBE,0x12,0x34,0x56,0x78,0xCA,0xFE,0xBA,0xBE,0x12,0x34,0x56,0x78\}
-# CFLAGS += -DENDPOINT_DEVADDR=$(ENDPOINT_DEVADDR)
-# CFLAGS += -DENDPOINT_GWEUI=$(ENDPOINT_GWEUI)
-# CFLAGS += -DENDPOINT_NWKSKEY=$(ENDPOINT_NWKSKEY)
-# CFLAGS += -DENDPOINT_APPSKEY=$(ENDPOINT_APPSKEY)
-
-
 CFLAGS_DBG = 
 
+# -----------------------------
+# No interactive
+# -----------------------------
 
-# Gateway is started after reboot and listens LoRa messages
+# Gateway is started after reboot and listens LoRa messages an run mission
+
 ifeq ($(NO_SHELL),1)
 CFLAGS += -DNO_SHELL=1
 endif
@@ -179,100 +232,10 @@ QUIET ?= 1
 #CFLAGS += -DENABLE_DEBUG=1
 CFLAGS += -DDEBUG_ASSERT_VERBOSE=1
 
-# -----------------------------
-# Modules 
-# -----------------------------
-
-USEMODULE += shell
-USEMODULE += shell_cmds_default
-
-USEMODULE += ps
-
-USEMODULE += fmt
-USEMODULE += printf_float
-
-USEMODULE += git
-USEMODULE += i2c_scan_utils
-
-# -----------------------------
-# SX1302 Lib 
-# -----------------------------
-
-# Default is 2.1.0
-SX1302_LIB_VERSION ?= 2_1_0
-#SX1302_LIB_VERSION ?= 1_0_4
-
-ifeq ($(SX1302_LIB_VERSION),1_0_4)
-USEMODULE += sx1302_1_0_4
-endif
-
-ifeq ($(SX1302_LIB_VERSION),2_1_0)
-USEMODULE += sx1302_2_1_0
-USEMODULE += ztimer
-USEMODULE += ztimer_sec
-#USEMODULE += ztimer_msec
-endif
-
-EXTERNAL_MODULE_DIRS += ../../public_modules
-
-#FEATURES_REQUIRED += periph_rtc
-FEATURES_OPTIONAL += periph_rtc
-FEATURES_OPTIONAL += periph_rtc_ms
-FEATURES_OPTIONAL += periph_rtc_mem
-
-# DISABLE_MODULE += periph_init_rtc
-
-#32768U 16384U
-#ifndef STTS751
-#CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192U
-1CFLAGS += -DLGW_LISTEN_STACKSIZE=8192U
-
-CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192U
-ifeq ($(BOARD),nucleo-l432kc)
-CFLAGS += -DLGW_LISTEN_STACKSIZE=10240U
-else
-CFLAGS += -DLGW_LISTEN_STACKSIZE=16384U
-endif
-
-# -----------------------------
-# For Repeat callback
-# -----------------------------
-
-CFLAGS += -DINVOKE_CALLBACKS=1
-
-# -----------------------------
-# Sx1302 Module footprint (TODO)
-# -----------------------------
-
-CFLAGS += -DLGW_PA_GAIN=0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1
-CFLAGS += -DLGW_PWR_IDX=15,16,17,19,20,22,1,2,3,4,5,6,7,9,11,14
-
-LGW_SX1302_LUT_DIG_GAIN ?= 0
-
-CFLAGS += -DLGW_SX1302_LUT_DIG_GAIN=$(LGW_SX1302_LUT_DIG_GAIN)
-# For SX1257 only
-CFLAGS += -DLGW_SX1257_LUT_DAC_GAIN=3
-CFLAGS += -DLGW_SX1257_LUT_MIX_GAIN=10
-
-
-
-ifeq ($(GPS_UART_ENABLE),1)
-include Makefile.gnss.mk
-endif
-
-ifeq ($(ENABLE_GPS),1)
-include Makefile.gnss.mk
-endif
-
-
-include Makefile.mission.mk
-include Makefile.repeat.mk
-
 
 # -----------------------------
 # Flags 
 # -----------------------------
-
 
 # Should be removed for production
 # CFLAGS += -Wno-unused-variable -Wno-unused-function
