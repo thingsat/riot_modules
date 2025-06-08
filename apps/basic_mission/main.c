@@ -128,6 +128,15 @@ static const shell_command_t shell_commands[] = { { "git", "Show git info",
 		{ NULL, NULL, NULL } };
 #endif
 
+
+static void print_i2c(void) {
+	// I2C scan
+	for (int idx = 0; idx < (int) I2C_NUMOF; idx++) {
+		(void) mission_i2c_scan(idx);
+		(void) mission_i2c_scan_and_check(idx);
+	}
+}
+
 int main(void) {
 
 
@@ -160,12 +169,7 @@ int main(void) {
 
 	print_git();
 
-	// I2C scan
-
-	for (int idx = 0; idx < (int) I2C_NUMOF; idx++) {
-		(void) mission_i2c_scan(idx);
-		(void) mission_i2c_scan_and_check(idx);
-	}
+	print_i2c();
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();
@@ -201,9 +205,6 @@ int main(void) {
 	puts("INFO: Starting listening ...");
 	lgw_cmd(2, (char*[] ) { "lgw", "listen" });
 
-#if GPS_UART_ENABLE == 1
-	//gnss_main(GPS_UART_DEV, GPS_BAUDRATE);
-#endif
 
 #else
 	/* start the shell */
