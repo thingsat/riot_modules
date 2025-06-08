@@ -12,6 +12,17 @@
 
 int lgw_cmd(int argc, char **argv);
 
+
+uint32_t lgw_frequency_plan_size(void);
+
+uint32_t lgw_get_freq_hz(const uint8_t channel);
+
+int lgw_tx(const uint32_t freq_hz, const uint32_t spreading_factor, const uint32_t bandwidth,
+		const uint16_t preamble, const uint32_t rf_power, const bool crc_on,
+		const bool invert_pol, const uint32_t pause_ms,
+		const uint16_t phypayload_size, const uint8_t *phypayload);
+
+
 #if INVOKE_CALLBACKS == 1
 
 #include "loragw_hal.h"

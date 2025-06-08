@@ -138,6 +138,19 @@ static void _lgw_stat_printf(void) {
 	printf("\n");
 }
 
+
+uint32_t lgw_frequency_plan_size(void) {
+ return LGW_IF_CHAIN_NB - 2;
+}
+
+uint32_t lgw_get_freq_hz(const uint8_t channel) {
+	if(channel < lgw_frequency_plan_size()) {
+		return _freq_hz_plan[channel];
+	} else {
+		return 0;
+	}
+}
+
 /**
  *
  * @brief Get the frequencies plan
@@ -523,7 +536,7 @@ static int lgw_start_cmd(int argc, char **argv) {
 	if (x != 0) {
 		printf("ERROR: failed to start the gateway\n");
 
-		lgw_com_close();//close SPI and turn NSS pin low (to avoid current leaking)
+		lgw_com_close(); //close SPI and turn NSS pin low (to avoid current leaking)
 		sx1302_poweroff(); //cut the alimentation if the start procedure didn't work
 
 		return EXIT_FAILURE;
@@ -711,29 +724,23 @@ static int lgw_bench_cmd(int argc, char **argv) {
 	const uint32_t devaddr = lgw_sx130x_endpoint->devaddr;
 
 	// APRS (https://www.aprs.org/doc/APRS101.PDF) like text message.
-	const uint8_t fpayload[] = "@sx1302@world :This is a simple test$GPGGA,045104.000,3014.1985,N,09749.2873,W,1,09,1.2,211.6,M,-22.5,M,,0000*62";
+	const uint8_t fpayload[] =
+			"@sx1302@world :This is a simple test$GPGGA,045104.000,3014.1985,N,09749.2873,W,1,09,1.2,211.6,M,-22.5,M,,0000*62";
 	const uint8_t fpayload_size = sizeof(fpayload);
-	const uint8_t fPort  = 100; // For Thingsat decoder (Plaintext)
+	const uint8_t fPort = 100; // For Thingsat decoder (Plaintext)
 	// Note: fpayload can contains an APRS string
 
 	while (nb_remaining_packets_to_transmit--) {
 
 		uint8_t frame_size;
 		lorawan_prepare_up_dataframe(
-				false,
-				devaddr,
+		false, devaddr,
 				0x00, // FCTrl (FOptLen = 0)
 				_fCntUp,
 				fPort, // fPort
-				fpayload,
-				fpayload_size,
-				lgw_sx130x_endpoint->nwkskey,
-				lgw_sx130x_endpoint->appskey,
-				pkt.payload,
-				&frame_size
-				);
+				fpayload, fpayload_size, lgw_sx130x_endpoint->nwkskey,
+				lgw_sx130x_endpoint->appskey, pkt.payload, &frame_size);
 		pkt.size = frame_size;
-
 
 		pkt.freq_hz = _freq_hz_plan[nb_packets_to_transmit
 				% ARRAY_SIZE(_freq_hz_plan)];
@@ -945,7 +952,7 @@ static uint16_t last_phypayload_size = 0;
 // TODO last_phypayload_timestamp
 
 /**
- * TX command
+ * Transmit
  */
 static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 
@@ -1007,12 +1014,13 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 }
 
 /**
- * TX command
+ * Transmit a LoRa message
  */
-static int _lgw_tx(const uint32_t frequency, const uint32_t spreading_factor,
-		const uint32_t bandwidth, const uint16_t preamble,
-		const uint32_t rf_power, const bool crc_on, const bool invert_pol,
+int lgw_tx(const uint32_t freq_hz, const uint32_t spreading_factor, const uint32_t bandwidth,
+		const uint16_t preamble, const uint32_t rf_power, const bool crc_on,
+		const bool invert_pol, const uint32_t pause_ms,
 		const uint16_t phypayload_size, const uint8_t *phypayload) {
+
 	if (phypayload_size == 0) {
 		printf("ERROR: the payload size must be not zero\n");
 		return EXIT_FAILURE;
@@ -1031,7 +1039,13 @@ static int _lgw_tx(const uint32_t frequency, const uint32_t spreading_factor,
 	pkt.no_header = false; 		// Beacons have not header
 	pkt.no_crc = (crc_on != true); // LoRaWAN : on for uplink and off for downlink
 	pkt.invert_pol = invert_pol;
-	pkt.freq_hz = frequency;
+
+	if(freq_hz == 0) {
+		pkt.freq_hz = _freq_hz_plan[_lgw_stat.tx % ARRAY_SIZE(_freq_hz_plan)];
+	} else {
+		pkt.freq_hz = freq_hz;
+	}
+
 	pkt.datarate = spreading_factor;
 	pkt.preamble = preamble;	//  8 for LoRaWAN
 
@@ -1053,7 +1067,13 @@ static int _lgw_tx(const uint32_t frequency, const uint32_t spreading_factor,
 		break;
 	}
 
-	return _lgw_tx_pkt_tx(&pkt);
+	_lgw_tx_pkt_tx(&pkt);
+
+
+	printf("Waiting %lu msec\n", pause_ms);
+	xtimer_msleep(pause_ms);
+
+	return EXIT_SUCCESS;
 }
 
 /**
@@ -1118,8 +1138,8 @@ static int lgw_tx_cmd(int argc, char **argv) {
 	uint8_t phypayload[256];
 	uint16_t phypayload_size = fmt_hex_bytes(phypayload, hexpayload);
 
-	return _lgw_tx(frequency, spreading_factor, bandwidth, preamble, rfpower,
-			crc_on, invert_pol, phypayload_size, phypayload);
+	return lgw_tx(frequency, spreading_factor, bandwidth, preamble, rfpower,
+			crc_on, invert_pol, 0, phypayload_size, phypayload);
 }
 
 static uint32_t _last_count_us = 0;
@@ -1321,6 +1341,9 @@ static int lgw_rx_cmd(int argc, char **argv) {
 			if(now > last_periodic_call + PERIODIC_CALLBACK_IN_SEC){
 				last_periodic_call = now;
 
+				// clean lgw_pkt_tx_s
+				memset(&lgw_pkt_tx_to_send, 0, sizeof(lgw_pkt_tx_to_send));
+
 				(*pkt_period_cb)(&lgw_pkt_tx_to_send);
 
 				if(lgw_pkt_tx_to_send.size > 0) {
@@ -1329,6 +1352,10 @@ static int lgw_rx_cmd(int argc, char **argv) {
 						printf("ERROR: failed to send packet\n");
 						_lgw_stat.tx_abort++;
 					}
+					printf("INFO: packet sent\n");
+
+				} else {
+					printf("INFO: no packet to send\n");
 				}
 			}
 		}
