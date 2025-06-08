@@ -14,6 +14,11 @@
 #include <inttypes.h>
 //#include "riotbuild.h"
 
+
+#if ENABLE_WDT_ZTIMER == 1
+#include "wdt_ztimer.h"
+#endif
+
 #include "shell.h"
 
 #include "lgw_cmd.h"
@@ -146,6 +151,13 @@ int main(void) {
 	puts("=========================================");
 
 	puts("\nBOARD:        " RIOT_BOARD "\n");
+
+#if ENABLE_WDT_ZTIMER == 1
+	(void)start_wdt_ztimer();
+#else
+	puts("WARNING: No watchdog timer\n");
+#endif
+
 
 #if GPS_UART_ENABLE == 1
 	puts("INFO: Starting the GNSS parsing ...");
