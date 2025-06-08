@@ -486,8 +486,9 @@ void parse_nmea(uint8_t c) {
 #endif
 
 		if (minmea_check((const char*) nmea_buffer, true) == false) {
+#if GPS_UART_ENABLE_TRACE_BADCHECKSUM == 1
 			printf("ERROR: NMEA BAD CHECKSUM: %s\n", nmea_buffer);
-
+#endif
 			// TODO Try to recover by finding next sentence starting with $
 
 			// clear buffer
@@ -615,22 +616,28 @@ void parse_nmea(uint8_t c) {
 					;
 					break;
 				case MINMEA_INVALID:
+#if GPS_UART_ENABLE_TRACE_ERROR == 1
 					printf(
 							"ERROR: Can not parse NMEA Invalid sentence %s : %d.\n",
 							(const char*) nmea_buffer, s);
+#endif
 					error_cnt++;
 					parse_nmea_incr_global_error();
 					break;
 				case MINMEA_UNKNOWN:
+#if GPS_UART_ENABLE_TRACE_UNKNOWN_SENTENCE == 1
 					printf(
 							"ERROR: Can not parse NMEA Unknown sentence %s : %d.\n",
 							(const char*) nmea_buffer, s);
+#endif
 					unkwown_cnt++;
 					parse_nmea_incr_global_unknown();
 					break;
 				default:
+#if GPS_UART_ENABLE_TRACE_ERROR == 1
 					printf("ERROR: Can not parse NMEA sentence %s : %d\n",
 							(const char*) nmea_buffer, s);
+#endif
 					error_cnt++;
 					parse_nmea_incr_global_error();
 					break;
@@ -638,7 +645,7 @@ void parse_nmea(uint8_t c) {
 
 				mutex_unlock(&gps_mutex);
 
-				if (error_cnt > 5) {
+				if (error_cnt > GPS_UART_ENABLE_ERROR_MAX_BEFORE_RESTART) {
 					gps_restart();
 					error_cnt = 0;
 					nmea_buffer_idx = 0;
