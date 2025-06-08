@@ -1,6 +1,6 @@
 # Thingsat :: Basic Mission
 
-This application illustrates a simple mission for the Thingsat in-orbit gateway.
+This application illustrates a simple mission for the [Thingsat in-orbit gateway](https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/public/-/tree/master/cubesat_mission_3).
 
 * [x] GNSS on UART parsing when a GNSS module is present on Mikrobus or on MiniPCIe module (as into the RAK5146 module).
 * [x] LoRaWAN repeater (with devaddr filtering)
