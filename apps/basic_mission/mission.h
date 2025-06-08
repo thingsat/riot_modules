@@ -13,7 +13,11 @@
 
 #include "loragw_hal.h"
 
-void mission(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
+void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
+
+void mission_gnss_print(void);
+
+void mission_inst_cnt_print(void);
 
 
 #endif /* APPS_BASIC_MISSION_MISSION_H_ */

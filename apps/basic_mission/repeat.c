@@ -18,6 +18,9 @@
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
 
+#include "mission.h"
+
+
 //#define CHIRPSTACK_MESH_ENABLE  1
 
 #ifdef CHIRPSTACK_MESH_ENABLE
@@ -65,14 +68,8 @@ static const uint32_t frequency_plan_len = ARRAY_SIZE(frequency_plan);
 static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		struct lgw_pkt_tx_s *pkt_tx) {
 
-	uint32_t inst_cnt_us;
-	lgw_get_instcnt(&inst_cnt_us);
-
-	uint32_t trig_cnt_us;
-	lgw_get_trigcnt(&trig_cnt_us);
-
-	printf("INFO: inst_cnt_us=%ld, trig_cnt_us=%ld\n", inst_cnt_us,
-			trig_cnt_us);
+	mission_inst_cnt_print();
+	mission_gnss_print();
 
 	// for skipping received frame
 	pkt_tx->size = 0;

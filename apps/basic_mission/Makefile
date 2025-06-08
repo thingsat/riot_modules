@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2024 Université Grenoble Alpes
+# Copyright (C) 2021-2025 Université Grenoble Alpes
 #
 RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
 
@@ -140,7 +140,6 @@ endif
 OPENLOG_BAUDRATE ?= 115200
 CFLAGS += -DSTDIO_UART_BAUDRATE=$(OPENLOG_BAUDRATE)
 
-
 #USEMODULE += periph_rtc
 
 # If ENDPOINT_DEVADDR is defined, ENDPOINT_DEVADDR replace the devaddr defined for the SX130x EUI of the concentrator
@@ -258,6 +257,10 @@ CFLAGS += -DLGW_SX1257_LUT_MIX_GAIN=10
 
 
 ifeq ($(GPS_UART_ENABLE),1)
+include Makefile.gnss.mk
+endif
+
+ifeq ($(ENABLE_GPS),1)
 include Makefile.gnss.mk
 endif
 
