@@ -58,7 +58,10 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* -------------------------------------------------------------------------- */
 /* --- PRIVATE TYPES -------------------------------------------------------- */
 
+#ifndef MAX_TIMESTAMP_PPS_HISTORY
 #define MAX_TIMESTAMP_PPS_HISTORY 16
+#endif
+
 struct timestamp_pps_history_s {
     uint32_t history[MAX_TIMESTAMP_PPS_HISTORY];
     uint8_t idx; /* next slot to be written */
@@ -214,7 +217,7 @@ int32_t legacy_timestamp_correction(uint8_t bandwidth, uint8_t sf, uint8_t cr, b
     DEBUG_PRINTF("FTIME OFF : fft_delay %llu \n", fft_delay);
     DEBUG_PRINTF("FTIME OFF : demap_delay %llu \n", demap_delay);
     DEBUG_PRINTF("FTIME OFF : decode_delay %llu \n", decode_delay);
-    DEBUG_PRINTF("FTIME OFF : timestamp correction %d \n", timestamp_correction);
+    DEBUG_PRINTF("FTIME OFF : timestamp correction %ld \n", timestamp_correction);
 
     return timestamp_correction;
 }
@@ -257,7 +260,7 @@ int32_t precision_timestamp_correction(uint8_t bandwidth, uint8_t datarate, uint
     timestamp_correction += (nb_symbols_payload * t_symbol_us); /* shift from end of header to end of packet */
     timestamp_correction -= (filtering_delay + 500E3) / 1E6; /* compensate the filtering delay */
 
-    DEBUG_PRINTF("FTIME ON : timestamp correction %d \n", timestamp_correction);
+    DEBUG_PRINTF("FTIME ON : timestamp correction %ld \n", timestamp_correction);
 
     return timestamp_correction;
 }
@@ -284,11 +287,11 @@ void timestamp_pps_history_save(uint32_t timestamp_pps_reg) {
         }
 
 #if 0
-        printf("---- timestamp PPS history (idx:%u size:%u) ----\n",  timestamp_pps_history.idx,  timestamp_pps_history.size);
+        DEBUG_PRINTF("---- timestamp PPS history (idx:%u size:%u) ----",  timestamp_pps_history.idx,  timestamp_pps_history.size);
         for (int i = 0; i < timestamp_pps_history.size; i++) {
-            printf("  %u\n", timestamp_pps_history.history[i]);
+        	DEBUG_PRINTF("  %lu\n", timestamp_pps_history.history[i]);
         }
-        printf("--------------------------------\n");
+        DEBUG_MSG("--------------------------------\n");
 #endif
     }
 }
@@ -503,9 +506,19 @@ int precise_timestamp_calculate(uint8_t ts_metrics_nb, const int8_t * ts_metrics
     CHECK_NULL(ts_metrics);
     CHECK_NULL(result_ftime);
 
+
+#if 0
+        DEBUG_PRINTF("---- timestamp PPS history (idx:%u size:%u) ----",  timestamp_pps_history.idx,  timestamp_pps_history.size);
+        for (int i = 0; i < timestamp_pps_history.size; i++) {
+        	DEBUG_PRINTF("  %lu\n", timestamp_pps_history.history[i]);
+        }
+        DEBUG_MSG("--------------------------------\n");
+#endif
+
+
     /* Check if we can calculate a ftime */
     if (timestamp_pps_history.size < MAX_TIMESTAMP_PPS_HISTORY) {
-        printf("INFO: Cannot compute ftime yet, PPS history is too short\n");
+        printf("INFO: Cannot compute ftime yet, PPS history (size=%d) is too short\n", timestamp_pps_history.size);
         return -1;
     }
 
@@ -578,7 +591,7 @@ int precise_timestamp_calculate(uint8_t ts_metrics_nb, const int8_t * ts_metrics
             /* search the pps counter in history */
             if ((timestamp_cnt - timestamp_pps_history.history[timestamp_pps_idx]) < 32e6) {
                 timestamp_pps = timestamp_pps_history.history[timestamp_pps_idx];
-                DEBUG_PRINTF("==> timestamp_pps found at history[%d] => %u\n", timestamp_pps_idx, timestamp_pps);
+                DEBUG_PRINTF("==> timestamp_pps found at history[%d] => %lu\n", timestamp_pps_idx, timestamp_pps);
                 break;
             }
         }
@@ -594,7 +607,7 @@ int precise_timestamp_calculate(uint8_t ts_metrics_nb, const int8_t * ts_metrics
     } else {
         /* The timestamp_pps_reg we just read is the reference we use to calculate the fine timestamp */
         timestamp_pps = timestamp_pps_reg;
-        DEBUG_PRINTF("==> timestamp_pps => %u\n", timestamp_pps);
+        DEBUG_PRINTF("==> timestamp_pps => %lu\n", timestamp_pps);
 
         /* Calculate the Xtal error between the reference PPS we just found and the previous one */
         timestamp_pps_idx = timestamp_pps_history.idx;
@@ -608,13 +621,16 @@ int precise_timestamp_calculate(uint8_t ts_metrics_nb, const int8_t * ts_metrics
         printf("ERROR: xtal_error is invalid (%.15lf)\n", xtal_correct);
         return -1;
     }
+    printf("INFO: xtal_correct : (%.15lf)\n", xtal_correct);
+
 
     /* Coarse timestamp based on PPS reference */
     diff_pps = timestamp_cnt - timestamp_pps;
 
-    DEBUG_PRINTF("timestamp_cnt : %u\n", timestamp_cnt);
-    DEBUG_PRINTF("timestamp_pps : %u\n", timestamp_pps);
-    DEBUG_PRINTF("diff_pps : %d\n", diff_pps);
+    DEBUG_PRINTF("xtal_correct  : %.15lf\n", xtal_correct);
+    DEBUG_PRINTF("timestamp_cnt : %lu\n", timestamp_cnt);
+    DEBUG_PRINTF("timestamp_pps : %lu\n", timestamp_pps);
+    DEBUG_PRINTF("diff_pps      : %ld\n", diff_pps);
 
     /* Compute the fine timestamp */
     pkt_ftime = (double)diff_pps + (double)ftime_mean;
@@ -635,7 +651,7 @@ int precise_timestamp_calculate(uint8_t ts_metrics_nb, const int8_t * ts_metrics
         return -1;
     }
 
-    DEBUG_PRINTF("==> ftime = %u ns since last PPS (%.15lf)\n", *result_ftime, pkt_ftime);
+    DEBUG_PRINTF("==> ftime = %lu ns since last PPS (%.15lf)\n", *result_ftime, pkt_ftime);
 
     return 0;
 }

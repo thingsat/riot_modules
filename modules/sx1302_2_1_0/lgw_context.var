@@ -73,7 +73,11 @@ static lgw_context_t lgw_context = {
         }
     },
     .ftime_cfg = {
+#if ENABLE_GPS == 1 
+        .enable = true,
+#else
         .enable = false,
+#endif 
         .mode = LGW_FTIME_MODE_ALL_SF
     },
 #if ENABLE_LBT == 1

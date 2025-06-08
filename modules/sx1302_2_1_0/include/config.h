@@ -26,6 +26,8 @@
 #define DEBUG_RAD 				0
 #define DEBUG_CAL 				0
 #define DEBUG_SX1302 			0
+#define DEBUG_FTIME 			1
+
 
 #ifndef ENABLE_REGTEST
 #define ENABLE_REGTEST			1
