@@ -1016,7 +1016,7 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 /**
  * Transmit a LoRa message
  */
-int lgw_tx(const uint32_t freq_hz, const uint32_t spreading_factor, const uint32_t bandwidth,
+static int _lgw_tx(const uint32_t freq_hz, const uint32_t spreading_factor, const uint32_t bandwidth,
 		const uint16_t preamble, const uint32_t rf_power, const bool crc_on,
 		const bool invert_pol, const uint32_t pause_ms,
 		const uint16_t phypayload_size, const uint8_t *phypayload) {
@@ -1138,7 +1138,7 @@ static int lgw_tx_cmd(int argc, char **argv) {
 	uint8_t phypayload[256];
 	uint16_t phypayload_size = fmt_hex_bytes(phypayload, hexpayload);
 
-	return lgw_tx(frequency, spreading_factor, bandwidth, preamble, rfpower,
+	return _lgw_tx(frequency, spreading_factor, bandwidth, preamble, rfpower,
 			crc_on, invert_pol, 0, phypayload_size, phypayload);
 }
 
