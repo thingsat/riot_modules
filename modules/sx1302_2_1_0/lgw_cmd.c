@@ -32,9 +32,11 @@
 #include "lgw_config.h"
 #include "lgw_cmd.h"
 #include "lgw_endpoint.h"
+
+#include "lgw_utils.h"
+
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
-
 #ifdef MODULE_LORA_MESH
 #include "lora_mesh.h"
 #endif
@@ -102,18 +104,6 @@ static int _print_rtc(void) {
 		puts("rtc: error getting time");
 		return 1;
 	}
-}
-
-static uint32_t _get_delta_instcnt(const uint32_t start, const uint32_t end) {
-	uint32_t delta_count_us;
-	if (start == 0 && end == 0) {
-		delta_count_us = 0;
-	} else if (end > start) {
-		delta_count_us = end - start;
-	} else {
-		delta_count_us = end + (UINT32_MAX - start);
-	}
-	return delta_count_us;
 }
 
 static void _lgw_stat_reset(void) {
@@ -297,31 +287,6 @@ static int _configure_txlut(struct lgw_tx_gain_lut_s *txlut,
 	return EXIT_SUCCESS;
 }
 
-static uint8_t _bandwidthToBwLoRaCode(uint32_t bandwidthInHz) {
-	switch (bandwidthInHz) {
-	case 125000:
-		return BW_125KHZ;
-	case 250000:
-		return BW_250KHZ;
-	case 500000:
-		return BW_500KHZ;
-	default:
-		return BW_UNDEFINED;
-	}
-}
-
-static uint32_t _bandwidthToBwLoRaHz(uint8_t bwCode) {
-	switch (bwCode) {
-	case BW_125KHZ:
-		return 125000;
-	case BW_250KHZ:
-		return 250000;
-	case BW_500KHZ:
-		return 500000;
-	default:
-		return 0;
-	}
-}
 
 /**
  * Configure Radio for RX according to global_conf.json.sx1250.EU868 parameters
@@ -421,7 +386,7 @@ static int _configure_radio(bool enable_tx_on_rfchain_0) {
 		ifconf.rf_chain = lgw_config->channel_rfchain[i];
 		ifconf.freq_hz = lgw_config->channel_if[i];
 		ifconf.datarate = lgw_config->lorastd_datarate;
-		ifconf.bandwidth = _bandwidthToBwLoRaCode(lgw_config->lorastd_bw);
+		ifconf.bandwidth = lgw_bandwidthToBwLoRaCode(lgw_config->lorastd_bw);
 
 		// TODO lorastd_implicit_hdr == true
 		if (lgw_config->lorastd_implicit_hdr) {
@@ -990,7 +955,7 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 	int x = lgw_send((struct lgw_pkt_tx_s*) pkt); // cast since loragw_sx1302 fixes some fields.
 	if (x != 0) {
 		lgw_get_instcnt(&inst_cnt_us_end);
-		inst_cnt_us_delta = _get_delta_instcnt(inst_cnt_us_start,
+		inst_cnt_us_delta = lgw_get_delta_instcnt(inst_cnt_us_start,
 				inst_cnt_us_end);
 		printf("ERROR: failed to send packet - ");
 		printf("count_us: start:%lu end:%lu delta:%lu\n", inst_cnt_us_start,
@@ -1000,7 +965,7 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 		return EXIT_FAILURE;
 	}
 	lgw_get_instcnt(&inst_cnt_us_end);
-	inst_cnt_us_delta = _get_delta_instcnt(inst_cnt_us_start, inst_cnt_us_end);
+	inst_cnt_us_delta = lgw_get_delta_instcnt(inst_cnt_us_start, inst_cnt_us_end);
 	printf("INFO: count_us: start:%lu end:%lu delta:%lu\n", inst_cnt_us_start,
 			inst_cnt_us_end, inst_cnt_us_delta);
 
@@ -1142,67 +1107,6 @@ static int lgw_tx_cmd(int argc, char **argv) {
 			crc_on, invert_pol, 0, phypayload_size, phypayload);
 }
 
-static uint32_t _last_count_us = 0;
-
-static void _printf_rxpkt(struct lgw_pkt_rx_s *rxpkt) {
-
-	// TODO print the delta in us between rxpkt->count_us;
-
-	uint32_t count_us = rxpkt->count_us;
-	const uint32_t delta_count_us = _get_delta_instcnt(count_us,
-			_last_count_us);
-	_last_count_us = count_us;
-
-	const uint32_t time_on_air = lgw_time_on_air_params(rxpkt->modulation,
-			rxpkt->bandwidth, // 0x04 for 125000 KHz
-			rxpkt->coderate, // 1 for CR4/5
-			rxpkt->datarate, // SF
-			8, // default in LoRaWAN
-			true, /* header is always enabled, except for beacons */
-			(rxpkt->status != STAT_NO_CRC), rxpkt->size);
-
-	printf("\n----- %s packet - TimeOnAir: %lu msec (",
-			(rxpkt->modulation == MOD_LORA) ? "LoRa" : "FSK", time_on_air);
-	_print_rtc();
-	printf(") -----\n");
-
-	printf("  count_us  : %lu (delta: %lu)\n", rxpkt->count_us, delta_count_us);
-	printf("  size      : %u\n", rxpkt->size);
-	printf("  chan      : %u\n", rxpkt->if_chain);
-	printf("  status    : 0x%02XX %s\n", rxpkt->status,
-			_get_status_str(rxpkt->status));
-	printf("  datr      : %lu\n", rxpkt->datarate);
-	printf("  bw        : %lu (0x%02X)\n",
-			_bandwidthToBwLoRaHz(rxpkt->bandwidth), rxpkt->bandwidth);
-	printf("  codr      : %u\n", rxpkt->coderate);
-	printf("  rf_chain  : %u\n", rxpkt->rf_chain);
-	printf("  freq_hz   : %lu\n", rxpkt->freq_hz);
-
-	printf("  snr_avg   : %.1f\n", rxpkt->snr);
-	printf("  snr_min   : %.1f\n", rxpkt->snr_min);
-	printf("  snr_max   : %.1f\n", rxpkt->snr_max);
-	printf("  rssi_chan : %.1f\n", rxpkt->rssic);
-	printf("  rssi_sig  : %.1f\n", rxpkt->rssis);
-	printf("  rssi_off  : %.1f\n", rxpkt->rssi_temperature_offset);
-	printf("  temp      : %.1f\n", rxpkt->temperature);
-
-	printf("  crc       : 0x%04X\n", rxpkt->crc);
-	for (int j = 0; j < rxpkt->size; j++) {
-		printf("%02X ", rxpkt->payload[j]);
-	}
-	printf("\n");
-
-#ifdef MODULE_LORA_MESH
-	if(lora_mesh_check_valid_frame(rxpkt->payload,rxpkt->size)) {
-		lora_mesh_printf_frame(rxpkt->payload,rxpkt->size);
-	} else {
-		lorawan_printf_payload(rxpkt->payload,rxpkt->size);
-	}
-#else
-	lorawan_printf_payload(rxpkt->payload, rxpkt->size);
-#endif
-}
-
 //#define MAX_RX_PKT 4
 //static struct lgw_pkt_rx_s rxpkt[MAX_RX_PKT];
 
@@ -1256,7 +1160,8 @@ static int lgw_rx_cmd(int argc, char **argv) {
 			for (int i = 0; i < nb_pkt; i++) {
 				_lgw_stat.rx++;
 
-				_printf_rxpkt(rxpkt + i);
+
+				lgw_printf_rxpkt(rxpkt + i);
 
 				bool same_as_previous = false;
 				if (rxpkt[i].size > 0) {
