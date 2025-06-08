@@ -84,6 +84,16 @@ tio -b 115200 -m INLCRNL /dev/tty.usbmodem1xxx
 tio -b 9600 -m INLCRNL /dev/tty.usbmodem1xxx
 ```
 
+## OpenLog
+
+[OpenLog](https://github.com/CampusIoT/tutorial/tree/master/openlogger) board enables to store the console traces into a MicroSD card with the board is running standalone (ie not connected to a PC).
+
+Since OpenLog UART baudrate should be `9600` in order to have reliable writes of the console traces.
+
+You should add `OPENLOG_BAUDRATE=9600` into the `gmake` command line.
+
+> Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
+
 ## RX Thread Stack
 
 In case of **"RIOT kernel panic: MEM MANAGE HANDLER" error**, enlarge the stack of the thread running the RX cmd 
