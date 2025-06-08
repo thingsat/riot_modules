@@ -1,6 +1,8 @@
 # Thingsat :: Basic Mission
 
-* [x] GNSS on UART parsing
+This application illustrates a simple mission for the Thingsat in-orbit gateway.
+
+* [x] GNSS on UART parsing when a GNSS module is present on Mikrobus or on MiniPCIe module (as into the RAK5146 module).
 * [x] LoRaWAN repeater (with devaddr filtering)
 * [ ] App Clock Sync
 * [x] Chirpstack Mesk Relay (SHOULD BE TESTED)
@@ -8,8 +10,7 @@
 * [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry
 * [ ] Periodic telemetry (with GNSS position and temperature) using APRS format (not fake)
 * [ ] Periodic two-way ranging with other Thingsat boards
-* [ ] LoRa 2G4 backhaul when SX1280 module is present
-
+* [ ] LoRa 2G4 backhaul when the SX1280 module is present
 
 ## Setup
 
