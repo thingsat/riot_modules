@@ -711,7 +711,7 @@ static int lgw_bench_cmd(int argc, char **argv) {
 				% ARRAY_SIZE(_freq_hz_plan)];
 
 		printf(
-				"Transmitting LoRa packet (%d/%d) on %.3fMHz [SF%ldBW%d, TXPOWER %lu, PWID %u, PA %s, ToA %lu msec] devaddr: 0x%8lx fCntUp: %ld\n",
+				"INFO: Transmitting LoRa packet (%d/%d) on %.3fMHz [SF%ldBW%d, TXPOWER %lu, PWID %u, PA %s, ToA %lu msec] devaddr: 0x%8lx fCntUp: %ld\n",
 				nb_packets_to_transmit - nb_remaining_packets_to_transmit,
 				nb_packets_to_transmit, (double) (pkt.freq_hz / 1E6),
 				pkt.datarate, (pkt.bandwidth - 3) * 125, rfpower,
@@ -867,7 +867,7 @@ static int lgw_chantest_cmd(int argc, char **argv) {
 		}
 
 		printf(
-				"Transmitting LoRa packet (%d/%d) on %.3fMHz [SF%ldBW%d, TXPOWER %lu, PWID %u, PA %s, ToA %lu msec] devaddr: 0x%8lx fCntUp: %ld\n",
+				"INFO: Transmitting LoRa packet (%d/%d) on %.3fMHz [SF%ldBW%d, TXPOWER %lu, PWID %u, PA %s, ToA %lu msec] devaddr: 0x%8lx fCntUp: %ld\n",
 				nb_packets_to_transmit - nb_remaining_packets_to_transmit,
 				nb_packets_to_transmit, (double) (pkt.freq_hz / 1E6),
 				pkt.datarate, (pkt.bandwidth - 3) * 125, rfpower,
@@ -932,16 +932,6 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 	}
 
 	// TODO add dac_gain, mix_gain, offset_i, offset_q for SX1257
-	printf(
-			"Transmitting LoRa packet on %.3fMHz [SF%ldBW%d, TXPOWER %u, PWID %u, PA %s, DIG %d, %d bytes, ToA %lu msec]\n",
-			(double) (pkt->freq_hz / 1E6), pkt->datarate,
-			(pkt->bandwidth - 3) * 125, pkt->rf_power, _txlut.lut[0].pwr_idx,
-			_txlut.lut[0].pa_gain ? "ON" : "OFF", _txlut.lut[0].dig_gain,
-			pkt->size, time_on_air);
-	for (unsigned int j = 0; j < pkt->size; j++) {
-		printf("%02X ", pkt->payload[j]);
-	}
-	printf("\n");
 
 	// save last packet before sending
 	memcpy(last_phypayload, pkt->payload, pkt->size);
@@ -952,7 +942,23 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 	uint32_t inst_cnt_us_delta;
 	lgw_get_instcnt(&inst_cnt_us_start);
 
+	// Send before print for avoiding miss the tx_count
+	// TODO check instruction
 	int x = lgw_send((struct lgw_pkt_tx_s*) pkt); // cast since loragw_sx1302 fixes some fields.
+
+	printf(
+			"INFO: Transmitting LoRa packet on %.3fMHz [%s, SF%ldBW%d, TXPOWER %u, PWID %u, PA %s, DIG %d, %d bytes, ToA %lu msec]\n",
+			(double) (pkt->freq_hz / 1E6),
+			pkt->tx_mode == IMMEDIATE ? "IMMEDIATE" : pkt->tx_mode == ON_GPS ? "ON_GPS" : "TIMESTAMPED",
+			pkt->datarate,
+			(pkt->bandwidth - 3) * 125, pkt->rf_power, _txlut.lut[0].pwr_idx,
+			_txlut.lut[0].pa_gain ? "ON" : "OFF", _txlut.lut[0].dig_gain,
+			pkt->size, time_on_air);
+	for (unsigned int j = 0; j < pkt->size; j++) {
+		printf("%02X ", pkt->payload[j]);
+	}
+	printf("\n");
+
 	if (x != 0) {
 		lgw_get_instcnt(&inst_cnt_us_end);
 		inst_cnt_us_delta = lgw_get_delta_instcnt(inst_cnt_us_start,
