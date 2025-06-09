@@ -17,6 +17,7 @@
 #define _PARSE_NMEA_H
 
 #include <time.h>
+#include <stdbool.h>
 
 void parse_nmea(uint8_t data);
 
