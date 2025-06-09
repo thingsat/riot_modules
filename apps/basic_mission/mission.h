@@ -11,10 +11,12 @@
 #ifndef APPS_BASIC_MISSION_MISSION_H_
 #define APPS_BASIC_MISSION_MISSION_H_
 
+// TODO change for enum
 #define RANGE1_PAYLOAD			0
 #define TELEMETRY_PAYLOAD		1
-#define APRS_PAYLOAD			2
-#define EWSS_PAYLOAD			3
+#define APRS_LORAWAN_PAYLOAD	2
+#define APRS_AX25_PAYLOAD		3
+#define EWSS_PAYLOAD			4
 
 #include "loragw_hal.h"
 
