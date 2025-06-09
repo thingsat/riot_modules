@@ -107,7 +107,7 @@ endif
 # Watchdog Timer
 # -----------------------------
 
-ENABLE_WDT_ZTIMER ?= 1
+ENABLE_WDT_ZTIMER ?= 0
 
 ifeq ($(ENABLE_WDT_ZTIMER),1)
 FEATURES_REQUIRED += periph_wdt
