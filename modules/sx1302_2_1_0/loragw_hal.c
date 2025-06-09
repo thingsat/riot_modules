@@ -1197,7 +1197,7 @@ int lgw_start(void) {
 		printf("[%s:%d] ERROR: failed to enable GPS on sx1302\n", __FUNCTION__, __LINE__);
 		return LGW_HAL_ERROR;
 	}
-	printf("INFO: GPS is enabled\n");
+	DEBUG_PRINTF("INFO: GPS is enabled\n");
 #else
 	/* disable GPS */
 	err = sx1302_gps_enable(false);
@@ -1206,10 +1206,10 @@ int lgw_start(void) {
 				__LINE__);
 		return LGW_HAL_ERROR;
 	}
-	printf("INFO: GPS is disabled\n");
+	DEBUG_PRINTF("INFO: GPS is disabled\n");
 #endif
 #ifdef GPS_MODEL
-	printf("INFO: GPS Model is \"%s\" (on UART #%d @ %d baud)\n", GPS_MODEL, GPS_UART_DEV, GPS_BAUDRATE);
+	DEBUG_PRINTF("INFO: GPS Model is \"%s\" (on UART #%d @ %d baud)\n", GPS_MODEL, GPS_UART_DEV, GPS_BAUDRATE);
 #endif
 
 	/* For debug logging */
@@ -1269,7 +1269,7 @@ int lgw_start(void) {
 			return LGW_HAL_ERROR;
 		}
 #else
-	printf("INFO: I2C STTS751 temperature sensor is disabled\n");
+		DEBUG_PRINTF("INFO: I2C STTS751 temperature sensor is disabled\n");
 #endif
 #if ENABLE_AD5338R == 1
 		/* Configure ADC AD5338R for full duplex (CN490 reference design) */
@@ -1298,7 +1298,7 @@ int lgw_start(void) {
 			DEBUG_PRINTF("[%s:%d] INFO: AD5338R: Set DAC output to 0x%02X 0x%02X\n", __FUNCTION__, __LINE__, (uint8_t)VOLTAGE2HEX_H(0), (uint8_t)VOLTAGE2HEX_L(0));
 		}
 #else
-	printf("INFO: I2C AD5338R ADC sensor is disabled\n");
+		DEBUG_PRINTF("INFO: I2C AD5338R ADC sensor is disabled\n");
 #endif
 	}
 
@@ -1337,7 +1337,7 @@ int lgw_start(void) {
 		return LGW_HAL_ERROR;
 	}
 #else
-	printf("INFO: SX1261 is disabled\n");
+	DEBUG_PRINTF("INFO: SX1261 is disabled\n");
 #endif
 
 	/* set hal state */
@@ -1626,7 +1626,7 @@ int lgw_send(struct lgw_pkt_tx_s *pkt_data) {
 		DEBUG_PRINTF("[%s:%d] INFO: AD5338R: Set DAC output to 0x%02X 0x%02X\n", __FUNCTION__, __LINE__, (uint8_t)VOLTAGE2HEX_H(2.51), (uint8_t)VOLTAGE2HEX_L(2.51));
 	}
 #else
-	printf("INFO: AD5338R is disabled\n");
+	DEBUG_PRINTF("INFO: AD5338R is disabled\n");
 #endif
 
 #if ENABLE_SX1261 == 1
@@ -1639,7 +1639,7 @@ int lgw_send(struct lgw_pkt_tx_s *pkt_data) {
 		}
 	}
 #else
-	printf("INFO: SX1261 is disabled\n");
+	DEBUG_PRINTF("INFO: SX1261 is disabled\n");
 #endif
 
 	/* Send the TX request to the concentrator */
@@ -1658,7 +1658,7 @@ int lgw_send(struct lgw_pkt_tx_s *pkt_data) {
 			}
 		}
 #else
-		printf("INFO: SX1261 is disabled\n");
+		DEBUG_PRINTF("INFO: SX1261 is disabled\n");
 #endif
 		return LGW_HAL_ERROR;
 	}
