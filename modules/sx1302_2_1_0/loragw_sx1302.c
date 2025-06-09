@@ -2033,7 +2033,7 @@ int sx1302_fetch(uint8_t * nb_pkt) {
             return LGW_REG_ERROR;
         }
     } else {
-    	printf("Note: remaining %u packets in RX buffer, do not fetch sx1302 yet...\n", rx_buffer.buffer_pkt_nb);
+    	DEBUG_PRINTF("Note: remaining %u packets in RX buffer, do not fetch sx1302 yet...\n", rx_buffer.buffer_pkt_nb);
     }
 
     /* Return the number of packet fetched */
@@ -2635,7 +2635,7 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
             break;
         }
     }
-    printf("INFO: selecting TX Gain LUT index %u\n", pow_index);
+    DEBUG_PRINTF("INFO: selecting TX Gain LUT index %u\n", pow_index);
 
     /* loading calibrated Tx DC offsets */
     err = lgw_reg_w(SX1302_REG_TX_TOP_TX_RFFE_IF_I_OFFSET_I_OFFSET(pkt_data->rf_chain), tx_lut->lut[pow_index].offset_i);
@@ -2643,7 +2643,7 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
     err = lgw_reg_w(SX1302_REG_TX_TOP_TX_RFFE_IF_Q_OFFSET_Q_OFFSET(pkt_data->rf_chain), tx_lut->lut[pow_index].offset_q);
     CHECK_ERR(err);
 
-    printf("INFO: Applying IQ offset (i:%d, q:%d)\n", tx_lut->lut[pow_index].offset_i, tx_lut->lut[pow_index].offset_q);
+    DEBUG_PRINTF("INFO: Applying IQ offset (i:%d, q:%d)\n", tx_lut->lut[pow_index].offset_i, tx_lut->lut[pow_index].offset_q);
 
     /* Set the power parameters to be used for TX */
     switch (radio_type) {
@@ -2711,7 +2711,7 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
         case MOD_CW:
             /* Set frequency deviation */
             freq_dev = ceil(fabs( (float)pkt_data->freq_offset / 10) ) * 10e3;
-            printf("CW: f_dev %d Hz\n", (int)(freq_dev));
+            DEBUG_PRINTF("CW: f_dev %d Hz\n", (int)(freq_dev));
             fdev_reg = SX1302_FREQ_TO_REG(freq_dev);
             err = lgw_reg_w(SX1302_REG_TX_TOP_TX_RFFE_IF_FREQ_DEV_H_FREQ_DEV(pkt_data->rf_chain), (fdev_reg >>  8) & 0xFF);
             CHECK_ERR(err);
@@ -2728,7 +2728,7 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
             CHECK_ERR(err);
 
             /* Set the frequency offset (ratio of the frequency deviation)*/
-            printf("CW: IF test mod freq %d\n", (int)(((float)pkt_data->freq_offset*1e3*64/(float)freq_dev)));
+            DEBUG_PRINTF("CW: IF test mod freq %d\n", (int)(((float)pkt_data->freq_offset*1e3*64/(float)freq_dev)));
             err = lgw_reg_w(SX1302_REG_TX_TOP_TX_RFFE_IF_TEST_MOD_FREQ(pkt_data->rf_chain), (int)(((float)pkt_data->freq_offset*1e3*64/(float)freq_dev)));
             CHECK_ERR(err);
             break;
