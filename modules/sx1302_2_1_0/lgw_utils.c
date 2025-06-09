@@ -154,6 +154,16 @@ uint32_t lgw_get_delta_instcnt(const uint32_t start, const uint32_t end) {
 	return delta_count_us;
 }
 
+uint32_t lgw_incr_instcnt(const uint32_t cnt, const uint32_t incr) {
+
+	if(cnt > (UINT32_MAX - incr)) {
+		// overflow
+		return (uint32_t)((uint64_t)cnt + incr) & 0xFFFFFFFF;
+	} else {
+		return cnt + incr;
+	}
+}
+
 
 void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
 #if ENABLE_DEBUG == 1

@@ -25,6 +25,8 @@ const char* lgw_get_tx_mode_str(const uint8_t tx_mode);
 
 uint32_t lgw_get_delta_instcnt(const uint32_t start, const uint32_t end);
 
+uint32_t lgw_incr_instcnt(const uint32_t cnt, const uint32_t incr);
+
 void lgw_print_info(void);
 
 int lgw_print_rtc(void);
