@@ -14,6 +14,18 @@ EXTERNAL_MODULE_DIRS += ../../modules
 EXTERNAL_MODULE_DIRS += ../../public_modules
 
 # -----------------------------
+# Debug
+# -----------------------------
+
+include Makefile.debug.mk
+
+# -----------------------------
+# PROD
+# -----------------------------
+PROD ?= 1
+CFLAGS += -DPROD=$(PROD)
+
+# -----------------------------
 # Board Configuration
 # -----------------------------
 
@@ -216,21 +228,6 @@ endif
 
 # include and auto-initialize all available sensors
 #USEMODULE += saul_default
-
-# -----------------------------
-# Debug
-# -----------------------------
-
-# Set this to 1 to enable code in RIOT that does safety checking
-# which is not needed in a production environment but helps in the
-# development process:
-DEVELHELP ?= 1
-
-# Change this to 0 show compiler invocation lines by default:
-QUIET ?= 1
-
-#CFLAGS += -DENABLE_DEBUG=1
-CFLAGS += -DDEBUG_ASSERT_VERBOSE=1
 
 
 # -----------------------------

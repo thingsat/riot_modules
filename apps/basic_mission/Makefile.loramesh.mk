@@ -1,8 +1,14 @@
 
-# Meshtastic Messages
-MESHTASTIC ?= 0
+# Meshtastic
+MESHTASTIC_ENABLE ?= 0
 
 ifeq ($(MESHTASTIC),1)
-CFLAGS += -DMESHTASTIC=$(MESHTASTIC)
-USEMODULE += meshtastic_utils
+include Makefile.meshtastic.mk
+endif
+
+# Chirpstack Mesh
+CHIRPSTACK_MESH_ENABLE ?= 0
+
+ifeq ($(CHIRPSTACK_MESH_ENABLE),1)
+include Makefile.chirpstackmesh.mk
 endif

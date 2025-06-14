@@ -31,10 +31,5 @@ CFLAGS += -DREPEAT_DR=$(REPEAT_DR)
 CFLAGS += -DREPEAT_SF=$(REPEAT_SF)
 CFLAGS += -DREPEAT_BW=$(REPEAT_BW)
 
-# Chirpstack Mesh
-
-CHIRPSTACK_MESH_ENABLE ?= 0
-ifeq ($(CHIRPSTACK_MESH_ENABLE),1)
-include "Makefile.loramesh.mk"
-endif
+include Makefile.loramesh.mk
 
