@@ -1167,7 +1167,7 @@ int sx1302_lora_syncword(bool public, uint8_t lora_service_sf) {
 	DEBUG_PRINTF("%s: enter\n", __func__);
     int err = LGW_REG_SUCCESS;
 
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
     (void) public;
     printf("INFO: configuring LoRa (Multi-SF) SF5->SF6 with syncword MESHTASTIC (0x2B)\n");
     err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF5_PEAK1_POS_SF5, 4);

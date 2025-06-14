@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 #include "lgw_config.h"
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 #include "lgw_config_868_meshtastic.h"
 #else
 #include "lgw_config_868.h"

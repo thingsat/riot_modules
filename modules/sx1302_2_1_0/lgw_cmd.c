@@ -1449,7 +1449,7 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		return;
 	}
 
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 		// check meshtastic_check_valid_frame_size
 		// filter meshtastic_get_srcid
 		// filter meshtastic_get_destid
@@ -1488,7 +1488,7 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 	pkt_tx->datarate = pkt_rx->datarate;
 	pkt_tx->bandwidth = pkt_rx->bandwidth;
 
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 		if(pkt_rx->freq_hz == 869525000) {
 			pkt_tx->rf_power = 27;
 		} else {

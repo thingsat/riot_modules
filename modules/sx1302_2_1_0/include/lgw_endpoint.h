@@ -26,17 +26,20 @@ typedef enum {
 	WM1303_SPI,
 	NEBRA1303_SPI,
 	HT1303_SPI,
-	UNKNOWN_SX130X_MODULE
+	UNKNOWN_SX130X_MODULE,
+	FIX_GATEWAY,
 } lgw_sx130x_module_t;
 
 typedef struct  {
 
 	// NB: module can be used for configuring GNSS and PPS
+	char* label;
 	lgw_sx130x_module_t module;
 	uint32_t devaddr;
-	uint64_t gweui;
+	uint64_t gweui; // use as deveui for registering the gateway as an ABP endpoint into the LNS
 	uint8_t nwkskey[16];
 	uint8_t appskey[16];
+	uint32_t fcntup; // initial frame counter for data up
 
 } lgw_sx130x_endpoint_t;
 
