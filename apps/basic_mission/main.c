@@ -169,13 +169,13 @@ int main(void) {
 	puts("WARN: No GNSS module");
 #endif
 
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 	puts("INFO: Meshtastic EU868 gateway configuration");
 #else
 	puts("INFO: LoRaWAN EU868 gateway configuration");
 #endif
 
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 	puts("INFO: Chirpstack mesh is enabled");
 #endif
 
@@ -201,8 +201,11 @@ int main(void) {
 	puts("INFO: Set endpoint");
 	set_endpoint();
 #endif
+	puts("INFO: Set callback function for mission");
+	pkt_period_cb = mission_periodic_cb;
+
 	puts("INFO: Repeating is on");
-	basic_mission_repeat(true);
+	basic_mission_repeat_enable(true);
 
 	puts("INFO: Set filter on RX frames");
 	basic_mission_filter(REPEAT_FILTER_DEVADDR_SUBNET,
@@ -210,9 +213,6 @@ int main(void) {
 
 	puts("INFO: Set filter on SNR threshold");
 	basic_mission_snr_threshold(REPEAT_FILTER_SNR_THRESHOLD);
-
-	puts("INFO: Set callback function for mission");
-	pkt_period_cb = mission_periodic_cb;
 
 	puts("INFO: Starting listening ...");
 	lgw_cmd(2, (char*[] ) { "lgw", "listen" });

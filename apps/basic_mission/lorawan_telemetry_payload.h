@@ -25,68 +25,9 @@
  * FPort definition for typing the payload format
  */
 
+#include "lorawan_common_payload.h"
+
 #define FPORT_GNSS_TELEMETRY_PAYLOAD	(5U)
-
-#define RANGING_GNSS_STATUS_FIX			0b10000000
-#define RANGING_GNSS_STATUS_FTIME		0b01000000
-#define RANGING_TX_MODE_STATUS_MASK		0b00000011
-
-
-/**
- * Struct for GNSS telemetry location (mainly for HA balloon experiments)
- */
-struct __attribute__((__packed__)) gnss_telemetry_location {
-
-	// TODO add GPS Fix last time (in seconds), GPS quality, GPS satellite number ...
-
-	/**
-	 * @brief Latitude	(in degree)
-	 * optimization on int24 with gps_get_latitude_to_i24(latitude)
-	 */
-	//uint32_t latitude:24;
-	float latitude;
-
-	/**
-	 * @brief Longitude (in degree)
-	 * optimization on int24 with gps_get_longitude_to_i24(longitude)
-	 */
-	//uint32_t longitude:24;
-	float longitude;
-
-	/**
-	 * @brief Altitude
-	 */
-	uint16_t altitude;
-
-	/**
-	 * @brief Seconds since last fix
-	 */
-	uint16_t seconds_since_last_fix;
-
-	/**
-	 * @brief Tracked satellites
-	 */
-	uint8_t satellites_tracked;
-
-	/**
-	 * @brief Fix quality
-	 */
-	uint8_t fix_quality;
-
-	/**
-	 * @brief Speed in kph
-	 */
-	uint16_t speed_kph;
-
-	/**
-	 * @brief Speed in kph
-	 */
-	int16_t true_track_degrees;
-
-};
-
-typedef struct gnss_telemetry_location gnss_telemetry_location_t;
-
 
 /**
  * Struct for Telemetry message
@@ -102,7 +43,7 @@ struct __attribute__((__packed__)) GNSSTelemetryPayload {
 	 * @brief Status
 	 * 1 for GPS_FIX, 2 for FTIME, TxMode
 	 */
-	uint8_t		status;
+	common_status_t		status;
 
 	/**
 	 * @brief Tx Power in dBm
@@ -113,7 +54,12 @@ struct __attribute__((__packed__)) GNSSTelemetryPayload {
 	/**
 	 * @brief Location
 	 */
-	gnss_telemetry_location_t location;
+	common_location_t location;
+
+	/**
+	 * @brief Location
+	 */
+	common_location_extra_t location_extra;
 
 
 	// TODO add sensors

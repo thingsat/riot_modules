@@ -21,6 +21,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "lorawan_common_payload.h"
+
 /*
  * FPort definition for typing the payload format
  */

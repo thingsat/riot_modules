@@ -10,6 +10,9 @@
 #include <math.h>
 #include <string.h>
 
+#define ENABLE_DEBUG		ENABLE_DEBUG_TELEMETRY
+#include "debug.h"
+
 #include "lorawan_telemetry_payload.h"
 #include "parse_nmea.h"
 
@@ -54,10 +57,11 @@ bool telemetry_get_fpayload(
 	telemetry_payload->txpower = txpower;
 
 	// Fill location
-	gnss_telemetry_location_t* location = &telemetry_payload->location;
+	common_location_t* location = &telemetry_payload->location;
+	common_location_extra_t* location_extra = &telemetry_payload->location_extra;
 
 	// Il faut changer le decoder.js
-	location->seconds_since_last_fix = gps_get_seconds_since_last_fix();
+	location_extra->seconds_since_last_fix = gps_get_seconds_since_last_fix();
 
 	float latitude, longitude, altitude;
 	gps_get_position(&latitude, &longitude, &altitude);
@@ -70,32 +74,32 @@ bool telemetry_get_fpayload(
 	float true_track_degrees;
 
 	if(gps_get_speed_direction(&speed_kph, &true_track_degrees)){
-		location->speed_kph = floor(speed_kph);
-		location->true_track_degrees =  floor(true_track_degrees);
+		location_extra->speed_kph = floor(speed_kph);
+		location_extra->true_track_degrees =  floor(true_track_degrees);
 	}
 
 	int fix_quality;
 	int satellites_tracked;
 
 	if(gps_get_quality(&fix_quality, &satellites_tracked)) {
-		location->satellites_tracked = (uint8_t)satellites_tracked;
-		location->fix_quality = (uint8_t)fix_quality;
+		location_extra->satellites_tracked = (uint8_t)satellites_tracked;
+		location_extra->fix_quality = (uint8_t)fix_quality;
 		if(fix_quality==0) {
 			location->latitude = 0.0;
 			location->longitude = 0.0;
 			location->altitude = 0;
-			location->speed_kph = 0;
-			location->true_track_degrees = 0;
+			location_extra->speed_kph = 0;
+			location_extra->true_track_degrees = 0;
 		}
 
 	} else {
 		location->latitude = 0.0;
 		location->longitude = 0.0;
 		location->altitude = 0;
-		location->speed_kph = 0;
-		location->true_track_degrees = 0;
-		location->fix_quality = 0;
-		location->satellites_tracked = 0;
+		location_extra->speed_kph = 0;
+		location_extra->true_track_degrees = 0;
+		location_extra->fix_quality = 0;
+		location_extra->satellites_tracked = 0;
 	}
 	return true;
 }

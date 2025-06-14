@@ -10,14 +10,25 @@
 #include <stdio.h>
 #include <string.h>
 
+
+
+#define ENABLE_DEBUG		ENABLE_DEBUG_MISSION
+#include "debug.h"
+
+
 #include "endpoints.h"
 #include "mission.h"
 #include "lgw_cmd.h"
 #include "lgw_utils.h"
 #include "lorawan_mac.h"
+#include "loragw_hal.h"
 
 #include "parse_nmea.h"
 #include "rtc_utilities.h"
+
+#include "repeat.h"
+#include "ranging.h"
+
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS    LGW_HAL_SUCCESS
@@ -66,11 +77,11 @@ static bool _set_phy_payload_range1(uint8_t *phypayload,
 	const uint8_t fPort = FPORT_RANGE1_PAYLOAD;
 
 	// Should be printed before ranging_get_fpayload_1 --> tx_count may be over
-	printf("INFO: set fpayload for ranging (devaddr=%8lx fport=%d)\n",
+	DEBUG("INFO: set fpayload for ranging (devaddr=%8lx fport=%d)\n",
 			devaddr, fPort);
 
 	uint8_t fpayload_size;
-	bool res = ranging_get_fpayload_1(fpayload, &fpayload_size, MISSION_RF_POWER, false /* TODO ftime */);
+	bool res = basic_mission_ranging_get_fpayload_1(fpayload, &fpayload_size, MISSION_RF_POWER, false /* TODO ftime */);
 	if (!res) {
 		return false;
 	}
@@ -81,6 +92,8 @@ static bool _set_phy_payload_range1(uint8_t *phypayload,
 			fPort, // fPort
 			(uint8_t*) &fpayload, fpayload_size, lgw_sx130x_endpoint->nwkskey,
 			lgw_sx130x_endpoint->appskey, phypayload, phypayload_size);
+
+	_fCntUp++;
 
 	return true;
 }
@@ -113,8 +126,10 @@ static bool _set_phy_payload_telemetry(uint8_t *phypayload,
 			fpayload, fpayload_size, lgw_sx130x_endpoint->nwkskey,
 			lgw_sx130x_endpoint->appskey, phypayload, phypayload_size);
 
-	printf("INFO: set fpayload for telemetry (devaddr=%8lx fport=%d size=%d)\n",
+	DEBUG("INFO: set fpayload for telemetry (devaddr=%8lx fport=%d size=%d)\n",
 			devaddr, fPort, *phypayload_size);
+
+	_fCntUp++;
 
 	return true;
 }
@@ -139,8 +154,10 @@ static bool _set_phy_payload_aprs_lorawan(uint8_t *phypayload, uint8_t *phypaylo
 			fpayload, fpayload_size, lgw_sx130x_endpoint->nwkskey,
 			lgw_sx130x_endpoint->appskey, phypayload, phypayload_size);
 
-	printf("INFO: set fpayload for aprs lorawan (devaddr=%8lx fport=%d size=%d aprs=%s)\n",
-			devaddr, fPort, *phypayload_size, fpayload);
+	DEBUG("INFO: set fpayload for aprs lorawan (devaddr=%8lx fport=%d size=%d)\n",
+			devaddr, fPort, *phypayload_size);
+
+	_fCntUp++;
 
 	return true;
 }
@@ -157,7 +174,7 @@ static bool _set_phy_payload_aprs_ax25(uint8_t *phypayload, uint8_t *phypayload_
 	memcpy(phypayload, fpayload, fpayload_size);
 	*phypayload_size = fpayload_size;
 
-	printf("INFO: set fpayload for aprs ax24 (size=%d)\n",
+	DEBUG("INFO: set fpayload for aprs ax25 (size=%d)\n",
 			*phypayload_size);
 
 	return true;
@@ -182,8 +199,10 @@ static bool _set_phy_payload_ewss(uint8_t *phypayload, uint8_t *phypayload_size)
 			(uint8_t*) &fpayload, fpayload_size, lgw_sx130x_endpoint->nwkskey,
 			lgw_sx130x_endpoint->appskey, phypayload, phypayload_size);
 
-	printf("INFO: set fpayload for ewss (devaddr=%8lx fport=%d size=%d)\n",
+	DEBUG("INFO: set fpayload for ewss (devaddr=%8lx fport=%d size=%d)\n",
 			devaddr, fPort, *phypayload_size);
+
+	_fCntUp++;
 
 	return true;
 }
@@ -226,7 +245,7 @@ void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s) {
 	lgw_pkt_tx_s->size = 0;
 
 	if (lgw_sx130x_endpoint == NULL) {
-		puts("ERROR: lgw_sx130x_endpoint is null : Can not transmit");
+		printf("ERROR: lgw_sx130x_endpoint is null : Can not transmit\n");
 	} else {
 
 		mission_set_default_lgw_pkt_tx(lgw_pkt_tx_s);
@@ -260,9 +279,14 @@ void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s) {
 
 			// overload default param
 			lgw_pkt_tx_s->datarate = 7;
-#if 0
-			lgw_pkt_tx_s->freq_hz = 869525000; 	// RX2 (duty cycle is 10%)
-			lgw_pkt_tx_s->rf_power = 27; 		// Max power
+#ifdef PROD
+			// TODO set sync_word with MISSION_APRS_SYNCWORD
+			lgw_pkt_tx_s->freq_hz = MISSION_APRS_FREQUENCY; 		// RX2 (duty cycle is 10%)
+			lgw_pkt_tx_s->bandwidth = lgw_bandwidthToBwLoRaCode(MISSION_APRS_BANDWIDTH);
+			lgw_pkt_tx_s->datarate = MISSION_APRS_SPREADING_FACTOR;
+			lgw_pkt_tx_s->preamble = MISSION_APRS_PREAMBLE_LEN;			//  8 for LoRaWAN
+			lgw_pkt_tx_s->coderate = MISSION_APRS_CODING_RATE; 		// LoRaWAN
+			lgw_pkt_tx_s->rf_power = MISSION_APRS_RF_POWER;   		// Max power
 			// TODO private syncword
 #else
 			// LoRa Service Channel (DR6)
@@ -291,10 +315,60 @@ void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s) {
 
 		memcpy(lgw_pkt_tx_s->payload, phypayload, phypayload_size);
 		lgw_pkt_tx_s->size = phypayload_size;
-
-
-		_fCntUp++;
 	}
+}
+
+
+/**
+ * Check pkt_rx
+ */
+bool basic_mission_check_pkt_rx(const struct lgw_pkt_rx_s *pkt_rx) {
+
+	if (pkt_rx->status == STAT_CRC_BAD) {
+		// skip received frame
+		DEBUG("INFO: status is CRC_BAD : skip received frame\n");
+		return false;
+	}
+
+	if (pkt_rx->size == 0) {
+		// skip received frame
+		DEBUG("INFO: Payload is empty : skip received frame\n");
+		return false;
+	}
+
+	if (pkt_rx->modulation != MOD_LORA || pkt_rx->modulation != MOD_FSK) {
+		// skip received frame
+		printf("INFO: modulation is not LoRa or FSK: skip received frame\n");
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Repeat callback
+ */
+void basic_mission_cb(const struct lgw_pkt_rx_s *pkt_rx,
+		struct lgw_pkt_tx_s *pkt_tx) {
+#if ENABLE_DEBUG_MISSION == 1
+	mission_inst_cnt_print();
+	mission_gnss_print();
+#endif
+
+	if(!basic_mission_check_pkt_rx(pkt_rx)) {
+		return;
+	}
+
+	// Try to process for ranging (Ranging1, Ranging2, Ranging3)
+	if(basic_mission_ranging_process(pkt_rx, pkt_tx)) {
+		return;
+	}
+
+	// Try to process for repeating
+	if(basic_mission_repeat_process(pkt_rx, pkt_tx)) {
+		return;
+	}
+
 }
 
 static bool rtc_set_since_reboot = false;

@@ -13,6 +13,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "loragw_hal.h"
+
+/**
+ * Process repeat
+ */
+bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
+		struct lgw_pkt_tx_s *pkt_tx);
 
 /**
  * Filter
@@ -27,7 +34,13 @@ void basic_mission_snr_threshold(int snr_threshold);
 /**
  * Repeat enable/disable
  */
-void basic_mission_repeat(bool enable);
+void basic_mission_repeat_enable(bool enable);
+
+
+/**
+ * Repeat check if enabled
+ */
+bool basic_mission_repeat_is_enabled(void);
 
 
 #endif /* APPS_BASIC_MISSION_REPEAT_H_ */

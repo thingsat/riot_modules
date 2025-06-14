@@ -11,6 +11,9 @@
 #include <string.h>
 #include <time.h>
 
+#define ENABLE_DEBUG		ENABLE_DEBUG_EWSS
+#include "debug.h"
+
 void generate_aprs_ews(char *buffer, size_t bufsize,
                        const char *callsign,         // ex: "F0EWS-13"
                        const char *object_name,      // ex: "EWSALRT "

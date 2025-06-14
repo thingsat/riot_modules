@@ -17,10 +17,14 @@
 #define APRS_LORAWAN_PAYLOAD	2
 #define APRS_AX25_PAYLOAD		3
 #define EWSS_PAYLOAD			4
+#define STAT_PAYLOAD			5
+// TOOD secure time distribution with ED25519 signature
 
 #include "loragw_hal.h"
 
 void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
+
+void mission_set_default_lgw_pkt_tx(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
 
 void mission_gnss_print(void);
 

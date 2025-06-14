@@ -10,11 +10,16 @@
 #include <math.h>
 #include <string.h>
 
-#include "ranging.h"
+#define ENABLE_DEBUG		ENABLE_DEBUG_RANGING
+#include "debug.h"
+
 #include "loragw_hal.h"
 #include "lgw_utils.h"
 #include "parse_nmea.h"
 #include "pack_coord.h"
+
+#include "ranging.h"
+
 
 // Nota Bene : console trace slow sending message
 #define TX_US_MARGIN			10000
@@ -22,7 +27,7 @@
 static uint32_t		tx_uscount_prev = 0;
 
 
-bool ranging_get_fpayload_1(
+bool basic_mission_ranging_get_fpayload_1(
 		/**
 		 * @brief FPayload to fill
 		 */
@@ -112,3 +117,16 @@ bool ranging_get_fpayload_1(
 
 	return true;
 }
+
+bool basic_mission_ranging_process(const struct lgw_pkt_rx_s *pkt_rx,
+		struct lgw_pkt_tx_s *pkt_tx) {
+
+	// NOT IMPLEMENTED
+
+	(void)pkt_rx;
+	(void)pkt_tx;
+
+
+	return false;
+}
+

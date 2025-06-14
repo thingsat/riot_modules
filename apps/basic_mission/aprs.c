@@ -12,7 +12,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define ENABLE_DEBUG		ENABLE_DEBUG_APRS
+#include "debug.h"
+
 #include "parse_nmea.h"
+#include "fmt_utils.h"
 #include "aprs.h"
 
 
@@ -114,9 +118,10 @@ bool aprs_get_fpayload(
 
     buildAPRSFrame(MISSION_APRS_CALLSIGN,
     		latitude, longitude, floor(true_track_degrees), floor(speed_kph), floor(altitude), MISSION_APRS_COMMENT, fpayload);
-	*fpayload_size = strlen((char*)fpayload) + 1; // add \0 just for making printing easier (should be removed)
 
-	//printf("INFO aprs_get_fpayload: %s\n", fpayload);
+    DEBUG("INFO: %s : fpayload=%s\n", __FUNCTION__, fpayload);
+
+	*fpayload_size = strlen((char*)fpayload);
 
 	return true;
 }
@@ -200,6 +205,9 @@ static size_t build_ax25_frame(
     );
 #pragma GCC diagnostic pop
 
+
+    DEBUG("INFO: %s : aprs=%s\n", __FUNCTION__, aprs);
+
     size_t aprsLen = strlen(aprs);
     memcpy(p, aprs, aprsLen);
     p += aprsLen;
@@ -208,6 +216,12 @@ static size_t build_ax25_frame(
     uint16_t crc = ax25_crc(frameOut, p - frameOut);
     *p++ = crc & 0xFF;
     *p++ = (crc >> 8) & 0xFF;
+
+#if ENABLE_DEBUG == 1
+    DEBUG("INFO: %s : ax25=", __FUNCTION__);
+    fmt_printf_ba(frameOut, p - frameOut, " ");
+    DEBUG("\n");
+#endif
 
     return p - frameOut; // Taille totale de la trame
 }

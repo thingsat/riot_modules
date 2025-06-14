@@ -9,6 +9,9 @@
 
 #include <math.h>
 
+#define ENABLE_DEBUG		ENABLE_DEBUG_REPEAT
+#include "debug.h"
+
 #include "repeat.h"
 
 #include "lgw_config.h"
@@ -65,46 +68,25 @@ static const uint32_t frequency_plan_len = ARRAY_SIZE(frequency_plan);
 /**
  * Repeat callback
  */
-static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
+bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
 		struct lgw_pkt_tx_s *pkt_tx) {
-
-	mission_inst_cnt_print();
-	mission_gnss_print();
 
 	// for skipping received frame
 	pkt_tx->size = 0;
 
-	if (pkt_rx->status == STAT_CRC_BAD) {
-		// skip received frame
-		printf("INFO: status is CRC_BAD : skip received frame\n");
-		return;
-	}
-
-	if (pkt_rx->size == 0) {
-		// skip received frame
-		printf("INFO: Payload is empty : skip received frame\n");
-		return;
-	}
-
-	if (pkt_rx->modulation != MOD_LORA) {
-		// skip received frame
-		printf("INFO: modulation is not LoRa : skip received frame\n");
-		return;
-	}
-
 	// filter on SNR
 	if (pkt_rx->modulation == MOD_LORA && pkt_rx->snr > _snr_threshold) {
-		printf(
+		DEBUG(
 				"INFO: SNR (%.1f)  is higher than snr_threshold (%d) : skip received frame\n",
 				pkt_rx->snr, _snr_threshold);
-		return;
+		return false;
 	}
 
-	printf(
+	DEBUG(
 			"INFO: SNR (%.1f) is lower than snr_threshold (%d)\n",
 			pkt_rx->snr, _snr_threshold);
 
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 		// check meshtastic_check_valid_frame_size
 		// filter meshtastic_get_srcid
 		// filter meshtastic_get_destid
@@ -117,36 +99,36 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		uint32_t relay_id = lora_mesh_get_relay_id(pkt_rx->payload,
 				pkt_rx->size);
 		if (relay_id == CHIRPSTACK_MESH_RELAY_ID) {
-			printf(
+			DEBUG(
 					"INFO: mesh frame from my relay_id=0x%8lx: skip received frame\n",
 					relay_id);
-			return;
+			return false;
 		}
 
-		printf(
+		DEBUG(
 				"INFO: mesh frame from relay_id 0x%8lx\n",
 				relay_id);
 
 		const uint8_t hop_count = lora_mesh_get_hop_count(pkt_rx->payload,
 				pkt_rx->size);
 		if (hop_count > CHIRPSTACK_MESH_MAX_HOP) {
-			printf(
+			DEBUG(
 					"INFO: frame with hop_count too high %d: skip received frame\n",
 					hop_count);
-			return;
+			return false;
 		}
-		printf(
+		DEBUG(
 				"INFO: frame with hop_count (%d) lower to max (%d)\n",
 				hop_count, CHIRPSTACK_MESH_MAX_HOP);
 
 		// note: for saving cpu cycles, mic is checked after previous tests
 		if (!lora_mesh_check_mic(pkt_rx->payload, pkt_rx->size, signing_key)) {
-			printf(
+			DEBUG(
 					"INFO: mic of relayed mesh frame is not valid : skip received frame\n");
-			return;
+			return false;
 		}
 
-		printf(
+		DEBUG(
 				"INFO: mic of relayed mesh frame is valid\n");
 
 		if (lora_mesh_is_uplink(pkt_rx->payload, pkt_rx->size)) {
@@ -185,7 +167,7 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		} else {
 			printf(
 					"WARN: unknown relay frame : skip received frame\n");
-			return;
+			return false;
 		}
 	} else
 #endif
@@ -199,7 +181,7 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 			printf(
 					"INFO: devaddr %8lx is not belonging to filter : skip received frame\n",
 					devaddr);
-			return;
+			return false;
 		}
 		printf(
 				"INFO: devaddr %8lx is belonging to filter\n",
@@ -237,20 +219,19 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 
 	} else {
 		printf("INFO: frame is not valid data frames : skip received frame\n");
-		return;
+		return false;
 	}
 #endif
 
-	pkt_tx->tx_mode = IMMEDIATE;
-	pkt_tx->rf_chain = 0; //only rf_chain 0 is able to tx
+	mission_set_default_lgw_pkt_tx(pkt_tx);
 
 	pkt_tx->freq_hz = pkt_rx->freq_hz;
 	pkt_tx->datarate = REPEAT_SF; //
 	pkt_tx->bandwidth = REPEAT_BW;
 
-#if MESHTASTIC == 1
-		if(pkt_rx->freq_hz == 869525000) {
-			pkt_tx->rf_power = 27;
+#if MESHTASTIC_ENABLE == 1
+		if(pkt_rx->freq_hz == MESHTASTIC_FREQUENCY) {
+			pkt_tx->rf_power = MESHTASTIC_RF_POWER;
 		} else {
 			pkt_tx->rf_power = REPEAT_TXPOWER;
 		}
@@ -260,13 +241,9 @@ static void _basic_mission_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 #else
 	pkt_tx->rf_power = REPEAT_TXPOWER; //use the single entry of the txlut TODO Should be check
 	pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
-	pkt_tx->preamble = 8;	//  8 for LoRaWAN
 	pkt_tx->coderate = CR_LORA_4_5; // 4/5 for LoRaWAN
 #endif
-
-	pkt_tx->no_header = false; 		// Beacons have not header
-	pkt_tx->no_crc = false; 		// LoRaWAN : on for uplink and off for downlink
-	pkt_tx->invert_pol = false;
+	return true;
 }
 
 /**
@@ -289,14 +266,21 @@ void basic_mission_snr_threshold(int snr_threshold) {
 	printf("SNR threshold : %d\n", _snr_threshold);
 }
 
+static bool basic_mission_repeat_enable_flag = false;
+
 /**
  * Repeat command
  */
-void basic_mission_repeat(bool enable) {
+void basic_mission_repeat_enable(bool enable) {
 
-	if (enable) {
-		pkt_rx_cb = _basic_mission_repeat_cb;
-	} else {
-		pkt_rx_cb = NULL;
-	}
+	basic_mission_repeat_enable_flag = enable;
 }
+
+
+/**
+ * Repeat check if enabled
+ */
+bool basic_mission_repeat_is_enabled(void) {
+	return basic_mission_repeat_enable_flag;
+}
+

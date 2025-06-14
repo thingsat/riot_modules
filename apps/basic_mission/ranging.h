@@ -15,7 +15,7 @@
 
 #include "lorawan_ranging_payload.h"
 
-bool ranging_get_fpayload_1(
+bool basic_mission_ranging_get_fpayload_1(
 	/**
 	 * @brief FPayload to fill
 	 */
@@ -35,5 +35,9 @@ bool ranging_get_fpayload_1(
 	 */
 	const bool ftime
 );
+
+bool basic_mission_ranging_process(const struct lgw_pkt_rx_s *pkt_rx,
+		struct lgw_pkt_tx_s *pkt_tx);
+
 
 #endif /* APPS_BASIC_MISSION_RANGING_H_ */

@@ -153,6 +153,8 @@ function getPayloadType(fPort) {
 	    return 'telemetry';
 	  case 5:
 	    return 'gnss';
+	  case 6:
+	    return 'stat';
 	  case 9:
 	    return 'tle';
 	  case 10:
@@ -667,6 +669,52 @@ function decodeRange(fPort, bytes) {
 	return res;
 }
 
+function decodeStat(fPort, bytes) {
+
+// TODO SHOULD BE TESTED
+
+	var len = bytes.length;
+	
+	if(len < 10) {
+		return { "error": "invalid_size" };
+	}
+
+	var res = {};
+	
+	var idx = 0;
+	
+	res.tx_uscount = readUInt32LE(bytes,idx);
+	idx += 4;
+
+	res.tx_trigcount = readUInt32LE(bytes,idx);
+	idx += 4;
+
+	res.ranging_status = readUInt8(bytes,idx);
+	idx += 1;
+
+	res.txpower = readUInt8(bytes,idx);
+	idx += 1;
+
+
+/*
+	if(idx+3 > len) { return res; }
+	res.latitude = gps_unpack_latitude_i24_to_f(readUInt24LE(bytes,idx));
+	idx += 3;
+
+	if(idx+3 > len) { return res; }
+	res.longitude = gps_unpack_longitude_i24_to_f(readUInt24LE(bytes,idx));
+	idx += 3;
+
+	if(idx+2 > len) { return res; }
+	res.altitude = readUInt16LE(bytes,idx);
+	idx += 2;
+*/
+	return res;
+}
+
+
+
+
 function decodeXor(fPort, bytes) {
 	return { ratio : fPort - 64, buf: bytes };
 }
@@ -696,6 +744,9 @@ function decodePayload(fPort, bytes) {
 		break;
 	  case 5:
 	    data = decodeGNSS(fPort, bytes);
+		break;
+	  case 6:
+	    data = decodeStat(fPort, bytes);
 		break;
 	  case 9:
 	    data = decodeTle(fPort, bytes);	    
