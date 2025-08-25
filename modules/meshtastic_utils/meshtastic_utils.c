@@ -73,7 +73,11 @@ void meshtastic_get_pb_payload(const uint8_t *frame_buffer, const uint8_t frame_
 
 /** Print payload */
 void meshtastic_printf(const uint8_t *frame_buffer, const uint8_t frame_size) {
-	(void)frame_size;
+	if(frame_size < 16) {
+		printf("too short for a meshtastic frame\n");
+		return;
+	}
+
 	const MeshtasticHeader_t*  m = (MeshtasticHeader_t*)frame_buffer;
 
 	printf("destination_id: %8lx\n", m->destination_id);
@@ -86,6 +90,12 @@ void meshtastic_printf(const uint8_t *frame_buffer, const uint8_t frame_size) {
 	printf("want_ack:       %s\n", m->want_ack == 1 ? "true" : "false");
 
 	printf("channel_hash:   %2x\n", m->channel_hash);
+	printf("pb_payload:     ");
+
+	for (uint8_t j = 0; j < frame_size - 16; j++) {
+		printf("%02X ", m->pb_payload[j]);
+	}
+	printf("\n");
 
 	// TODO display encrypted protobuf payload
 }

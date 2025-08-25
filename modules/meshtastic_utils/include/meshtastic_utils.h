@@ -15,19 +15,20 @@
 
 struct __attribute__((__packed__)) MeshtasticHeader
 {
-	uint32_t destination_id;
-	uint32_t source_id;
-	uint32_t packet_id;
+	uint32_t destination_id; // The destination's unique NodeID. 0xFFFFFFFF for broadcast. Little Endian.
+	uint32_t source_id; //  The sender's unique NodeID. Little Endian.
+	uint32_t packet_id; // The sending node's unique packet ID for this packet. Little Endian.
 
-	uint8_t hope_start: 3;  // 0:2
-	uint8_t from_mqtt: 1;   // 3:3
+	uint8_t hope_start: 3;  // 0:2 original HopLimit
+	uint8_t from_mqtt: 1;   // 3:3 ViaMQTT (packet came via MQTT)
 	uint8_t want_ack: 1;    // 4:4
 	uint8_t hop_limit: 3;   // 5:7
 
-	uint8_t channel_hash;
-	uint16_t reserved;
+	uint8_t channel_hash; // Channel hash. Used as hint for decryption for the receiver.
 
-	// https://buf.build/meshtastic/protobufs/docs/main:meshtastic#meshtastic.MeshPacket
+	uint8_t next_hop; // Next-hop used for relaying
+	uint8_t relay_node; // Relay node of the current transmission
+
 	uint8_t pb_payload[237]; // Max. 237 bytes (excl. protobuf overhead)
 };
 
