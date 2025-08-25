@@ -2,7 +2,7 @@
 # Meshtastic
 MESHTASTIC_ENABLE ?= 0
 
-ifeq ($(MESHTASTIC),1)
+ifeq ($(MESHTASTIC_ENABLE),1)
 include Makefile.meshtastic.mk
 endif
 
