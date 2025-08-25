@@ -19,7 +19,7 @@
 
 #include "lgw_endpoint.h"
 
-lgw_sx130x_endpoint_t lgw_sx130x_endpoints[] = {
+lorawan_endpoint_t lgw_sx130x_endpoints[] = {
 		{
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00af5e,
@@ -50,6 +50,6 @@ lgw_sx130x_endpoint_t lgw_sx130x_endpoints[] = {
 };
 
 
-lgw_sx130x_endpoint_t *lgw_sx130x_endpoint = NULL;
+lorawan_endpoint_t *lgw_sx130x_endpoint = NULL;
 
 #endif /* TESTS_DRIVER_SX1302_ENDPOINTS_H_ */

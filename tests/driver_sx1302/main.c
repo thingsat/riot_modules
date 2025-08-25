@@ -174,7 +174,7 @@ int main(void) {
 
 
 	puts("\nBOARD: " RIOT_BOARD "\n");
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 	puts("\nMESHTASTIC EU868 gateway configuration\n");
 #else
 	puts("\nLoRaWAN EU868 gateway configuration\n");
@@ -211,7 +211,7 @@ int main(void) {
 
 	puts("Repeating is on");
 	lgw_cmd(3, (char*[]){"lgw","repeat","on"});
-#if MESHTASTIC == 1
+#if MESHTASTIC_ENABLE == 1
 	lgw_cmd(2, (char*[]){"lgw","filter"});
 #else
 	// Filter CampusIoT only
