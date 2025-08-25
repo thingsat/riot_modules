@@ -1,8 +1,10 @@
 /*
- * fmt_utils.h
- *
- *  Created on: Jun 14, 2025
- *      Author: donsez
+ Basic Mission
+ Copyright (c) 2021-2025 UGA CSUG LIG
+
+ Unless required by applicable law or agreed to in writing, this
+ software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ CONDITIONS OF ANY KIND, either express or implied.
  */
 
 #ifndef APPS_BASIC_MISSION_FMT_UTILS_H_

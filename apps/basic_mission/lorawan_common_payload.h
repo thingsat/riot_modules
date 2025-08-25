@@ -1,7 +1,11 @@
 /*
- * Copyright (C) 2020-2025 Université Grenoble Alpes
- */
+ Basic Mission
+ Copyright (c) 2021-2025 UGA CSUG LIG
 
+ Unless required by applicable law or agreed to in writing, this
+ software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ CONDITIONS OF ANY KIND, either express or implied.
+ */
 /*
  * Author : Didier Donsez, Université Grenoble Alpes
  */
@@ -14,38 +18,52 @@
  * Types for the format of the payload into the LoRaWAN frames sent and received by the Thingsat payload
  */
 
-
 #ifndef _LORAWAN_COMMON_PAYLOAD_H
 #define _LORAWAN_COMMON_PAYLOAD_H
 
 #include <stdint.h>
 #include <stdbool.h>
 
-
-// Field for status
-#define COMMON_GNSS_STATUS_FIX			0b10000000
-#define COMMON_GNSS_STATUS_FTIME		0b01000000
-#define COMMON_TX_MODE_STATUS_MASK		0b00000011
-
 /**
- * @brief Status for GNSS and Tx Mode
+ * @brief Status flags for GNSS and TxMode
  * 1 for GPS_FIX, 2 for FTIME
  * TxMode (IMMEDIATE=0,TIMESTAMPED=1,ON_GPS=2)
- *
- * TODO change for struct __attribute__((__packed__)) common_status
- *
  */
 
-typedef uint8_t common_status_t;
-
-struct __attribute__((__packed__)) common_status_s {
-	uint8_t		tx_mode:2; 	// lgw tx mode IMMEDIATE=0,TIMESTAMPED=1,ON_GPS=2
-	uint8_t		rfu:4;
-	uint8_t		ftime:1;	// flag for fine timestamping
-	uint8_t		fix:1;		// flag for GNSS fix
+struct __attribute__((__packed__)) common_status {
+	uint8_t tx_mode :2; 	// lgw tx mode IMMEDIATE=0,TIMESTAMPED=1,ON_GPS=2
+	uint8_t rfu :4;		// RFU
+	uint8_t ftime :1;	// flag for fine timestamping
+	uint8_t fix :1;		// flag for GNSS fix
 };
 
-typedef struct common_status_s common_status_s_t;
+typedef struct common_status common_status_s_t;
+
+struct __attribute__((__packed__)) common_tx {
+
+	/**
+	 * @brief us counter at TX
+	 */
+	uint32_t tx_uscount;
+
+	/**
+	 * @brief us counter at last PPS (0 if no fix)
+	 */
+	uint32_t tx_trigcount;
+
+	/**
+	 * @brief Status for GNSS and Tx Mode
+	 */
+	common_status_s_t status;
+
+	/**
+	 * @brief Tx Power in dBm
+	 * Useful for ADR
+	 */
+	uint8_t txpower;
+};
+
+typedef struct common_tx common_tx_t;
 
 /**
  * Struct for time fields
@@ -66,12 +84,10 @@ struct __attribute__((__packed__)) common_time {
 
 typedef struct common_time common_time_t;
 
-
 /**
  * Struct for location (mainly for HA balloon experiments)
  */
 struct __attribute__((__packed__)) common_location {
-
 
 	/**
 	 * @brief Latitude	(in degree)
@@ -95,7 +111,6 @@ struct __attribute__((__packed__)) common_location {
 
 typedef struct common_location common_location_t;
 
-
 /**
  * Struct for optimized location
  */
@@ -105,13 +120,13 @@ struct __attribute__((__packed__)) common_packed_location {
 	 * @brief Latitude	(in degree)
 	 * optimization on int24 with pack_coord(latitude,longitude)
 	 */
-	uint32_t latitude:24;
+	uint32_t latitude :24;
 
 	/**
 	 * @brief Longitude (in degree)
 	 * optimization on int24 with pack_coord()
 	 */
-	uint32_t longitude:24;
+	uint32_t longitude :24;
 
 	/**
 	 * @brief Altitude (in 10 meters)

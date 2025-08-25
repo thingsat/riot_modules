@@ -19,6 +19,8 @@
 #include "fmt_utils.h"
 #include "aprs.h"
 
+#include "loragw_hal.h"
+
 
 // APRS (https://www.aprs.org/doc/APRS101.PDF) like text message.
 
@@ -46,7 +48,11 @@ static void formatLongitude(float lon, uint8_t *out) {
 #pragma GCC diagnostic pop
 }
 
-static const char format[] = "%s-11>APRS,TCPIP*:=%s/%sO%.3d/%.3d/A=%06d %s";
+static const char format[] = "%s-11>APRS,TCPIP*:=%s/%sO%.3d/%.3d/A=%06d %s (%08lx%08lx) #%ld";
+
+static uint32_t aprs_frame_counter = 0;
+static uint32_t aprs_ax25_frame_counter = 0;
+
 
 // Fonction pour construire une trame APRS
 static void buildAPRSFrame(
@@ -71,6 +77,9 @@ static void buildAPRSFrame(
     // Symbole ballon : '/O'
     // Course et vitesse sont formatés sur 3 chiffres
 
+	uint64_t gweui = 0;
+	(void) lgw_get_eui(&gweui);
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
     snprintf((char*)out, 256,
@@ -81,7 +90,12 @@ static void buildAPRSFrame(
         course % 360, 	// in deg
         speed, // in kph
         altitudeFeet,
-        comment
+        comment,
+
+		(uint32_t)(gweui>>32),
+		(uint32_t)(gweui&0xFFFFFFFF),
+
+		aprs_frame_counter++
     );
 #pragma GCC diagnostic pop
 }
@@ -104,7 +118,6 @@ bool aprs_get_fpayload(
 	float true_track_degrees;
 
 	gps_get_speed_direction(&speed_kph, &true_track_degrees);
-
 
 	int fix_quality;
 	int satellites_tracked;
@@ -193,16 +206,26 @@ static size_t build_ax25_frame(
 #pragma GCC diagnostic pop
     int altitudeFeet = (int)(altitudeMeters * 3.28084);
 
+	uint64_t gweui = 0;
+	(void) lgw_get_eui(&gweui);
+
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
     snprintf(aprs, sizeof(aprs),
-        "=%s/%sO%03d/%03d/A=%06d %s",
+        "=%s/%sO%03d/%03d/A=%06d %s (%08lx%08lx) #%ld",
         latStr, lonStr,
         course % 360,
         speed,
         altitudeFeet,
-        comment
+        comment,
+
+		(uint32_t)(gweui>>32),
+		(uint32_t)(gweui&0xFFFFFFFF),
+
+		aprs_ax25_frame_counter++
     );
+
 #pragma GCC diagnostic pop
 
 
@@ -219,7 +242,7 @@ static size_t build_ax25_frame(
 
 #if ENABLE_DEBUG == 1
     DEBUG("INFO: %s : ax25=", __FUNCTION__);
-    fmt_printf_ba(frameOut, p - frameOut, " ");
+    fmt_printf_ba(frameOut, p - frameOut, "");
     DEBUG("\n");
 #endif
 
@@ -258,6 +281,9 @@ bool aprs_get_ax25(
 		speed_kph = 0.0;
 		true_track_degrees = 0.0;
 	}
+
+
+
 
     size_t len = build_ax25_frame(srcCall, srcSSID, dstCall, dstSSID,
     		latitude, longitude, floor(true_track_degrees), floor(speed_kph),

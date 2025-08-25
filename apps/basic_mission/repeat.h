@@ -14,12 +14,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "loragw_hal.h"
+#include "endpoints.h"
 
 /**
  * Process repeat
  */
 bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
-		struct lgw_pkt_tx_s *pkt_tx);
+		struct lgw_pkt_tx_s *pkt_tx, const lorawan_endpoint_t* rx_endpoint);
 
 /**
  * Filter

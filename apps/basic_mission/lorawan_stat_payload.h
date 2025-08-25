@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2020-2025 Université Grenoble Alpes
+ Basic Mission
+ Copyright (c) 2021-2025 UGA CSUG LIG
+
+ Unless required by applicable law or agreed to in writing, this
+ software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ CONDITIONS OF ANY KIND, either express or implied.
  */
 
 /*
@@ -29,6 +34,42 @@
 #define FPORT_STAT_PAYLOAD	(6U)
 
 /**
+ * Struct for Stat for Ranging
+ */
+struct __attribute__((__packed__)) stat_ranging {
+
+
+	/**
+	 * @brief counter of sent Range1 frames
+	 */
+	uint16_t range1_tx;
+
+	/**
+	 * @brief counter of received Range1 frames counter from friends (LSB of uint32_t since boot time)
+	 */
+	uint16_t range1_rx;
+
+	/**
+	 * @brief counter of received Range2 frames counter from friends (LSB of uint32_t since boot time)
+	 */
+	uint16_t range2_rx;
+
+	/**
+	 * @brief counter of received Range2 frames counter from friends (LSB of uint32_t since boot time)
+	 */
+	uint16_t range3_rx;
+
+	/**
+	 * @brief counter of received Range2 frames counter from friends for myself (LSB of uint32_t since boot time)
+	 */
+	uint16_t range2_rx_replies;
+
+
+};
+
+typedef struct stat_ranging stat_ranging_t;
+
+/**
  * Struct for Stat for LGW
  */
 struct __attribute__((__packed__)) stat_lgw {
@@ -53,6 +94,11 @@ struct __attribute__((__packed__)) stat_lgw {
 	uint16_t rx_bad_mic;
 
 	/**
+	 * @brief counter of received frames from friends with older fcnts
+	 */
+	uint16_t rx_replay;
+
+	/**
 	 * @brief counter of transmitted frames counter including repeated (LSB of uint32_t since boot time)
 	 */
 	uint16_t tx;
@@ -61,88 +107,16 @@ struct __attribute__((__packed__)) stat_lgw {
 	 * @brief counter of repeated frames counter including repeated (LSB of uint32_t since boot time)
 	 */
 	uint16_t tx_repeat;
-
-	/**
-	 * @brief counter of received Range1 frames counter from friends (LSB of uint32_t since boot time)
-	 */
-	uint16_t range1;
-
-	/**
-	 * @brief counter of received Range2 frames counter from friends (LSB of uint32_t since boot time)
-	 */
-	uint16_t range2;
-
-	/**
-	 * @brief counter of received Range2 frames counter from friends (LSB of uint32_t since boot time)
-	 */
-	uint16_t range3;
-
-	/**
-	 * @brief counter of received Range2 frames counter from friends for myself (LSB of uint32_t since boot time)
-	 */
-	uint16_t range2_replies;
 };
 
 typedef struct stat_lgw stat_lgw_t;
-
-
-
-/**
- * Struct for Stat for Ranging
- */
-struct __attribute__((__packed__)) stat_ranging {
-
-	/**
-	 * @brief counter of received Range1 frames counter from friends (LSB of uint32_t since boot time)
-	 */
-	uint16_t range1;
-
-	/**
-	 * @brief counter of received Range2 frames counter from friends (LSB of uint32_t since boot time)
-	 */
-	uint16_t range2;
-
-	/**
-	 * @brief counter of received Range2 frames counter from friends (LSB of uint32_t since boot time)
-	 */
-	uint16_t range3;
-
-	/**
-	 * @brief counter of received Range2 frames counter from friends for myself (LSB of uint32_t since boot time)
-	 */
-	uint16_t range2_replies;
-};
-
-typedef struct stat_ranging stat_ranging_t;
-
 
 /**
  * Struct for Stat message
  */
 struct __attribute__((__packed__)) StatPayload {
 
-	/**
-	 * @brief us counter at TX
-	 */
-	uint32_t		tx_uscount;
-
-	/**
-	 * @brief us counter at last PPS (0 if no fix)
-	 */
-	uint32_t		tx_trigcount;
-
-	/**
-	 * @brief Status for GNSS and Tx Mode
-	 * 1 for GPS_FIX, 2 for FTIME
-	 * TxMode (IMMEDIATE=0,TIMESTAMPED=1,ON_GPS=2)
-	 */
-	uint8_t		status;
-
-	/**
-	 * @brief Tx Power in dBm
-	 * Useful for ADR
-	 */
-	uint8_t	txpower;
+	common_tx_t tx;
 
 	common_time_t time;
 

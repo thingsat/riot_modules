@@ -14,6 +14,7 @@
 #include <stdbool.h>
 
 #include "lorawan_ranging_payload.h"
+#include "endpoints.h"
 
 bool basic_mission_ranging_get_fpayload_1(
 	/**
@@ -28,16 +29,11 @@ bool basic_mission_ranging_get_fpayload_1(
 	 * @brief Tx Power in dBm
 	 * Useful for ADR
 	 */
-	const uint8_t txpower,
-	/**
-	 * @brief Tx Power in dBm
-	 * Useful for ADR
-	 */
-	const bool ftime
+	const uint8_t txpower
 );
 
 bool basic_mission_ranging_process(const struct lgw_pkt_rx_s *pkt_rx,
-		struct lgw_pkt_tx_s *pkt_tx);
+		struct lgw_pkt_tx_s *pkt_tx, const lorawan_endpoint_t* rx_endpoint, const uint32_t fCntUp);
 
 
 #endif /* APPS_BASIC_MISSION_RANGING_H_ */

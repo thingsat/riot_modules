@@ -7,6 +7,7 @@
  CONDITIONS OF ANY KIND, either express or implied.
  */
 
+
 #ifndef APPS_BASIC_MISSION_EWSS_H_
 #define APPS_BASIC_MISSION_EWSS_H_
 

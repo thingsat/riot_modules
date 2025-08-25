@@ -1,5 +1,5 @@
 /*
- SX1302/SX1303 LGW commands
+ Basic Mission
  Copyright (c) 2021-2025 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
@@ -17,8 +17,12 @@
 #include <stdbool.h>
 #include "lgw_endpoint.h"
 
-extern lgw_sx130x_endpoint_t *lgw_sx130x_endpoint;
+extern lorawan_endpoint_t *lgw_sx130x_endpoint;
 
 bool set_endpoint(void);
+
+const lorawan_endpoint_t* endpoint_get_endpoint(const uint32_t devaddr);
+
+
 
 #endif /* TESTS_DRIVER_SX1302_ENDPOINTS_H_ */

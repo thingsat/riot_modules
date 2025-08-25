@@ -167,8 +167,9 @@ endif
 # Mission & Repeat 
 # -----------------------------
 CFLAGS += -DINVOKE_CALLBACKS=1
-include Makefile.mission.mk
 include Makefile.repeat.mk
+include Makefile.mission.mk
+include Makefile.ranging.mk
 
 
 # -----------------------------

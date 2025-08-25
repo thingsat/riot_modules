@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2020-2025 Université Grenoble Alpes
+ Basic Mission
+ Copyright (c) 2021-2025 UGA CSUG LIG
+
+ Unless required by applicable law or agreed to in writing, this
+ software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ CONDITIONS OF ANY KIND, either express or implied.
  */
 
 /*
@@ -34,37 +39,7 @@
 #define FPORT_RANGE3_PAYLOAD					(23U)
 
 
-#define RANGING_GNSS_STATUS_FIX			0b10000000
-#define RANGING_GNSS_STATUS_FTIME		0b01000000
-#define RANGING_TX_MODE_STATUS_MASK		0b00000011
-
-
-/**
- * Struct for Ranging location
- */
-struct __attribute__((__packed__)) ranging_location {
-
-	// TODO add GPS Fix last time (in seconds), GPS quality, GPS satellite number ...
-
-	/**
-	 * @brief Latitude	(in degree)
-	 * optimization on int24 with pack_coord(latitude,longitude)
-	 */
-	uint32_t latitude:24;
-
-	/**
-	 * @brief Longitude (in degree)
-	 * optimization on int24 with pack_coord()
-	 */
-	uint32_t longitude:24;
-
-	/**
-	 * @brief Altitude (in 10 meters)
-	 */
-	uint16_t altitude;
-};
-
-typedef struct ranging_location ranging_location_t;
+#define RANGING_NO_FTIME 						(0xFFFFFFFFU)
 
 /**
  * @brief Up Text Message Payload
@@ -78,33 +53,13 @@ typedef struct ranging_location ranging_location_t;
  */
 struct __attribute__((__packed__)) Ranging01Payload {
 
-	/**
-	 * @brief us counter at TX
-	 */
-	uint32_t		tx_uscount;
-
-	/**
-	 * @brief us counter at the previous ranging message TX (fcntup - 1)
-	 */
-	uint32_t		tx_uscount_prev;
-
-	/**
-	 * @brief Ranging Status
-	 * 1 for GPS_FIX, 2 for FTIME, TxMode ()
-	 */
-	uint8_t		ranging_status;
-
-	/**
-	 * @brief Tx Power in dBm
-	 * Useful for ADR
-	 */
-	uint8_t		txpower;
+	common_tx_t tx;
 
 	/**
 	 * @brief Location
 	 * optional field but useful for checking distance when debugging
 	 */
-	ranging_location_t location;
+	common_packed_location_t location;
 };
 
 typedef struct Ranging01Payload Ranging01Payload_t;
@@ -114,37 +69,17 @@ typedef struct Ranging01Payload Ranging01Payload_t;
  */
 struct __attribute__((__packed__)) Ranging2Payload {
 
-	/**
-	 * @brief us counter at TX
-	 */
-	uint32_t		tx_uscount;
-
-	/**
-	 * @brief us counter at the previous ranging message TX (fcntup - 1)
-	 */
-	uint32_t		tx_uscount_prev;
-
-	/**
-	 * @brief Ranging Status
-	 * 1 for GPS_FIX, 2 for FTIME, TxMode ()
-	 */
-	uint8_t		ranging_status;
-
-	/**
-	 * @brief Tx Power in dBm
-	 * Useful for ADR
-	 */
-	uint8_t		txpower;
-
-	/**
-	 * @brief the two least significant bytes of 32 bits fCnt of the message #1
-	 */
-	uint16_t fcnt1;
+	common_tx_t tx;
 
 	/**
 	 * @brief DevAddr of sender of the message #1
 	 */
 	uint32_t devaddr1;
+
+	/**
+	 * @brief the two least significant bytes of 32 bits fCnt of the message #1
+	 */
+	uint16_t fcnt1;
 
 	/**
 	 * @brief us counter at RX of the message #1
@@ -179,7 +114,7 @@ struct __attribute__((__packed__)) Ranging2Payload {
 	 * @brief Location
 	 * optional field but useful for checking distance when debugging
 	 */
-	ranging_location_t location;
+	common_packed_location_t location;
 };
 
 typedef struct Ranging2Payload Ranging2Payload_t;
@@ -191,27 +126,7 @@ typedef struct Ranging2Payload Ranging2Payload_t;
  */
 struct __attribute__((__packed__)) Ranging3Payload {
 
-	/**
-	 * @brief us counter at TX
-	 */
-	uint32_t		tx_uscount;
-
-	/**
-	 * @brief us counter at the previous ranging message TX (fcntup - 1)
-	 */
-	uint32_t		tx_uscount_prev;
-
-	/**
-	 * @brief Ranging Status
-	 * 1 for GPS_FIX, 2 for FTIME, TxMode ()
-	 */
-	uint8_t		ranging_status;
-
-	/**
-	 * @brief Tx Power in dBm
-	 * Useful for ADR
-	 */
-	uint8_t		txpower;
+	common_tx_t tx;
 
 	/**
 	 * @brief DevAddr of sender of the message #2
@@ -254,7 +169,7 @@ struct __attribute__((__packed__)) Ranging3Payload {
 	 * @brief Location
 	 * optional field but useful for checking distance when debugging
 	 */
-	ranging_location_t location;
+	common_packed_location_t location;
 
 	/**
 	 * @brief Distances between the sender and the others receivers in the swarm

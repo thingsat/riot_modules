@@ -12,6 +12,7 @@
 #define ENABLE_DEBUG		ENABLE_DEBUG_REPEAT
 #include "debug.h"
 
+#include "stat.h"
 #include "repeat.h"
 
 #include "lgw_config.h"
@@ -69,8 +70,17 @@ static const uint32_t frequency_plan_len = ARRAY_SIZE(frequency_plan);
  * Repeat callback
  */
 bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
-		struct lgw_pkt_tx_s *pkt_tx) {
+		struct lgw_pkt_tx_s *pkt_tx, const lorawan_endpoint_t* rx_endpoint) {
 
+	(void)rx_endpoint;
+
+/*
+	if(rx_endpoint == NULL) {
+
+	} else {
+
+	}
+ */
 	// for skipping received frame
 	pkt_tx->size = 0;
 
@@ -243,6 +253,9 @@ bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
 	pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
 	pkt_tx->coderate = CR_LORA_4_5; // 4/5 for LoRaWAN
 #endif
+
+	stat_lgw.tx_repeat++;
+
 	return true;
 }
 

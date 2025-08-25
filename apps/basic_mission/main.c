@@ -152,6 +152,17 @@ int main(void) {
 
 	puts("\nBOARD:        " RIOT_BOARD "\n");
 
+
+#if PROD == 1
+	puts("INFO: Production mode\n");
+#else
+	puts("INFO: Development mode\n");
+#endif
+
+
+	// TODO : show friends
+
+
 #if ENABLE_WDT_ZTIMER == 1
 	(void)start_wdt_ztimer();
 #else
@@ -202,7 +213,8 @@ int main(void) {
 	set_endpoint();
 #endif
 	puts("INFO: Set callback function for mission");
-	pkt_period_cb = mission_periodic_cb;
+	pkt_period_cb = mission_period_cb;
+	pkt_rx_cb = mission_rx_cb;
 
 	puts("INFO: Repeating is on");
 	basic_mission_repeat_enable(true);

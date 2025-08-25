@@ -131,6 +131,148 @@ function convertBytesToString(bytes) {
 }
 
 
+// ===================================================
+// Decode common fields
+// ---------------------------------------------------
+
+function decode_common_tx(bytes, res, idx, len) {
+
+	if(idx+4 > len) { return idx; }
+	res.tx_uscount = readUInt32LE(bytes,idx);
+	idx += 4;
+
+	if(idx+4 > len) { return idx; }
+	res.tx_trigcount = readUInt32LE(bytes,idx);
+	idx += 4;
+
+	if(idx+1 > len) { return idx; }
+	res.status = readUInt8(bytes,idx);
+	idx += 1;
+
+	if(idx+1 > len) { return idx; }
+	res.txpower = readUInt8(bytes,idx);
+	idx += 1;
+	
+	return idx;
+}
+
+function decode_common_time(bytes, res, idx, len) {
+
+	if(idx+4 > len) { return idx; }
+	res.uptime = readUInt32LE(bytes,idx);
+	idx += 4;
+
+	if(idx+4 > len) { return idx; }
+	res.localtime = readUInt32LE(bytes,idx);
+	idx += 4;
+	
+	return idx;
+}
+
+function decode_common_location(bytes, res, idx, len) {
+
+	if(idx+4 > len) { return idx; }
+	res.latitude = decodeFloat32(readUInt32LE(bytes,idx));
+	idx += 4;
+
+	if(idx+4 > len) { return idx; }
+	res.longitude = decodeFloat32(readUInt32LE(bytes,idx));
+	idx += 4;
+
+	if(idx+2 > len) { return idx; }
+	res.altitude = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	return idx;
+}
+
+function decode_common_packed_location(bytes, res, idx, len) {
+
+	if(idx+3 > len) { return idx; }
+	res.latitude = gps_unpack_latitude_i24_to_f(readUInt24LE(bytes,idx));
+	idx += 3;
+
+	if(idx+3 > len) { return idx; }
+	res.longitude = gps_unpack_longitude_i24_to_f(readUInt24LE(bytes,idx));
+	idx += 3;
+
+	if(idx+2 > len) { return idx; }
+	res.altitude = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	return idx;
+}
+
+function decode_stat_ranging(bytes, res, idx, len) {
+
+	if(idx+2 > len) { return idx; }
+	res.range1_tx = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.range1 = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.range2 = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.range3 = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.range2_replies = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	return idx;
+}
+
+function decode_stat_lgw(bytes, res, idx, len) {
+
+	if(idx+2 > len) { return idx; }
+	res.rx = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.rx_bad_crc = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.rx_friends = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.rx_bad_mic = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.rx_replay = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.rx_replay = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	if(idx+2 > len) { return idx; }
+	res.tx_repeat = readUInt16LE(bytes,idx);
+	idx += 2;
+	
+	return idx;
+}
+
+function decode_common_sensors(bytes, res, idx, len) {
+
+	if(idx+1 > len) { return idx; }
+	res.vbat = readUInt8(bytes,idx);
+	idx += 1;
+
+	if(idx+1 > len) { return idx; }
+	res.ts = readUInt8(bytes,idx);
+	idx += 1;
+	
+	return idx;
+}
 
 // ===================================================
 // Decode payloads
@@ -683,37 +825,26 @@ function decodeStat(fPort, bytes) {
 	
 	var idx = 0;
 	
-	res.tx_uscount = readUInt32LE(bytes,idx);
-	idx += 4;
-
-	res.tx_trigcount = readUInt32LE(bytes,idx);
-	idx += 4;
-
-	res.ranging_status = readUInt8(bytes,idx);
-	idx += 1;
-
-	res.txpower = readUInt8(bytes,idx);
-	idx += 1;
-
-
-/*
-	if(idx+3 > len) { return res; }
-	res.latitude = gps_unpack_latitude_i24_to_f(readUInt24LE(bytes,idx));
-	idx += 3;
-
-	if(idx+3 > len) { return res; }
-	res.longitude = gps_unpack_longitude_i24_to_f(readUInt24LE(bytes,idx));
-	idx += 3;
-
-	if(idx+2 > len) { return res; }
-	res.altitude = readUInt16LE(bytes,idx);
-	idx += 2;
-*/
+	idx = decode_common_tx(bytes, res, idx, len);
+	if(idx > len) { return res; }
+	
+	idx = decode_common_time(bytes, res, idx, len);
+	if(idx > len) { return res; }
+	
+	idx = decode_stat_lgw(bytes, res, idx, len);
+	if(idx > len) { return res; }
+	
+	idx = decode_stat_ranging(bytes, res, idx, len);
+	if(idx > len) { return res; }
+	
+	idx = decode_common_packed_location(bytes, res, idx, len);
+	if(idx > len) { return res; }
+	
+	idx = decode_common_sensors(bytes, res, idx, len);
+	if(idx > len) { return res; }
+	
 	return res;
 }
-
-
-
 
 function decodeXor(fPort, bytes) {
 	return { ratio : fPort - 64, buf: bytes };

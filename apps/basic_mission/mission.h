@@ -22,9 +22,14 @@
 
 #include "loragw_hal.h"
 
-void mission_periodic_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
+void mission_period_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
+
+void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
+		struct lgw_pkt_tx_s *pkt_tx);
 
 void mission_set_default_lgw_pkt_tx(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
+
+void mission_gnss_print_short(void);
 
 void mission_gnss_print(void);
 
