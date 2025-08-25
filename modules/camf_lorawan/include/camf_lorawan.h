@@ -30,7 +30,7 @@
  */
 
 // Emergency Warning Satellite Service (Galileo like)
-#define FPORT_DN_EWSS_PAYLOAD					(17U)
+#define FPORT_EWSS_PAYLOAD					(17U)
 
 /*
  *  @brief Common Alert Message LoRa Frame
