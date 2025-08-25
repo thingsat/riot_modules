@@ -710,6 +710,7 @@ static int lgw_bench_cmd(int argc, char **argv) {
 		pkt.freq_hz = _freq_hz_plan[nb_packets_to_transmit
 				% ARRAY_SIZE(_freq_hz_plan)];
 
+#if DEBUG_CMD == 1
 		printf(
 				"INFO: Transmitting LoRa packet (%d/%d) on %.3fMHz [SF%ldBW%d, TXPOWER %lu, PWID %u, PA %s, ToA %lu msec] devaddr: 0x%8lx fCntUp: %ld\n",
 				nb_packets_to_transmit - nb_remaining_packets_to_transmit,
@@ -718,12 +719,32 @@ static int lgw_bench_cmd(int argc, char **argv) {
 				_txlut.lut[0].pwr_idx, _txlut.lut[0].pa_gain ? "ON" : "OFF",
 				time_on_air, devaddr, _fCntUp);
 
-		_fCntUp++;
-
 		for (unsigned int j = 0; j < size; j++) {
 			printf("%02X ", pkt.payload[j]);
 		}
 		printf("\n");
+#else
+		printf(
+				"TXPKT:LORA;%ld;%ld;%u;%lu;%d;%s;%ld:%08lx;%ld;%d;",
+				pkt.freq_hz,
+				pkt.datarate,
+				(pkt.bandwidth - 3) * 125,
+				rfpower,
+				_txlut.lut[0].pwr_idx,
+				_txlut.lut[0].pa_gain ? "ON" : "OFF",
+				time_on_air,
+				devaddr,
+				_fCntUp,
+				pkt.size);
+
+		for (unsigned int j = 0; j < size; j++) {
+			printf("%02x", pkt.payload[j]);
+		}
+		printf("\n");
+#endif
+
+		_fCntUp++;
+
 
 		int x = lgw_send(&pkt);
 		if (x != 0) {
@@ -865,7 +886,7 @@ static int lgw_chantest_cmd(int argc, char **argv) {
 		if (_configure_txlut(&_txlut, rfpower) == EXIT_FAILURE) {
 			return EXIT_FAILURE;
 		}
-
+#if DEBUG_CMD == 1
 		printf(
 				"INFO: Transmitting LoRa packet (%d/%d) on %.3fMHz [SF%ldBW%d, TXPOWER %lu, PWID %u, PA %s, ToA %lu msec] devaddr: 0x%8lx fCntUp: %ld\n",
 				nb_packets_to_transmit - nb_remaining_packets_to_transmit,
@@ -874,12 +895,33 @@ static int lgw_chantest_cmd(int argc, char **argv) {
 				_txlut.lut[0].pwr_idx, _txlut.lut[0].pa_gain ? "ON" : "OFF",
 				time_on_air, devaddr, _fCntUp);
 
-		_fCntUp++;
 
 		for (unsigned int j = 0; j < size; j++) {
 			printf("%02X ", pkt.payload[j]);
 		}
 		printf("\n");
+#else
+		printf(
+				"TXPKT:LORA;%ld;%ld;%u;%lu;%d;%s;%ld:%08lx;%ld;%d;",
+				pkt.freq_hz,
+				pkt.datarate,
+				(pkt.bandwidth - 3) * 125,
+				rfpower,
+				_txlut.lut[0].pwr_idx,
+				_txlut.lut[0].pa_gain ? "ON" : "OFF",
+				time_on_air,
+				devaddr,
+				_fCntUp,
+				pkt.size);
+
+		for (unsigned int j = 0; j < size; j++) {
+			printf("%02x", pkt.payload[j]);
+		}
+		printf("\n");
+#endif
+		_fCntUp++;
+
+
 
 		int x = lgw_send(&pkt);
 		if (x != 0) {
@@ -946,6 +988,7 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 	// TODO check instruction
 	int x = lgw_send((struct lgw_pkt_tx_s*) pkt); // cast since loragw_sx1302 fixes some fields.
 
+#if DEBUG_CMD == 1
 	printf(
 			"INFO: Transmitting LoRa packet on %.3fMHz [%s, SF%ldBW%d, TXPOWER %u, PWID %u, PA %s, DIG %d, %d bytes, ToA %lu msec]\n",
 			(double) (pkt->freq_hz / 1E6),
@@ -958,6 +1001,30 @@ static int _lgw_tx_pkt_tx(const struct lgw_pkt_tx_s *pkt) {
 		printf("%02X ", pkt->payload[j]);
 	}
 	printf("\n");
+
+#else
+		printf(
+				"TXPKT:%d;%s;%ld;%ld;%u;%u;%d;%s;%ld;%d;",
+				pkt->modulation,
+				pkt->tx_mode == IMMEDIATE ? "IMM" : pkt->tx_mode == ON_GPS ? "GPS" : "TIM",
+				//pkt->tx_mode == IMMEDIATE ? "IMMEDIATE" : pkt->tx_mode == ON_GPS ? "ON_GPS" : "TIMESTAMPED",
+
+				pkt->freq_hz,
+				pkt->datarate,
+				(pkt->bandwidth - 3) * 125,
+				pkt->rf_power,
+				_txlut.lut[0].pwr_idx,
+				_txlut.lut[0].pa_gain ? "on" : "off",
+				time_on_air,
+				pkt->size);
+		const uint16_t size = pkt->size;
+		for (unsigned int j = 0; j < size; j++) {
+			printf("%02x", pkt->payload[j]);
+		}
+		printf("\n");
+#endif
+
+
 
 	if (x != 0) {
 		lgw_get_instcnt(&inst_cnt_us_end);

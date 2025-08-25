@@ -77,22 +77,29 @@ static lgw_config_t _lorawan_lgw_config = {
 #define LGW_PWR_IDX 15,16,17,19,20,22,1,2,3,4,5,6,7,9,11,14
 #endif
 
+/*
+https://meshtastic.org/docs/overview/radio-settings/#europe-frequency-bands
+Long Moderate SF11 BW125
+Slot 1 : 869.462500
+Slot 2 : 869.587500
+*/
+
 #define LGW_CONFIG_FOR_LORAWAN_EU868_WITH_SX1250 \
 { \
 	.single_input_mode = true, \
 	.fa = 867500000UL, \
-	.fb = 869525000UL, \
+	.fb = 869587500UL, \
 	.channel_if = { \
-			-400000, \
-			-200000, \
+			-250000, \
+			-125000, \
 			0,       \
 			-400000, \
 			-200000, \
 			0,       \
 			200000,  \
 			400000,  \
-			-200000, \
-			300000 \
+			-62500, \
+			-62500 \
 			}, \
 	.channel_rfchain = { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 }, \
 	.pa_gain = {LGW_PA_GAIN}, \

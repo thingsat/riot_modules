@@ -77,11 +77,12 @@ static lgw_config_t _lorawan_lgw_config = {
 #define LGW_PWR_IDX 15,16,17,19,20,22,1,2,3,4,5,6,7,9,11,14
 #endif
 
+
 #define LGW_CONFIG_FOR_LORAWAN_EU868_WITH_SX1250 \
 { \
 	.single_input_mode = true, \
 	.fa = 867500000UL, \
-	.fb = 868500000UL, \
+	.fb = 868500000UL,
 	.channel_if = { \
 			-400000, \
 			-200000, \

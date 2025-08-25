@@ -15,18 +15,29 @@
 #define LIBLORAGW_RELEASE "https://github.com/Lora-net/sx1302_hal/releases/tag/V2.1.0"
 
 
+#ifndef DEBUG_CMD
+#define DEBUG_CMD 				0
+#endif
+
 #define DEBUG_AUX 				0
 #define DEBUG_COM 				0 // SPI and USB
 #define DEBUG_I2C 				0 
 #define DEBUG_REG 				0
+
+#ifndef DEBUG_HAL
 #define DEBUG_HAL 				0
+#endif
+
 #define DEBUG_GPS 				0
 #define DEBUG_GPIO 				0
 #define DEBUG_LBT 				0
 #define DEBUG_RAD 				0
 #define DEBUG_CAL 				0
 #define DEBUG_SX1302 			0
-#define DEBUG_FTIME 			1
+
+#ifndef DEBUG_FTIME
+#define DEBUG_FTIME 			0
+#endif
 
 
 #ifndef ENABLE_REGTEST

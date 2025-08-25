@@ -2565,7 +2565,7 @@ int sx1302_tx_configure(lgw_radio_type_t radio_type) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, bool lwan_public, struct lgw_conf_rxif_s * context_fsk, struct lgw_pkt_tx_s * pkt_data) {
+int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, bool lpwan_public, struct lgw_conf_rxif_s * context_fsk, struct lgw_pkt_tx_s * pkt_data) {
 	DEBUG_PRINTF("%s: enter\n", __func__);
 
 	(void)context_fsk;
@@ -2787,8 +2787,16 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
             err = lgw_reg_w(SX1302_REG_TX_TOP_TXRX_CFG0_2_CRC_EN(pkt_data->rf_chain), (pkt_data->no_crc) ? 0 : 1);
             CHECK_ERR(err);
 
+#if MESHTASTIC_ENABLE == 1
+            (void) lpwan_public;
+			DEBUG_MSG("Setting LoRa syncword 0x2B\n");
+			err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_0_PEAK1_POS(pkt_data->rf_chain), 4);
+			CHECK_ERR(err);
+			err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_1_PEAK2_POS(pkt_data->rf_chain), 22);
+			CHECK_ERR(err);
+#else
             /* Syncword */
-            if ((lwan_public == false) || (pkt_data->datarate == DR_LORA_SF5) || (pkt_data->datarate == DR_LORA_SF6)) {
+            if ((lpwan_public == false) || (pkt_data->datarate == DR_LORA_SF5) || (pkt_data->datarate == DR_LORA_SF6)) {
                 DEBUG_MSG("Setting LoRa syncword 0x12\n");
                 err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_0_PEAK1_POS(pkt_data->rf_chain), 2);
                 CHECK_ERR(err);
@@ -2801,7 +2809,7 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
                 err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_1_PEAK2_POS(pkt_data->rf_chain), 8);
                 CHECK_ERR(err);
             }
-
+#endif
             /* Set Fine Sync for SF5/SF6 */
             if ((pkt_data->datarate == DR_LORA_SF5) || (pkt_data->datarate == DR_LORA_SF6)) {
                 DEBUG_MSG("Enable Fine Sync\n");

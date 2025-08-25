@@ -10,9 +10,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#ifndef ENABLE_DEBUG_LGW_UTILS
-#define ENABLE_DEBUG_LGW_UTILS		1
-#endif
 #define ENABLE_DEBUG ENABLE_DEBUG_LGW_UTILS
 #include "debug.h"
 
@@ -28,6 +25,12 @@
 #ifdef MODULE_LORA_MESH
 #include "lora_mesh.h"
 #endif
+
+#ifdef MODULE_MESHTASTIC_UTILS
+#include "meshtastic_utils.h"
+#endif
+
+
 
 static uint32_t _last_count_us = 0;
 
@@ -120,8 +123,6 @@ const char* lgw_get_tx_mode_str(const uint8_t tx_mode) {
 	}
 }
 
-
-
 // Imported from sys/shell/commands/sc_rtc.c
 static int _print_time(struct tm *time) {
 	printf("%04i-%02i-%02i %02i:%02i:%02i", time->tm_year + 1900,
@@ -156,17 +157,15 @@ uint32_t lgw_get_delta_instcnt(const uint32_t start, const uint32_t end) {
 
 uint32_t lgw_incr_instcnt(const uint32_t cnt, const uint32_t incr) {
 
-	if(cnt > (UINT32_MAX - incr)) {
+	if (cnt > (UINT32_MAX - incr)) {
 		// overflow
-		return (uint32_t)((uint64_t)cnt + incr) & 0xFFFFFFFF;
+		return (uint32_t) ((uint64_t) cnt + incr) & 0xFFFFFFFF;
 	} else {
 		return cnt + incr;
 	}
 }
 
-
 void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
-#if ENABLE_DEBUG == 1
 
 	// TODO print the delta in us between rxpkt->count_us;
 
@@ -182,6 +181,7 @@ void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
 			rxpkt->modulation == MOD_LORA ? 8 : 5, // default in LoRaWAN
 			true, /* header is always enabled, except for beacons */
 			(rxpkt->status != STAT_NO_CRC), rxpkt->size);
+#if ENABLE_DEBUG == 1
 
 	printf("\n----- %s packet - TimeOnAir: %lu msec (",
 			lgw_get_modulation_str(rxpkt->modulation), time_on_air);
@@ -230,6 +230,7 @@ void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
 		printf("%02x ", rxpkt->payload[j]);
 	}
 	printf("\n");
+
 #ifdef MODULE_LORA_MESH
 	if(lora_mesh_check_valid_frame(rxpkt->payload,rxpkt->size)) {
 		lora_mesh_printf_frame(rxpkt->payload,rxpkt->size);
@@ -237,9 +238,55 @@ void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
 		lorawan_printf_payload(rxpkt->payload,rxpkt->size);
 	}
 #else
+#ifdef MODULE_MESHTASTIC_UTILS
+	if(meshtastic_check_valid_frame_size(rxpkt->payload, rxpkt->size)) {
+		meshtastic_printf(rxpkt->payload, rxpkt->size);
+	} else {
+		printf("INFO:Bad size for a Meshtastic frame\n");
+	}
+#else
 	lorawan_printf_payload(rxpkt->payload, rxpkt->size);
 #endif
+#endif
+
 #else
-	(void)rxpkt;
+
+	printf("RXPKT:%s;%lu;", lgw_get_modulation_str(rxpkt->modulation),
+			time_on_air);
+	lgw_print_rtc();
+	printf(";%lu;", rxpkt->freq_hz);
+	printf("%ld;", rxpkt->freq_offset);
+	printf("%lu;%lu;", rxpkt->count_us, delta_count_us);
+	printf("%u;", rxpkt->if_chain);
+	printf("%u;", rxpkt->rf_chain);
+	printf("%u;", rxpkt->modem_id);
+	printf("%s;", lgw_get_status_str(rxpkt->status));
+	printf("%lu;", rxpkt->datarate);
+	printf("%lu;", lgw_bandwidthToBwLoRaHz(rxpkt->bandwidth));
+	printf("%u;", rxpkt->coderate);
+	printf("%.1f;", rxpkt->snr); /*!> average packet SNR, in dB (LoRa only) */
+	printf("%.1f;", rxpkt->snr_min); /*!> minimum packet SNR, in dB (LoRa only) */
+	printf("%.1f;", rxpkt->snr_max); /*!> maximum packet SNR, in dB (LoRa only) */
+	printf("%.1f;", rxpkt->rssic); /*!> average RSSI of the channel in dB */
+	printf("%.1f", rxpkt->rssis); /*!> average RSSI of the signal in dB */
+#ifdef RIOT_APPLICATION
+	printf("%.1f;", rxpkt->rssi_temperature_offset);
+	printf("%.1f;", rxpkt->temperature);
+#endif
+
+	/*!> a fine timestamp has been received */
+	if (rxpkt->ftime_received) {
+		/*!> packet fine timestamp (nanoseconds since last PPS) */
+		printf("%ld;", rxpkt->ftime);
+	} else {
+		printf("na;");
+	}
+	printf("0x%04X;", rxpkt->crc);
+	printf("%u;", rxpkt->size);
+	for (int j = 0; j < rxpkt->size; j++) {
+		printf("%02x", rxpkt->payload[j]);
+	}
+	printf("\n");
+
 #endif
 }
