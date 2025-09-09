@@ -13,7 +13,7 @@ EXTERNAL_MODULE_DIRS += ../../modules
 
 USEMODULE += lorawan
 USEMODULE += lorawan_printf
-
+USEMODULE += rtc_utilities
 USEMODULE += libc_gettimeofday
 
 # Enable code section save time for porting and firmware size
