@@ -148,7 +148,7 @@ static int _set_endpoint(void) {
 	lgw_sx130x_endpoint = NULL;
 
 	for(unsigned int i=0; i<ARRAY_SIZE(lgw_sx130x_endpoints); i++) {
-		if(eui == lgw_sx130x_endpoints[i].gweui) {
+		if(eui == lgw_sx130x_endpoints[i].deveui) {
 			lgw_sx130x_endpoint = lgw_sx130x_endpoints + i;
 		}
 	}

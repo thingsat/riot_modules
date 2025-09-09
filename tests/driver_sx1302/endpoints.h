@@ -23,7 +23,7 @@ lorawan_endpoint_t lgw_sx130x_endpoints[] = {
 		{
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00af5e,
-				.gweui = 0x0016c001f136e359,
+				.deveui = 0x0016c001f136e359,
 				// BABECAFE12345678BABECAFE12345678
 				.nwkskey = DEFAULT_NWKSKEY,
 				// CAFEBABE12345678CAFEBABE12345678
@@ -32,7 +32,7 @@ lorawan_endpoint_t lgw_sx130x_endpoints[] = {
 		{
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00ac92,
-				.gweui = 0x0016C001F136EAC8,
+				.deveui = 0x0016C001F136EAC8,
 				// BABECAFE12345678BABECAFE12345678
 				.nwkskey = DEFAULT_NWKSKEY,
 				// CAFEBABE12345678CAFEBABE12345678
@@ -41,7 +41,7 @@ lorawan_endpoint_t lgw_sx130x_endpoints[] = {
 		{
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00af2b,
-				.gweui = 0x0016c001f136effd,
+				.deveui = 0x0016c001f136effd,
 				// BABECAFE12345678BABECAFE12345678
 				.nwkskey = DEFAULT_NWKSKEY,
 				// CAFEBABE12345678CAFEBABE12345678

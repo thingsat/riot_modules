@@ -1346,7 +1346,9 @@ static int lgw_rx_cmd(int argc, char **argv) {
 	printf("Nb valid packets received: %lu CRC OK\n", nb_pkt_crc_ok);
 
 #if INVOKE_CALLBACKS == 1
-	(*pkt_period_cb)(&lgw_pkt_tx_to_send);
+	if(pkt_period_cb != NULL) {
+		(*pkt_period_cb)(&lgw_pkt_tx_to_send);
+	}
 #endif
 	return EXIT_SUCCESS;
 }
