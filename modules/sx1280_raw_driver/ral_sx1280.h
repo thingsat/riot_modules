@@ -516,7 +516,6 @@ static inline ral_status_t ral_sx1280_init_all(const ral_t* ral, gpio_cb_t evt_h
 	res = ral_sx1280_init(ral);
 	if (res == RAL_STATUS_OK) {
 		uint16_t fwid = ral_sx1280_get_firmware_version(ral);
-        printf("SX1280 firmware version = %x\n", fwid);
 		if (fwid == 0x5853) {
 			sx1280_hal_setup_irq(evt_handler);
 			sx1280_set_lna_settings(ral->context, SX1280_LNA_HIGH_SENSITIVITY_MODE);

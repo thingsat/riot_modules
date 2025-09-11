@@ -12,6 +12,7 @@
 
 #include <stdint.h>     // C99 types
 #include <stdbool.h>    // bool type
+#include <stdio.h>
 
 #include "xtimer.h"
 #include "irq.h"
@@ -128,6 +129,8 @@ sx1280_hal_status_t sx1280_hal_read( const void *context, const uint8_t *command
 
 void sx1280_hal_reset( const void *context )
 {
+	(void)context;
+
     gpio_clear(SX1280_PARAM_RESET);
     _delay_ms(5);
     gpio_set(SX1280_PARAM_RESET);
@@ -136,7 +139,9 @@ void sx1280_hal_reset( const void *context )
 
 sx1280_hal_status_t sx1280_hal_wakeup( const void *context )
 {
-    if (!spi_initialized) {
+    (void)context;
+
+	if (!spi_initialized) {
         spi_initialized = true;
 
         spi_acquire(spiconf.dev, spiconf.cs, spiconf.mode, spiconf.clk);
@@ -179,11 +184,13 @@ sx1280_hal_status_t sx1280_hal_wakeup( const void *context )
 
 sx1280_hal_operating_mode_t sx1280_hal_get_operating_mode( const void *context )
 {
+	(void)context;
     return radio_opmode;
 }
 
 void sx1280_hal_set_operating_mode( const void *context, const sx1280_hal_operating_mode_t op_mode )
 {
+	(void)context;
     radio_opmode = op_mode;
 
     if ((op_mode == SX1280_HAL_OP_MODE_SLEEP) && (spi_initialized)) {

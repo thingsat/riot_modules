@@ -478,12 +478,16 @@ ral_status_t ral_sx1280_setup_tx_flrc( const ral_t* ral, const ral_params_flrc_t
 
 ral_status_t ral_sx1280_setup_tx_lora_e( const ral_t* ral, const ral_params_lora_e_t* params )
 {
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
+    (void)ral;
+	(void)params;
+	return RAL_STATUS_UNSUPPORTED_FEATURE;
 }
 
 ral_status_t ral_sx1280_tx_bpsk( const ral_t* ral, const ral_params_bpsk_t* params )
 {
-    return RAL_STATUS_UNSUPPORTED_FEATURE;
+    (void)ral;
+	(void)params;
+	return RAL_STATUS_UNSUPPORTED_FEATURE;
 }
 
 ral_status_t ral_sx1280_setup_cad( const ral_t* ral, const ral_lora_cad_params_t* params )
