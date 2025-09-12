@@ -134,7 +134,14 @@ void sx1280_hal_reset( const void *context )
     gpio_clear(SX1280_PARAM_RESET);
     _delay_ms(5);
     gpio_set(SX1280_PARAM_RESET);
-    _delay_ms(5);
+
+	printf("BUSY check ON\n");
+	while (!gpio_read(SX1280_PARAM_DIO0)) {}; // wait ON
+	printf("BUSY check OFF\n");
+	sx1280_hal_wait_on_busy(); // wait OFF
+	printf("BUSY check OK\n");
+
+    _delay_ms(1);
 }
 
 sx1280_hal_status_t sx1280_hal_wakeup( const void *context )
