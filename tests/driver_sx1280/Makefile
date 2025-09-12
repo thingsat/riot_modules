@@ -4,6 +4,7 @@
 
 APPLICATION=driver_sx1280_shell
 
+EXTERNAL_BOARD_DIRS ?= ../../boards
 BOARD_WHITELIST := thingsat-l0 nucleo-l053r8 nucleo-l073rz nucleo-l432kc nucleo-f411re nucleo-f401re nucleo-f446re nucleo-f446ze nucleo-f103rb olimexino-stm32
 # BOARD_WHITELIST += esp32-wroom-32 lora-e5-dev bluepill bluepill-128kib
 
