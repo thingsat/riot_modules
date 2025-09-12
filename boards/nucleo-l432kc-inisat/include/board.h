@@ -76,15 +76,15 @@ extern "C" {
 #endif
 
 #ifndef SX1280_PARAM_RESET
-#define SX1280_PARAM_RESET                  	GPIO_UNDEF      /**< Reset pin */
+#define SX1280_PARAM_RESET                  	PWM2_PIN       /**< Reset pin /!\ on PWM2 for test - Mikrobus slot does not work /!\ */
 #endif
 
 #ifndef SX1280_PARAM_DIO0
-#define SX1280_PARAM_DIO0                  		GPIO_UNDEF      /**< DIO0 */
+#define SX1280_PARAM_DIO0                  		SENS1_PIN      /**< DIO0 / BUSY /!\ on SENS1_PIN for test - Mikrobus slot does not work /!\*/
 #endif
 
 #ifndef SX1280_PARAM_DIO1
-#define SX1280_PARAM_DIO1                  		 GPIO_PIN(PORT_B,8) /**< DIO1 */
+#define SX1280_PARAM_DIO1                  		SENS2_PIN      /**< DIO1 /!\ on SENS2_PIN for test - Mikrobus slot does not work /!\*/
 #endif
 
 #ifndef MCP9808_I2C_ADDRESS
