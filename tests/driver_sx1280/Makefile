@@ -18,12 +18,27 @@ USEMODULE += hashes
 USEMODULE += crypto
 
 USEMODULE += shell
-
 USEMODULE += fmt
 USEMODULE += printf_float
 
 USEMODULE += xtimer
 USEMODULE += random
+
+# -----------------------------
+# Debug
+# -----------------------------
+
+USEMODULE += shell_cmds_default
+USEMODULE += ps
+USEMODULE += git
+
+# Set this to 1 to enable code in RIOT that does safety checking
+# which is not needed in a production environment but helps in the
+# development process:
+DEVELHELP ?= 1
+
+#CFLAGS += -DENABLE_DEBUG=1
+CFLAGS += -DDEBUG_ASSERT_VERBOSE=1
 
 
 # -----------------------------

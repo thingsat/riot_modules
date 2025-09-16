@@ -30,15 +30,6 @@
 #define SECONDS_IF_INIT_FAILED              (5U)
 #endif
 
-/*
- * @brief The LoRa modulation parameters for Rx and Tx
- */
-extern ral_params_lora_t params;
-
-/*
- * @brief Get the frequency in Hz from the driver lora definition
- */
-uint32_t getBW(ral_lora_bw_t lora_bw);
 
 /*
  * @brief Initialize the SX1280 driver
@@ -49,6 +40,29 @@ int sx1280_init(void);
  * @brief Initialize the SX1280 driver and reboot on initialization failure
  */
 void sx1280_init_and_reboot_on_failure(void);
+
+
+/*
+ * @brief Lock the mutex that protect low level access to sx1280 (useful when calling the driver directly)
+ */
+void sx1280_lock(void);
+
+/*
+ * @brief Unlock the mutex that protect low level access to sx1280 (useful when calling the driver directly)
+ */
+void sx1280_unlock(void);
+
+
+/*
+ * @brief The LoRa modulation parameters for Rx and Tx
+ */
+ral_params_lora_t * sx1280_get_params(void);
+
+/*
+ * @brief Get the frequency in Hz from the driver lora definition
+ */
+uint32_t sx1280_getBW(ral_lora_bw_t lora_bw);
+
 
 /*
  * @brief Get/Set the central frequencies of the LoRa channel

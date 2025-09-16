@@ -103,15 +103,16 @@ static void reboot_after_delay(uint32_t delay)
  */
 int sx1280_channel_set(uint32_t freq_in_hz)
 {
+	ral_params_lora_t * const params = sx1280_get_params();
 
-    if ((ISM2400_LOWER_FREQUENCY + (getBW(params.bw) / 2) >= freq_in_hz)
-        && (freq_in_hz <= ISM2400_HIGHER_FREQUENCY - (getBW(params.bw) / 2))) {
+    if ((ISM2400_LOWER_FREQUENCY + (sx1280_getBW(params->bw) / 2) >= freq_in_hz)
+        && (freq_in_hz <= ISM2400_HIGHER_FREQUENCY - (sx1280_getBW(params->bw) / 2))) {
         printf("[Error] setup: out-of-range frequency value given for bw=%ld\n",
-               getBW(params.bw));
+               sx1280_getBW(params->bw));
         return -1;
     }
-    params.freq_in_hz = freq_in_hz;
-    printf("New channel set to %lu Hz\n", params.freq_in_hz);
+    params->freq_in_hz = freq_in_hz;
+    printf("New channel set to %lu Hz\n", params->freq_in_hz);
 
     return 0;
 }
@@ -122,7 +123,8 @@ int sx1280_channel_set(uint32_t freq_in_hz)
  */
 void sx1280_invertiq_set(bool invert_iq_is_on)
 {
-    params.invert_iq_is_on = invert_iq_is_on;
+	ral_params_lora_t * const params = sx1280_get_params();
+    params->invert_iq_is_on = invert_iq_is_on;
 }
 
 
@@ -174,6 +176,8 @@ int sx1280_rangetest_cmd(int argc, char **argv)
         return -1;
     }
 
+	ral_params_lora_t * const params = sx1280_get_params();
+
     uint32_t count = atoi(argv[1]);
     uint32_t payload_len = atoi(argv[2]);
     uint32_t delay = atoi(argv[3]);
@@ -196,6 +200,8 @@ int sx1280_rangetest_cmd(int argc, char **argv)
 
 
     for (uint32_t i = 0; i < count; i++) {
+
+		sx1280_lock(); // lock for tx setup
 
         // set a new channel
         uint32_t channel = ((uint32_t)atoi(argv[4 + i % 3])) * 1000U;
@@ -220,13 +226,13 @@ int sx1280_rangetest_cmd(int argc, char **argv)
         sx1280_invertiq_set(false);
 
         // prepare the LoRaWAN frame
-        printf("sending : channel=%lu iq=%d fcnt=%lu frame=", channel, params.invert_iq_is_on,
+        printf("sending : channel=%lu iq=%d fcnt=%lu frame=", channel, params->invert_iq_is_on,
                fcnt);
         printf_ba(frame, payload_len);
         printf("\n");
 
-        params.pld_len_in_bytes = payload_len;
-        ral_status_t res = ral_sx1280_setup_tx_lora(&ral_default_cfg, &params);
+        params->pld_len_in_bytes = payload_len;
+        ral_status_t res = ral_sx1280_setup_tx_lora(&ral_default_cfg, params);
         if (res != RAL_STATUS_OK) {
             printf("ral_sx1280_setup_tx_lora ERROR %d\n", res);
             reboot_after_delay(10);
@@ -242,17 +248,21 @@ int sx1280_rangetest_cmd(int argc, char **argv)
                 return -1;
             }
 
+			sx1280_unlock(); // tx setup done
+
             xtimer_sleep(RECEIVE_WINDOWS_IN_SECONDS);
+
+			sx1280_lock(); // lock for rx setup
 
             // Set the IQ to inverted for downlink
             sx1280_invertiq_set(true);
 
             // listen downlink on receive windows
             printf("listen : channel=%lu iq=%d duration=%d seconds ...\n", channel,
-                   params.invert_iq_is_on, RECEIVE_WINDOWS_TIMEOUT_IN_SECONDS);
+                   params->invert_iq_is_on, RECEIVE_WINDOWS_TIMEOUT_IN_SECONDS);
 
-            params.pld_len_in_bytes = 255;
-            ral_status_t res = ral_sx1280_setup_rx_lora(&ral_default_cfg, &params);
+            params->pld_len_in_bytes = 255;
+            ral_status_t res = ral_sx1280_setup_rx_lora(&ral_default_cfg, params);
             if (res != RAL_STATUS_OK) {
                 printf("ral_sx1280_setup_rx_lora ERROR %d\n", res);
             }
@@ -263,6 +273,7 @@ int sx1280_rangetest_cmd(int argc, char **argv)
                     printf("ral_sx1280_set_rx ERROR %d\n", res);
                 }
             }
+			sx1280_unlock(); // rx setup done
 
             xtimer_sleep(RECEIVE_WINDOWS_TIMEOUT_IN_SECONDS);
 

@@ -21,19 +21,34 @@
 
 #include "xtimer.h"
 #include "random.h"
+#include "thread.h"
 
 #include "periph/pm.h"
 
 #include "ral_sx1280.h"
-
 #include "sx1280_cmd.h"
 
 
-static ral_status_t sx1280_init_status;
+/* ******************************************** */
 
+// Thread
+static char _thread_stack[THREAD_STACKSIZE_DEFAULT];
+static kernel_pid_t _thread_pid;
+
+// Mutex for sx1280 access
+static mutex_t sx1280_mutex = MUTEX_INIT;
+
+static ral_status_t _sx1280_init_status = RAL_STATUS_UNKNOWN_VALUE;
+
+#define MSG_QUEUE_SIZE   (8)
+#define MSG_TYPE_IRQ     (0x00)
+
+
+/* ******************************************** */
+
+
+static ral_params_lora_t params = {
 #ifdef MULTITECH_ISM2400_PARAMS
-
-ral_params_lora_t params = {
     .freq_in_hz = MULTITECH_ISM2400_CHANNEL_1,
     .sf = MULTITECH_ISM2400_SF,
     .bw = MULTITECH_ISM2400_BANDWITH,
@@ -45,27 +60,35 @@ ral_params_lora_t params = {
     .invert_iq_is_on = false,
     .symb_nb_timeout = 0,               //! Rx only parameters - useless anyway
     .pwr_in_dbm = SX1280_MAX_TXPOWER,   //! Tx only parameters
-};
+
 #else
 
-
-ral_params_lora_t params = { .freq_in_hz = 2483500000,
-                             .sf = RAL_LORA_SF9, .bw = RAL_LORA_BW_200_KHZ,
-                             .cr = RAL_LORA_CR_LI_4_5,
-                             .pbl_len_in_symb = 12,
-                                                                                //.sync_word = 0x12,
-                             .sync_word = 0x21, .pld_is_fix = false, .crc_is_on = true,
-                             .invert_iq_is_on = false, .symb_nb_timeout = 0,    //! Rx only parameters - useless anyway
-                             .pwr_in_dbm = 4,                                   //! Tx only parameters
-};
+	.freq_in_hz = 2483500000,
+	.sf = RAL_LORA_SF9,
+	.bw = RAL_LORA_BW_200_KHZ,
+	.cr = RAL_LORA_CR_LI_4_5,
+	.pbl_len_in_symb = 12,
+	//.sync_word = 0x12,
+	.sync_word = 0x21,
+	.pld_is_fix = false,
+	.crc_is_on = true,
+	.invert_iq_is_on = false,
+	.symb_nb_timeout = 0,    //! Rx only parameters - useless anyway
+	.pwr_in_dbm = 4,         //! Tx only parameters
 
 #endif
+};
 
+
+
+ral_params_lora_t * sx1280_get_params(void) {
+	return &params;
+}
 
 /*
  * @brief Get the frequency in Hz from the driver lora definition
  */
-uint32_t getBW(ral_lora_bw_t lora_bw)
+uint32_t sx1280_getBW(ral_lora_bw_t lora_bw)
 {
     switch (lora_bw) {
     case RAL_LORA_BW_007_KHZ:
@@ -123,12 +146,12 @@ int sx1280_channel_cmd(int argc, char **argv)
             return -1;
         }
         uint32_t freq_in_hz = strtoull(argv[2], NULL, 10);
-        if ((ISM2400_LOWER_FREQUENCY + (getBW(params.bw) / 2) >= freq_in_hz)
+        if ((ISM2400_LOWER_FREQUENCY + (sx1280_getBW(params.bw) / 2) >= freq_in_hz)
             && (freq_in_hz
-                <= ISM2400_HIGHER_FREQUENCY - (getBW(params.bw) / 2))) {
+                <= ISM2400_HIGHER_FREQUENCY - (sx1280_getBW(params.bw) / 2))) {
             printf(
                 "[Error] setup: out-of-range frequency value given for bw=%ld\n",
-                getBW(params.bw));
+                sx1280_getBW(params.bw));
             return -1;
         }
         params.freq_in_hz = freq_in_hz;
@@ -380,7 +403,7 @@ int sx1280_crc_cmd(int argc, char **argv)
 int sx1280_setup_cmd(int argc, char **argv)
 {
     if (argc == 1) {
-        printf("Setup: sf=%d bw=%ldHz cr=%d/8\n", params.sf, getBW(params.bw),
+        printf("Setup: sf=%d bw=%ldHz cr=%d/8\n", params.sf, sx1280_getBW(params.bw),
                params.cr);
         return 0;
     }
@@ -516,19 +539,24 @@ int sx1280_send_cmd(int argc, char **argv)
         printf("sending \"%s\" payload (%u bytes)   (%d/%d)\n", to_send,
                (unsigned)strlen(to_send) + 1, i, count);
 
-        params.pld_len_in_bytes = (unsigned)strlen(to_send) + 1;
-        ral_status_t res = ral_sx1280_setup_tx_lora(&ral_default_cfg, &params);
-        if (res != RAL_STATUS_OK) {
-            printf("ral_sx1280_setup_tx_lora ERROR %d\n", res);
-        }
-        else {
-            ral_sx1280_set_pkt_payload(&ral_default_cfg, (uint8_t *)to_send,
-                                       (unsigned)strlen(to_send) + 1);
-            res = ral_sx1280_set_tx(&ral_default_cfg);
-            if (res != RAL_STATUS_OK) {
-                printf("ral_sx1280_set_tx ERROR %d\n", res);
-            }
-        }
+		mutex_lock(&sx1280_mutex);
+		{
+			params.pld_len_in_bytes = (unsigned)strlen(to_send) + 1;
+			ral_status_t res = ral_sx1280_setup_tx_lora(&ral_default_cfg, &params);
+			if (res != RAL_STATUS_OK) {
+				printf("ral_sx1280_setup_tx_lora ERROR %d\n", res);
+			}
+			else {
+				ral_sx1280_set_pkt_payload(&ral_default_cfg, (uint8_t *)to_send,
+										   (unsigned)strlen(to_send) + 1);
+				res = ral_sx1280_set_tx(&ral_default_cfg);
+				if (res != RAL_STATUS_OK) {
+					printf("ral_sx1280_set_tx ERROR %d\n", res);
+				}
+			}
+		}
+		mutex_unlock(&sx1280_mutex);
+
         if (i < count) {
             xtimer_usleep(DELAY_BETWEEN_TX);
         }
@@ -569,22 +597,28 @@ int sx1280_listen_cmd(int argc, char **argv)
     for (uint32_t c = 0; c < count; c++) {
         printf("c=%ld\n", c);
 
-        params.pld_len_in_bytes = 255;
-        ral_status_t res = ral_sx1280_setup_rx_lora(&ral_default_cfg, &params);
-        if (res != RAL_STATUS_OK) {
-            printf("ral_sx1280_setup_rx_lora ERROR %d\n", res);
-        }
-        else {
-            res = ral_sx1280_set_rx(&ral_default_cfg, timeout * 1000);
-            if (res != RAL_STATUS_OK) {
-                printf("ral_sx1280_set_rx ERROR %d\n", res);
-            }
-        }
+		mutex_lock(&sx1280_mutex);
+		{
+			params.pld_len_in_bytes = 255;
+			ral_status_t res = ral_sx1280_setup_rx_lora(&ral_default_cfg, &params);
+			if (res != RAL_STATUS_OK) {
+				printf("ral_sx1280_setup_rx_lora ERROR %d\n", res);
+			}
+			else {
+				res = ral_sx1280_set_rx(&ral_default_cfg, timeout * 1000);
+				if (res != RAL_STATUS_OK) {
+					printf("ral_sx1280_set_rx ERROR %d\n", res);
+				}
+			}
+		}
+		mutex_unlock(&sx1280_mutex);
     }
 
     return 0;
 }
 
+
+/* ******************************************** */
 
 /*
  * @brief handler when Tx is down
@@ -642,11 +676,45 @@ static void _SX1280_OnRxError(void)
     printf("SX1280 OnRxError\n");
 }
 
+/* ******************************************** */
+
 static void sx1280_handler_cb(void *arg)
 {
     (void)arg;  // unused param
-    ral_sx1280_proces_lora_irqs(&ral_default_cfg);
+	static msg_t irq_msg = {
+		.type = MSG_TYPE_IRQ,
+		.content = {
+			.value = 0,
+		}
+	};
+
+    msg_send_int(&irq_msg, _thread_pid);
 }
+
+static void * _sx1280_thread(void *arg) {
+    (void)arg;
+
+    static msg_t msg_queue[MSG_QUEUE_SIZE];
+    static msg_t msg;
+
+	msg_init_queue(msg_queue, MSG_QUEUE_SIZE);
+
+    printf("sx1280 Thread running\n");
+    while (1) {
+		msg_receive(&msg);
+
+		mutex_lock(&sx1280_mutex);
+		{
+			// only one message type for now
+			ral_sx1280_proces_lora_irqs(&ral_default_cfg);
+		}
+		mutex_unlock(&sx1280_mutex);
+
+	}
+	return NULL;
+}
+
+/* ******************************************** */
 
 /*
  * @brief Initialize the SX1280 driver
@@ -657,15 +725,31 @@ int sx1280_init(void)
                                                _SX1280_OnRxDone, .rxHeaderDone = NULL, .rxTimeout =
                                                _SX1280_OnRxTimeout, .rxError = _SX1280_OnRxError, };
 
-    sx1280_init_status = ral_sx1280_init_all(&ral_default_cfg,
+    _sx1280_init_status = ral_sx1280_init_all(&ral_default_cfg,
                                              sx1280_handler_cb, &rcb);
 
-    if (sx1280_init_status != RAL_STATUS_OK) {
-        printf("sx1280_init_status ERROR %d\n", sx1280_init_status);
+    if (_sx1280_init_status != RAL_STATUS_OK) {
+        printf("sx1280_init_status ERROR %d\n", _sx1280_init_status);
         return -1;
     }
+
+	/* init local thread */
+	_thread_pid = thread_create(_thread_stack,
+								sizeof(_thread_stack),
+                                THREAD_PRIORITY_MAIN - 1,
+                                THREAD_CREATE_STACKTEST,
+                                _sx1280_thread,
+								NULL,
+								"sx1280_thread");
+
+    if (_thread_pid <= KERNEL_PID_UNDEF) {
+        printf("sx1280 ERROR: impossible to create a thread\n");
+        return -1;
+    }
+
     return 0;
 }
+
 
 /*
  * @brief Initialize the SX1280 driver and reboot if the init failed
@@ -679,4 +763,14 @@ void sx1280_init_and_reboot_on_failure(void)
         xtimer_sleep(SECONDS_IF_INIT_FAILED);
         pm_reboot();
     }
+}
+
+
+void sx1280_lock(void) {
+	mutex_lock(&sx1280_mutex);
+}
+
+
+void sx1280_unlock(void) {
+	mutex_unlock(&sx1280_mutex);
 }
