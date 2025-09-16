@@ -20,8 +20,6 @@
 
 #include "ral_defs.h"
 
-#include "ism2400.h"
-
 #ifndef DELAY_BETWEEN_TX
 #define DELAY_BETWEEN_TX                    (2000000U)
 #endif
@@ -65,57 +63,9 @@ uint32_t sx1280_getBW(ral_lora_bw_t lora_bw);
 
 
 /*
- * @brief Get/Set the central frequencies of the LoRa channel
+ * The `sx1280` shell command
  */
-int sx1280_channel_cmd(int argc, char **argv);
-
-/*
- * @brief Get/Set the TX power of the next TX LoRa communications
- */
-int sx1280_txpower_cmd(int argc, char **argv);
-
-/*
- * @brief Get/Set the sync word of the next LoRa communications
- */
-int sx1280_syncword_cmd(int argc, char **argv);
-
-/*
- * @brief Get/Set the preamble length of the next LoRa communications
- */
-int sx1280_preamble_cmd(int argc, char **argv);
-
-/*
- * @brief Get/Set the payload size of the next LoRa communications
- */
-int sx1280_payload_cmd(int argc, char **argv);
-
-/*
- * @brief Get/Set the IQ of the next LoRa communications
- */
-int sx1280_invertiq_cmd(int argc, char **argv);
-
-/*
- * @brief Get/Set the CRC of the next LoRa communications
- */
-int sx1280_crc_cmd(int argc, char **argv);
-
-/*
- * @brief Setup the bandwidth, the spreading factor and the code rate of the next LoRa communications
- */
-int sx1280_setup_cmd(int argc, char **argv);
-
-/*
- * @brief Send packets to the SX1280 radio
- */
-int sx1280_send_cmd(int argc, char **argv);
-
-/*
- * @brief Listen the SX1280 radio for count packets during timeout_in_sec seconds for each packet
- *
- * @param timeout_in_sec
- * @param count
- */
-int sx1280_listen_cmd(int argc, char **argv);
+int sx1280_cmd(int argc, char **argv);
 
 
 #endif

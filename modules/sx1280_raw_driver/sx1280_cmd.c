@@ -22,11 +22,13 @@
 #include "xtimer.h"
 #include "random.h"
 #include "thread.h"
+#include "shell.h"
 
 #include "periph/pm.h"
 
 #include "ral_sx1280.h"
 #include "sx1280_cmd.h"
+#include "ism2400.h"
 
 
 /* ******************************************** */
@@ -80,55 +82,10 @@ static ral_params_lora_t params = {
 };
 
 
-
-ral_params_lora_t * sx1280_get_params(void) {
-	return &params;
-}
-
-/*
- * @brief Get the frequency in Hz from the driver lora definition
- */
-uint32_t sx1280_getBW(ral_lora_bw_t lora_bw)
-{
-    switch (lora_bw) {
-    case RAL_LORA_BW_007_KHZ:
-        return 7000;
-    case RAL_LORA_BW_010_KHZ:
-        return 10000;
-    case RAL_LORA_BW_015_KHZ:
-        return 15000;
-    case RAL_LORA_BW_020_KHZ:
-        return 20000;
-    case RAL_LORA_BW_031_KHZ:
-        return 31000;
-    case RAL_LORA_BW_041_KHZ:
-        return 41000;
-    case RAL_LORA_BW_062_KHZ:
-        return 62000;
-    case RAL_LORA_BW_125_KHZ:
-        return 125000;
-    case RAL_LORA_BW_200_KHZ:
-        return 200000;
-    case RAL_LORA_BW_250_KHZ:
-        return 250000;
-    case RAL_LORA_BW_400_KHZ:
-        return 400000;
-    case RAL_LORA_BW_500_KHZ:
-        return 500000;
-    case RAL_LORA_BW_800_KHZ:
-        return 800000;
-    case RAL_LORA_BW_1600_KHZ:
-        return 1600000;
-    default:
-        return 0;
-    }
-}
-
-
 /*
  * @brief Get/Set the central frequencies of the LoRa channel
  */
-int sx1280_channel_cmd(int argc, char **argv)
+static int sx1280_channel_cmd(int argc, char **argv)
 {
     if (argc < 2) {
         puts("usage: channel <get|set>");
@@ -168,7 +125,7 @@ int sx1280_channel_cmd(int argc, char **argv)
 /*
  * @brief Get/Set the TX power of the next TX LoRa communications
  */
-int sx1280_txpower_cmd(int argc, char **argv)
+static int sx1280_txpower_cmd(int argc, char **argv)
 {
 
     if (argc < 2) {
@@ -200,7 +157,7 @@ int sx1280_txpower_cmd(int argc, char **argv)
 /*
  * @brief Get/Set the sync word of the next LoRa communications
  */
-int sx1280_syncword_cmd(int argc, char **argv)
+static int sx1280_syncword_cmd(int argc, char **argv)
 {
 
     if (argc < 2) {
@@ -232,7 +189,7 @@ int sx1280_syncword_cmd(int argc, char **argv)
 /*
  * @brief Get/Set the preamble length of the next LoRa communications
  */
-int sx1280_preamble_cmd(int argc, char **argv)
+static int sx1280_preamble_cmd(int argc, char **argv)
 {
 
     if (argc < 2) {
@@ -269,7 +226,7 @@ int sx1280_preamble_cmd(int argc, char **argv)
 /*
  * @brief Get/Set the payload size of the next LoRa communications
  */
-int sx1280_payload_cmd(int argc, char **argv)
+static int sx1280_payload_cmd(int argc, char **argv)
 {
 
     if (argc < 2) {
@@ -311,7 +268,7 @@ int sx1280_payload_cmd(int argc, char **argv)
 /*
  * @brief Get/Set the IQ of the next LoRa communications
  */
-int sx1280_invertiq_cmd(int argc, char **argv)
+static int sx1280_invertiq_cmd(int argc, char **argv)
 {
 
     if (argc < 2) {
@@ -355,7 +312,7 @@ int sx1280_invertiq_cmd(int argc, char **argv)
 /*
  * @brief Get/Set the CRC of the next LoRa communications
  */
-int sx1280_crc_cmd(int argc, char **argv)
+static int sx1280_crc_cmd(int argc, char **argv)
 {
 
     (void)argc;
@@ -400,7 +357,7 @@ int sx1280_crc_cmd(int argc, char **argv)
 /*
  * @brief Setup the bandwidth, the spreading factor and the code rate of the next LoRa communications
  */
-int sx1280_setup_cmd(int argc, char **argv)
+static int sx1280_setup_cmd(int argc, char **argv)
 {
     if (argc == 1) {
         printf("Setup: sf=%d bw=%ldHz cr=%d/8\n", params.sf, sx1280_getBW(params.bw),
@@ -480,34 +437,10 @@ int sx1280_setup_cmd(int argc, char **argv)
     return 0;
 }
 
-//static int sx1280_tx_cmd(int argc, char **argv)
-//{
-//    if (argc != 2) {
-//        puts("usage: tx <msg>");
-//        return -1;
-//    }
-//
-//    char* msg = argv[1];
-//
-//    params.pld_len_in_bytes = strlen(msg)+1;
-//	ral_status_t res = ral_sx1280_setup_tx_lora(&ral_default_cfg, &params );
-//    if (res != RAL_STATUS_OK) {
-//        printf("ral_sx1280_setup_tx_lora ERROR %d\n", res);
-//    } else {
-//        ral_sx1280_set_pkt_payload(&ral_default_cfg, (uint8_t *)&msg, strlen(msg)+1 );
-//        res = ral_sx1280_set_tx(&ral_default_cfg);
-//        if (res != RAL_STATUS_OK) {
-//            printf("ral_sx1280_set_tx ERROR %d\n", res);
-//        }
-//    }
-//
-//    return 0;
-//}
-
 /*
  * @brief Send packets to the SX1280 radio
  */
-int sx1280_send_cmd(int argc, char **argv)
+static  int sx1280_send_cmd(int argc, char **argv)
 {
     if (argc < 2) {
         puts("usage: send <number of packet> <payload>");
@@ -574,7 +507,7 @@ int sx1280_send_cmd(int argc, char **argv)
  * @param timeout_in_sec
  * @param count
  */
-int sx1280_listen_cmd(int argc, char **argv)
+static int sx1280_listen_cmd(int argc, char **argv)
 {
     uint32_t timeout;
     uint32_t count = 1;
@@ -716,6 +649,50 @@ static void * _sx1280_thread(void *arg) {
 
 /* ******************************************** */
 
+ral_params_lora_t * sx1280_get_params(void) {
+	return &params;
+}
+
+/*
+ * @brief Get the frequency in Hz from the driver lora definition
+ */
+uint32_t sx1280_getBW(ral_lora_bw_t lora_bw)
+{
+    switch (lora_bw) {
+    case RAL_LORA_BW_007_KHZ:
+        return 7000;
+    case RAL_LORA_BW_010_KHZ:
+        return 10000;
+    case RAL_LORA_BW_015_KHZ:
+        return 15000;
+    case RAL_LORA_BW_020_KHZ:
+        return 20000;
+    case RAL_LORA_BW_031_KHZ:
+        return 31000;
+    case RAL_LORA_BW_041_KHZ:
+        return 41000;
+    case RAL_LORA_BW_062_KHZ:
+        return 62000;
+    case RAL_LORA_BW_125_KHZ:
+        return 125000;
+    case RAL_LORA_BW_200_KHZ:
+        return 200000;
+    case RAL_LORA_BW_250_KHZ:
+        return 250000;
+    case RAL_LORA_BW_400_KHZ:
+        return 400000;
+    case RAL_LORA_BW_500_KHZ:
+        return 500000;
+    case RAL_LORA_BW_800_KHZ:
+        return 800000;
+    case RAL_LORA_BW_1600_KHZ:
+        return 1600000;
+    default:
+        return 0;
+    }
+}
+
+
 /*
  * @brief Initialize the SX1280 driver
  */
@@ -773,4 +750,59 @@ void sx1280_lock(void) {
 
 void sx1280_unlock(void) {
 	mutex_unlock(&sx1280_mutex);
+}
+
+
+/* ******************************************** */
+
+static const shell_command_t internal_shell_commands[] = {
+    { "setup", "Setup the sx1280 parameters for rx/tx", sx1280_setup_cmd },
+    { "channel", "Get/Set channel frequency (in Hz)", sx1280_channel_cmd },
+    { "preamble", "Get/Set the preamble length", sx1280_preamble_cmd },
+    { "syncword", "Get/Set the sync word", sx1280_syncword_cmd },
+    { "invert_iq", "Get/Set IQ swapping", sx1280_invertiq_cmd },
+    { "crc", "Get/Set CRC on/off", sx1280_crc_cmd },
+    { "payload", "Get/Set Payload fix/var", sx1280_payload_cmd },
+    { "txpower", "Get/Set the TX power", sx1280_txpower_cmd },
+    { "invert_iq", "Get/Set IQ swapping", sx1280_invertiq_cmd },
+    { "send", "Sends a message with sx1280", sx1280_send_cmd },
+    { "listen", "Waits for a message with sx1280", sx1280_listen_cmd },
+    { NULL, NULL, NULL }
+};
+
+
+static void _cmd_usage(char **argv) {
+	int idx = 0;
+	while (internal_shell_commands[idx].name) {
+		printf("%s %-10s : %s\n", argv[0], internal_shell_commands[idx].name, internal_shell_commands[idx].desc);
+		idx++;
+	}
+}
+
+static shell_command_handler_t _find_handler(char * name) {
+	int idx = 0;
+	while (internal_shell_commands[idx].name) {
+		if (strcmp(name, internal_shell_commands[idx].name) == 0) {
+			return internal_shell_commands[idx].handler;
+		}
+		idx++;
+	}
+	return NULL;
+}
+
+int sx1280_cmd(int argc, char **argv) {
+	if (argc < 2) {
+		_cmd_usage(argv);
+		return EXIT_FAILURE;
+
+	} else {
+		const shell_command_handler_t handler = _find_handler(argv[1]);
+		if (handler) {
+			return handler(argc - 1, argv + 1);
+
+		} else {
+			_cmd_usage(argv);
+			return EXIT_FAILURE;
+		}
+	}
 }
