@@ -194,6 +194,7 @@ USEMODULE += printf_float
 
 USEMODULE += git
 USEMODULE += i2c_scan_utils
+USEMODULE += schedstatistics
 
 # -----------------------------
 # SX1302 Lib 
