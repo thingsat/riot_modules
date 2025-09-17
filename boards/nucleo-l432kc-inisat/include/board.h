@@ -53,6 +53,7 @@ extern "C" {
 #define SX1302_PARAM_SPI_CLK_SPEED	 			SPI_CLK_5MHZ
 
 #define SX1302_PARAM_RESET_PIN       			GPIO_PIN(PORT_B,0) // Nano D3
+#define SX1302_PARAM_POWER_EN_PIN               GPIO_UNDEF
 
 #define SX1302_GPIO6_PIN       		 			GPIO_PIN(PORT_A,4) // Nano A3
 
