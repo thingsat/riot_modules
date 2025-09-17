@@ -43,6 +43,10 @@
 
 #include "loragw_sx1302.h"
 
+
+#define FETCH_SLEEP_MS      10          /* nb of ms waited when a fetch return no packets */
+
+
 #ifdef ENDPOINT_DEVADDR
 
 static const lgw_sx130x_endpoint_t lgw_sx130x_default_endpoint = {
@@ -1310,6 +1314,7 @@ static int lgw_rx_cmd(int argc, char **argv) {
 			printf("Received %d packets (total:%lu)\n", nb_pkt, nb_pkt_crc_ok);
 		} else {
 			// printf("No packet");
+			xtimer_msleep(FETCH_SLEEP_MS);
 		}
 
 #if INVOKE_CALLBACKS == 1

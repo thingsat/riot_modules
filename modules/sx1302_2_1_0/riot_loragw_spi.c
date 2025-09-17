@@ -47,7 +47,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 #define WRITE_ACCESS 0x80
 
 #ifndef SPI_PAUSE_DELAY
-#define SPI_PAUSE_DELAY 1000
+#define SPI_PAUSE_DELAY 100
 #endif
 
 #if SPI_PAUSE_DELAY == 0
