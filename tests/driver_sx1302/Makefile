@@ -19,6 +19,14 @@ CFLAGS += -DMESHTASTIC=$(MESHTASTIC)
 USEMODULE += meshtastic_utils
 endif
 
+# SX1280
+SX1280 ?= 0
+ifeq ($(SX1280),1)
+CFLAGS += -DSX1280=$(SX1280)
+USEMODULE += sx1280_raw_driver
+USEMODULE += random
+endif
+
 # LoRa Chirpstack Messages
 USEMODULE += lora_mesh
 
