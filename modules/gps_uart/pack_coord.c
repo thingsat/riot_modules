@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2020-2025 Université Grenoble Alpes
+ */
+
+/*
+ * Nota Bene : the i24 quantization of the latitude and the longitude is used
+ * by the LoRaWAN specification for representing positions.
+ */
 
 #include <math.h>
 

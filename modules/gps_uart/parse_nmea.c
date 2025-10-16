@@ -723,7 +723,7 @@ void gps_print(void) {
 		printf("WARN: GNSS no speed and track available\n");
 	} else {
 		printf("INFO: GNSS speed=%.1f m/s (%.1f km/h), track=%.0f°\n",
-				speed_kph * 1.852 / 3.6, speed_kph * 1.852, true_track_degrees);
+			speed_kph / 3.6, speed_kph, true_track_degrees);
 	}
 
 	float pdop, hdop, vdop;
