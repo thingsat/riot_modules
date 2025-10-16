@@ -17,8 +17,12 @@
 #include "loragw_hal.h"
 #include "lgw_utils.h"
 #include "lorawan_printf.h"
+
+#ifdef MODULE_GPS_UART
 #include "parse_nmea.h"
 #include "pack_coord.h"
+#endif
+
 #include "common_payload.h"
 
 #include "ranging.h"

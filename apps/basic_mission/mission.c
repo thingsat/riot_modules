@@ -22,8 +22,11 @@
 #include "lorawan_printf.h"
 #include "loragw_hal.h"
 
+#ifdef MODULE_GPS_UART
 #include "pack_coord.h"
 #include "parse_nmea.h"
+#endif
+
 #include "rtc_utilities.h"
 
 #include "ztimer.h"
@@ -473,6 +476,8 @@ void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 
 }
 
+#if GPS_UART_ENABLE == 1
+
 static bool rtc_set_since_reboot = false;
 
 void mission_gnss_print_short(void) {
@@ -521,6 +526,17 @@ void mission_gnss_print(void) {
 
 	gps_print();
 }
+
+
+#else
+
+void mission_gnss_print_short(void) {
+}
+
+void mission_gnss_print(void) {
+}
+
+#endif
 
 void mission_inst_cnt_print(void) {
 

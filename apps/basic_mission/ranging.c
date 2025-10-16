@@ -21,8 +21,12 @@
 #include "lorawan_crypto.h"
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
+
+#ifdef MODULE_GPS_UART
 #include "parse_nmea.h"
 #include "pack_coord.h"
+#endif
+
 #include "common_payload.h"
 #include "ranging_payload.h"
 
@@ -35,11 +39,13 @@ static bool basic_mission_ranging_set_common_tx(common_tx_t *tx,
 
 	memset(tx, 0, sizeof(common_tx_t));
 
-	int fix_quality;
+#ifdef MODULE_GPS_UART
+	int fix_quality = 0;
 	int satellites_tracked;
 	if (!gps_get_quality(&fix_quality, &satellites_tracked)) {
 		fix_quality = 0;
 	}
+#endif
 	uint32_t inst_cnt_us;
 	lgw_get_instcnt(&inst_cnt_us);
 
@@ -100,6 +106,7 @@ const uint8_t txpower
 	basic_mission_ranging_set_common_tx(&ranging1_payload->tx, txpower, false);
 
 	common_set_common_packed_location(&ranging1_payload->location);
+
 #if 0
 	ranging_payload_range1_printf(ranging1_payload);
 #endif

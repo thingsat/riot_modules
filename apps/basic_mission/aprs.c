@@ -15,7 +15,10 @@
 #define ENABLE_DEBUG		ENABLE_DEBUG_APRS
 #include "debug.h"
 
+#ifdef MODULE_GPS_UART
 #include "parse_nmea.h"
+#endif
+
 #include "fmt_utils.h"
 #include "aprs.h"
 
@@ -111,23 +114,24 @@ bool aprs_get_fpayload(
 		uint8_t *fpayload_size
 
 ) {
-	float latitude, longitude, altitude;
+	float latitude = 0, longitude = 0, altitude = 0;
+	float speed_kph = 0;
+	float true_track_degrees = 0;
+
+#ifdef MODULE_GPS_UART
 	gps_get_position(&latitude, &longitude, &altitude);
-
-	float speed_kph;
-	float true_track_degrees;
-
 	gps_get_speed_direction(&speed_kph, &true_track_degrees);
+#endif
 
-	int fix_quality;
-	int satellites_tracked;
+
+#ifdef MODULE_GPS_UART
+	int fix_quality = 0;
+	int satellites_tracked = 0;
+
 	if(!gps_get_quality(&fix_quality, &satellites_tracked) || fix_quality == 0) {
-		latitude = 0.0;
-		longitude = 0.0;
-		altitude = 0.0;
-		speed_kph = 0.0;
-		true_track_degrees = 0.0;
+		// Nothing to do
 	}
+#endif
 
     buildAPRSFrame(MISSION_APRS_CALLSIGN,
     		latitude, longitude, floor(true_track_degrees), floor(speed_kph), floor(altitude), MISSION_APRS_COMMENT, fpayload);
@@ -259,31 +263,28 @@ bool aprs_get_ax25(
 		 */
 		uint8_t *fpayload_size
 ) {
+	float latitude = 0, longitude = 0, altitude = 0;
+	float speed_kph = 0;
+	float true_track_degrees = 0;
+
+#ifdef MODULE_GPS_UART
+	gps_get_position(&latitude, &longitude, &altitude);
+	gps_get_speed_direction(&speed_kph, &true_track_degrees);
+#endif
+
+
+#ifdef MODULE_GPS_UART
+	int fix_quality = 0;
+	int satellites_tracked = 0;
+	if(!gps_get_quality(&fix_quality, &satellites_tracked) || fix_quality == 0) {
+		// Nothing to do
+	}
+#endif
+
     const char *srcCall = MISSION_APRS_CALLSIGN;
     const char *dstCall = "APRS";
-    uint8_t srcSSID = 11;   // -11 pour ballon
-    uint8_t dstSSID = 0;    // standard
-
-	float latitude, longitude, altitude;
-	gps_get_position(&latitude, &longitude, &altitude);
-
-	float speed_kph;
-	float true_track_degrees;
-
-	gps_get_speed_direction(&speed_kph, &true_track_degrees);
-
-	int fix_quality;
-	int satellites_tracked;
-	if(!gps_get_quality(&fix_quality, &satellites_tracked) || fix_quality == 0) {
-		latitude = 0.0;
-		longitude = 0.0;
-		altitude = 0.0;
-		speed_kph = 0.0;
-		true_track_degrees = 0.0;
-	}
-
-
-
+    const uint8_t srcSSID = 11;   // -11 pour ballon
+    const uint8_t dstSSID = 0;    // standard
 
     size_t len = build_ax25_frame(srcCall, srcSSID, dstCall, dstSSID,
     		latitude, longitude, floor(true_track_degrees), floor(speed_kph),

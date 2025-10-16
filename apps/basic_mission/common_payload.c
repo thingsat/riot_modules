@@ -25,8 +25,11 @@
 #include "lgw_utils.h"
 #include "loragw_hal.h"
 
+#ifdef MODULE_GPS_UART
 #include "pack_coord.h"
 #include "parse_nmea.h"
+#endif
+
 #include "rtc_utilities.h"
 
 void common_set_common_tx(common_tx_t *tx, uint8_t txpower) {
@@ -60,6 +63,11 @@ void common_set_common_location(common_location_t *location) {
 
 	memset(location,0,sizeof(common_location_t));
 
+	location->latitude = 0;
+	location->longitude = 0;
+	location->altitude = 0;
+
+#ifdef MODULE_GPS_UART
 	if(gps_get_fix()) {
 		float latitude, longitude, altitude;
 		gps_get_position(&latitude, &longitude, &altitude);
@@ -67,11 +75,8 @@ void common_set_common_location(common_location_t *location) {
 		location->latitude = latitude;
 		location->longitude = longitude;
 		location->altitude = floor(altitude);
-	} else {
-		location->latitude = 0;
-		location->longitude = 0;
-		location->altitude = 0;
 	}
+#endif
 
 }
 
@@ -79,9 +84,20 @@ void common_set_common_location_extra(common_location_extra_t *location_extra) {
 
 	memset(location_extra,0,sizeof(common_location_extra_t));
 
+#ifdef MODULE_GPS_UART
 	// Il faut changer le decoder.js
 	location_extra->seconds_since_last_fix = gps_get_seconds_since_last_fix();
+#else
+	// TODO : REPLACE by a #define
+	location_extra->seconds_since_last_fix = 0xFFFF;
+#endif
 
+	location_extra->speed_kph = 0;
+	location_extra->true_track_degrees = 0;
+	location_extra->fix_quality = 0;
+	location_extra->satellites_tracked = 0;
+
+#ifdef MODULE_GPS_UART
 	int fix_quality;
 	int satellites_tracked;
 
@@ -97,18 +113,20 @@ void common_set_common_location_extra(common_location_extra_t *location_extra) {
 			location_extra->true_track_degrees =  floor(true_track_degrees);
 		}
 
-	} else {
-		location_extra->speed_kph = 0;
-		location_extra->true_track_degrees = 0;
-		location_extra->fix_quality = 0;
-		location_extra->satellites_tracked = 0;
 	}
+#endif
+
 }
 
 void common_set_common_packed_location(common_packed_location_t *location) {
 
 	memset(location,0,sizeof(common_packed_location_t));
 
+	location->latitude = 0;
+	location->longitude = 0;
+	location->altitude = 0;
+
+#ifdef MODULE_GPS_UART
 	if(gps_get_fix()) {
 
 		float latitude, longitude, altitude;
@@ -117,11 +135,8 @@ void common_set_common_packed_location(common_packed_location_t *location) {
 		location->latitude = gps_pack_latitude_f_to_i24(latitude);
 		location->longitude = gps_pack_longitude_f_to_i24(longitude);
 		location->altitude = floor(altitude);
-	} else {
-		location->latitude = 0;
-		location->longitude = 0;
-		location->altitude = 0;
 	}
+#endif
 }
 
 void common_set_common_sensors(common_sensors_t *sensors) {
@@ -145,7 +160,11 @@ void common_payload_tx_printf(const common_tx_t *tx){
 }
 
 void common_payload_packed_location_printf(const common_packed_location_t *l){
+#ifdef MODULE_GPS_UART
 	printf("  latitude       : %0.5f\n", gps_unpack_latitude_i24_to_f(l->latitude));
 	printf("  longitude      : %0.5f\n", gps_unpack_longitude_i24_to_f(l->longitude));
 	printf("  altitude       : %d\n", l->altitude);
+#else
+	(void)l;
+#endif
 }
