@@ -42,7 +42,7 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 
 
 #ifdef RIOT_APPLICATION
-#define SPI_PAUSE_DELAY  1000
+#define SPI_PAUSE_DELAY  100
 
 #if SPI_PAUSE_DELAY == 0
 #define SPI_PAUSE

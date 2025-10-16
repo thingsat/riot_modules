@@ -62,7 +62,7 @@ int mission_i2c_scan(const int idx) {
 
 	for (char i = 0; i < 8; i++) {
 		char row[] = { '0', 'x', '0' + i, '0', '\0' };
-		fputs(row, stdout);
+		printf("%s",row);
 		uint16_t addr = i;
 		addr <<= 4;
 		for (unsigned j = 0; j < 16; j++) {
@@ -91,7 +91,7 @@ int mission_i2c_scan(const int idx) {
 				}
 			}
 
-			fputs(str, stdout);
+			printf("%s",str);
 			addr++;
 		}
 		puts("");
