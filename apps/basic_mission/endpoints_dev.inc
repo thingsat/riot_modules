@@ -21,41 +21,66 @@
  */
 static lorawan_endpoint_t lorawan_endpoints[] = {
 		{
-				.label = "BALLOON 1",
+				.label = "BALLOON 1 (INISAT F136EAC8)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00ac92,
-				.deveui = 0x0016C001F136EAC8,
+				.deveui = 0x0016C001F136EAC8U,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 100,
+				.fcntup = 0,
 		},
 		{
-				.label = "BALLOON 2",
+				.label = "BALLOON 2 (INISAT F136E359)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00af5e,
 				.deveui = 0x0016c001f136e359U,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 100,
+				.fcntup = 0,
 		},
 		{
-				.label = "BALLOON 3",
+				.label = "BALLOON 3 (INISAT FF19582C)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00aecf,
-				.deveui = 0x0016C001FF19582C,
+				.deveui = 0x0016C001FF19582CU,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 100,
+				.fcntup = 0,
 		},
 		{
-				.label = "OTHER",
+				.label = "GROUND 1 (INISAT F136EFFD)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00af2b,
-				.deveui = 0x0016c001f136effd,
+				.deveui = 0x0016c001f136effdU,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 100,
+				.fcntup = 0,
 		},
+		{
+				// Flight model
+				.label = "THINGSAT @ STORK1 FM 1",
+				.module = THINGSAT_SX1302_BOARD,
+				.devaddr = 0xfc00ae69,
+				.deveui = 0x0016C001FF1848AEU,
+				.nwkskey = DEFAULT_NWKSKEY,
+				.appskey = DEFAULT_APPSKEY,
+				.fcntup = 0,
+		},
+		{
+				// Engineering model
+				.label = "THINGSAT @ STORK1 EM 1",
+				.module = THINGSAT_SX1302_BOARD,
+				.devaddr = 0xfc00ac2c,
+				.deveui = 0x0016c001ff1858ccU,
+				.nwkskey = DEFAULT_NWKSKEY,
+				.appskey = DEFAULT_APPSKEY,
+				.fcntup = 0,
+		},
+
+		// TODO add 00016c001ff18596 (Thingsat FM aboard Stork - Burn after returning to Earth)
+
+		// TODO add Thingsat EM and FM @ SatRev SOWA
+		// TODO add Thingsat EM and FM @ CSUT Nimph
 
 
 		// Entries of gateways sending ranging1 messages

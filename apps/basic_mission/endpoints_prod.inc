@@ -19,12 +19,12 @@
 
 
 /*
- * Me and list of my friends
+ * Me and list of my friends (for strastopheric balloon flights https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/public/-/tree/master/balloons/2025-05)
  */
 static lorawan_endpoint_t lorawan_endpoints[] = {
 		{
 				// ORANGE
-				.label = "BALLOON 1",
+				.label = "BALLOON 1 (INISAT F136EAC8)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0x1f22a9a9,
 				.deveui = 0x0016C001F136EAC8,
@@ -43,7 +43,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 		},
 		{
 				// NETMORE
-				.label = "BALLOON 2",
+				.label = "BALLOON 2 (INISAT F136E359)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0x1241155c,
 				.deveui = 0x0016c001f136e359U,
@@ -59,7 +59,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 		},
 		{
 				// TTN ABP
-				.label = "BALLOON 3",
+				.label = "BALLOON 3 (INISAT FF19582C)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0x260B89AD,
 				.deveui = 0x0016C001FF19582C,
@@ -70,7 +70,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.fcntup = 100,
 		},
 		{
-				.label = "OTHER",
+				.label = "GROUND 1 (INISAT F136EFFD)",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00af2b,
 				.deveui = 0x0016c001f136effd,
