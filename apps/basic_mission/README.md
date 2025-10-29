@@ -4,10 +4,12 @@ This application illustrates a simple mission for the [Thingsat in-orbit gateway
 
 * [x] GNSS on UART parsing when a GNSS module is present on Mikrobus or on MiniPCIe module (as into the RAK5146 module).
 * [x] LoRaWAN repeater (with devaddr filtering)
-* [ ] App Clock Sync
+* [ ] add App Clock Sync
+* [ ] add 5.9 DeviceTime commands (DeviceTimeReq, DeviceTimeAns) introduced in lorawan specification v1.0.3
 * [x] Chirpstack Mesk Relay (SHOULD BE TESTED)
+* [x] Meshtastic Router (Very simple implementation)
 * [ ] Periodic telemetry (with GNSS position and temperature) using LoRaWAN with Cayenne LPP (and XOR redundancy)
-* [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry
+* [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry and position (protobuf)
 * [ ] Periodic telemetry (with GNSS position and temperature) using APRS format (not fake)
 * [ ] Periodic two-way ranging with other Thingsat boards
 * [ ] LoRa 2G4 backhaul when the SX1280 module is present
@@ -23,6 +25,11 @@ cd tests/driver_sx1302
 For Thingsat UP4 (default board)
 ```bash
 export BOARD=thingsat-up4
+```
+
+For Thingsat UP1 F4 (SatRev Stork-1)
+```bash
+export BOARD=thingsat-up1-f4
 ```
 
 For Nucleo F446RE with Corecell
