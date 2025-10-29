@@ -63,8 +63,9 @@ gmake BOARD=$BOARD -j 8 flash term
 Nucleo L432KC With RAK5146 on INISAT board with [OpenLog](https://github.com/CampusIoT/tutorial/tree/master/openlogger)
 
 ```bash
+export PROD=1
 export BOARD=nucleo-l432kc-inisat
-gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 NO_SHELL=1 -j 8 flash term
+gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 PROD=$PROD GPS_UART_ENABLE=0 GPS_UART_ENABLE_TRACE=0 NO_SHELL=1 -j 8 flash term
 ```
 
 > Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
