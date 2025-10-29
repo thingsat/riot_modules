@@ -26,7 +26,8 @@ FEATURES_OPTIONAL += periph_uart_rxstart_irq
 ifeq ($(BOARD),thingsat-up4)
 # Set UART board for GNSS
 GPS_UART_DEV = 1
-GPS_UART_BAUDRATE ?= 9600
+#GPS_UART_BAUDRATE ?= 9600
+GPS_BAUDRATE ?= 9600
 # Disable GPS in SX1302 driver
 ENABLE_GPS = 0
 endif
@@ -34,7 +35,8 @@ endif
 ifeq ($(BOARD),thingsat-up1-f4)
 # Set UART board for GNSS
 GPS_UART_DEV = 1
-GPS_UART_BAUDRATE ?= 9600
+#GPS_UART_BAUDRATE ?= 9600
+GPS_BAUDRATE ?= 9600
 # Disable GPS in SX1302 driver
 ENABLE_GPS = 0
 endif
