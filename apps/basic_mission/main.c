@@ -208,6 +208,10 @@ int main(void) {
 	lgw_cmd(2, (char*[] ) { "lgw", "eui" });
 	lgw_cmd(2, (char*[] ) { "lgw", "freq_plan" });
 
+
+	mission_info_print();
+
+
 #ifndef ENDPOINT_DEVADDR
 	puts("INFO: Set endpoint");
 	set_endpoint();

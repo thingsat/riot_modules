@@ -75,3 +75,19 @@ const lorawan_endpoint_t* endpoint_get_endpoint(const uint32_t devaddr) {
 	return NULL;
 }
 
+
+void endpoint_print_all(void) {
+	for (unsigned int i = 0; i < ARRAY_SIZE(lorawan_endpoints); i++) {
+		const lorawan_endpoint_t* e = lorawan_endpoints + i;
+		printf("INFO: friend endpoint with devaddr=%08lx \"%s\" defined for SX130x EUI (%08lX%08lX)",
+				e->devaddr, e->label,
+				(uint32_t)(e->deveui>>32),
+				(uint32_t)(e->deveui&0xFFFFFFFF)
+				);
+		printf(" - initial fcntup=%ld\n",
+				e->fcntup);
+
+	}
+}
+
+

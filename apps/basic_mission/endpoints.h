@@ -23,6 +23,7 @@ bool set_endpoint(void);
 
 const lorawan_endpoint_t* endpoint_get_endpoint(const uint32_t devaddr);
 
+void endpoint_print_all(void);
 
 
 #endif /* TESTS_DRIVER_SX1302_ENDPOINTS_H_ */

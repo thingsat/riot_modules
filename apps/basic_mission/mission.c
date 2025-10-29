@@ -331,7 +331,6 @@ void mission_period_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s) {
 			lgw_pkt_tx_s->freq_hz = 868300000;
 			lgw_pkt_tx_s->bandwidth = BW_250KHZ;
 			lgw_pkt_tx_s->rf_power = 14;
-			GNSS Stats
 			// Max power at RX1
 			// public syncword for test
 #endif
@@ -474,6 +473,11 @@ void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		 */return;
 	}
 
+}
+
+void mission_info_print(void) {
+	endpoint_print_all();
+	// TODO add other mission information
 }
 
 #if GPS_UART_ENABLE == 1

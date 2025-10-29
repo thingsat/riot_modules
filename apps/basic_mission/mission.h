@@ -22,17 +22,40 @@
 
 #include "loragw_hal.h"
 
+/**
+ * print information about the mission
+ */
+void mission_info_print(void);
+
+/**
+ * callback function for the periodic calls (called by listen thread)
+ */
 void mission_period_cb(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
 
+/**
+ * callback function for the message receiving (called by listen thread)
+ */
 void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		struct lgw_pkt_tx_s *pkt_tx);
 
+/**
+ * Set default parameters for LoRa message transmit
+ */
 void mission_set_default_lgw_pkt_tx(struct lgw_pkt_tx_s *lgw_pkt_tx_s);
 
+/**
+ * print GNSS data in compact format
+ */
 void mission_gnss_print_short(void);
 
+/**
+ * print GNSS data in compact format
+ */
 void mission_gnss_print(void);
 
+/**
+ * print SX130x internal counter (in microseconds)
+ */
 void mission_inst_cnt_print(void);
 
 
