@@ -1,0 +1,32 @@
+00000;IC-A-01;[trống]
+00001;IC-A-02;Bạn đang ở khu vực nguy hiểm, rời khỏi khu vực ngay lập tức. Nghe radio hoặc phương tiện truyền thông để biết hướng dẫn và thông tin.
+00010;IC-A-03;Bạn đang ở khu vực nguy hiểm, rời khỏi khu vực ngay lập tức và đến điểm sơ tán được chỉ định bởi khu vực đánh dấu màu vàng. Nghe radio hoặc phương tiện truyền thông để biết hướng dẫn và thông tin.
+00011;IC-A-04;Tìm nơi trú ẩn trong tòa nhà ngay lập tức. Ở dưới nơi che chắn và luôn cập nhật thông tin.
+00100;IC-A-05;Tìm hầm hoặc các phòng bên trong ở tầng thấp.
+00101;IC-A-06;Nếu bạn ở vùng núi, hãy bắt đầu xuống núi ngay lập tức và tìm nơi trú ẩn.
+00110;IC-A-07;Nhanh chóng vào các phòng bên trong. Nếu bạn đang ở trong xe: Dừng lái ngay lập tức ở lề đường. Nếu có tòa nhà gần đó, tìm nơi trú ẩn trong tòa nhà đó.
+00111;IC-A-08;Nếu bạn ở vùng đất trống và không tìm được nơi trú ẩn, nằm úp mặt xuống đất và bảo vệ đầu, cổ bằng tay, ở chỗ lõm nếu có thể.
+01000;IC-A-09;Chuẩn bị sơ tán. Chỉ mang theo những vật dụng cần thiết, đặc biệt là thẻ căn cước, hộ chiếu, thẻ tín dụng và tiền mặt. Chỉ sơ tán khi có chỉ dẫn từ cơ quan khẩn cấp.
+01001;IC-A-10;Chuẩn bị thực phẩm và vật dụng cứu trợ khẩn cấp: Kiểm tra và bổ sung thiết bị và nguồn dự trữ nước, thực phẩm, thuốc, tiền mặt và pin.
+01010;IC-A-11;Tránh xa các bề mặt kính như cửa sổ và cửa kính. Có nguy cơ bị thương do mảnh kính vỡ.
+01011;IC-A-12;Giảm mức tiêu thụ điện năng xuống mức tối thiểu.
+01100;IC-A-13;Giảm mức tiêu thụ nước xuống mức tối thiểu.
+01101;IC-A-14;Đun sôi nước trước khi uống hoặc sử dụng trong nhà bếp.
+01110;IC-A-15;Giữ khoảng cách ít nhất một mét với bất kỳ người đối thoại nào. Tránh tiếp xúc vật lý với người khác như hôn và bắt tay. Rửa tay thường xuyên và kỹ lưỡng.
+01111;IC-A-16;Không uống nước máy. Tránh tiếp xúc da với nước máy. Chỉ uống nước khoáng đóng chai. Tắt nguồn cấp nước cho ngôi nhà của bạn.
+10000;IC-A-17;Cẩn thận với khí rò rỉ. Điều này có thể được nhận biết bằng tiếng xì xì hoặc mùi khí đặc trưng. Không sử dụng diêm, bật lửa hoặc ngọn lửa trần: ngọn lửa trần kết hợp với khí rò rỉ có thể dẫn đến nổ và cháy.
+10001;IC-A-18;Không ra ngoài và không sử dụng xe của bạn.
+10010;IC-A-19;Không chạm vào bất kỳ vật thể nào có vẻ đáng ngờ. Mảnh vỡ có thể gây ra nguy hiểm bổ sung như cháy nổ. Thông báo cho dịch vụ khẩn cấp về thiệt hại và mảnh vỡ.
+10011;IC-A-20;Không vào các phòng đầy khói. Có thể hình thành khí độc chết người.
+10100;IC-A-21;Không vào hầm hoặc bãi đậu xe dưới lòng đất.
+10101;IC-A-22;Không để thú cưng hoặc gia súc bên ngoài.
+10110;IC-A-23;Không chạm vào xác động vật. Báo cáo bất kỳ phát hiện nào về động vật hoang chết cho cơ quan chức năng.
+10111;IC-A-24;Tránh lái xe.
+11000;IC-A-25;Tránh tất cả các vật có bộ phận kim loại như ô và xe đạp. Không tắm hoặc đi vòi hoa sen trong khi có giông. Việc tắm hoặc đi vòi hoa sen có thể nguy hiểm đến tính mạng.
+11001;IC-A-26;Tránh các phòng ngay dưới khung mái. Tránh các phòng rất lớn, như hội trường, nơi trần nhà không được chống đỡ bằng cột.
+11010;IC-A-27;Tránh ra ngoài. Giữ khoảng cách với cây, tháp và cột. Giữ ít nhất 20 m cách đường điện. Cẩn thận với vật bay và vật rơi.
+11011;IC-A-28;Tránh khu vực nguy hiểm.
+11100;IC-A-29;Tránh ra ngoài khi không cần thiết.
+11101;IC-A-30;Đây chỉ là bài kiểm tra. Bạn không cần thực hiện bất kỳ hành động nào hoặc áp dụng biện pháp trú ẩn đặc biệt nào.
+11110;IC-A-31;Điều này thay thế cảnh báo trước đây có hiệu lực cho khu vực này.
+11111;IC-A-32;Điều kiện đã được cải thiện và không còn dự kiến đáp ứng tiêu chí cảnh báo.

@@ -1,0 +1,4 @@
+00;Không xác định
+01;Thời gian < 6
+10;6 <= Thời gian < 12
+11;12 <= Thời gian < 24

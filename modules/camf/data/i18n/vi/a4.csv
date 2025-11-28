@@ -1,0 +1,105 @@
+0000001;CBRNE;Đòn không kích;Cuộc tấn công thực hiện bởi máy bay, thường là loại quân sự, bằng cách ném bom (hoặc tương tự), bắn súng hoặc tên lửa.
+0000010;CBRNE;Tấn công hệ thống CNTT;Cố gắng có chủ ý để lộ, thay đổi, vô hiệu hóa, phá hủy, đánh cắp hoặc truy cập trái phép vào thiết bị CNTT hoặc sử dụng trái phép.
+0000011;CBRNE;Tấn công bằng vũ khí hạt nhân;Theo www.dhs.gov 'Tấn công thực hiện bằng thiết bị tạo ra vụ nổ hạt nhân.
+0000100;CBRNE;Nguy cơ sinh học;Sự hiện diện của các vật liệu sinh học nguy hiểm có nguy cơ hoặc tiềm ẩn nguy cơ đối với sức khỏe con người, động vật, thực vật hoặc môi trường.
+0000101;CBRNE;Nguy cơ hóa học;Sự hiện diện của các vật liệu hóa học nguy hiểm có nguy cơ hoặc tiềm ẩn nguy cơ đối với sức khỏe con người, động vật, thực vật hoặc môi trường.
+0000110;CBRNE;Nguy cơ nổ;Sự hiện diện của các vật liệu nổ nguy hiểm có nguy cơ hoặc tiềm ẩn nguy cơ đối với sức khỏe con người, động vật, thực vật hoặc môi trường.
+0000111;CBRNE;Tác động thiên thạch;Thiên thạch từ không gian đi vào khí quyển Trái đất.
+0001000;CBRNE;Tấn công tên lửa;Phóng tên lửa.
+0001001;CBRNE;Nguy cơ hạt nhân;Sự hiện diện của các vật liệu hạt nhân nguy hiểm có nguy cơ hoặc tiềm ẩn nguy cơ đối với sức khỏe con người, động vật, thực vật hoặc môi trường.
+0001010;CBRNE;Tai nạn nhà máy điện hạt nhân;Tai nạn xảy ra tại cơ sở sản xuất điện bằng lò phản ứng hạt nhân.
+0001011;CBRNE;Nguy cơ phóng xạ;Sự hiện diện của các vật liệu phóng xạ nguy hiểm có nguy cơ hoặc tiềm ẩn nguy cơ đối với sức khỏe con người, động vật, thực vật hoặc môi trường.
+0001100;CBRNE;Mảnh vỡ vệ tinh/tái nhập không gian;Vệ tinh hoặc bộ phận của vệ tinh, tên lửa hoặc phương tiện không gian đi vào hoặc tái nhập từ không gian vào khí quyển Trái đất.
+0001101;CBRNE;Kiểm tra còi báo;Kiểm tra thiết bị cảnh báo phát ra âm thanh lớn.
+0001110;ENVIRONMENT;Mưa axit;Mưa chứa các hợp chất axit hòa tan, do ô nhiễm hóa học không khí bởi hợp chất lưu huỳnh và nitơ. Khi lắng đọng, làm tăng độ axit của đất và nước gây hại nông nghiệp và sinh thái.
+0001111;ENVIRONMENT;Ô nhiễm không khí;Ngưỡng cụ thể theo tiêu chuẩn địa phương.
+0010000;ENVIRONMENT;Nước uống bị ô nhiễm;Nước uống chứa chất gây ô nhiễm (vi khuẩn và/hoặc hóa chất) vượt tiêu chuẩn chất lượng. Ngưỡng cụ thể theo tiêu chuẩn địa phương.
+0010001;ENVIRONMENT;Rò rỉ khí;Giải phóng không kiểm soát khí tự nhiên hoặc sản phẩm khí ra môi trường.
+0010010;ENVIRONMENT;Ô nhiễm biển;Ô nhiễm biển xảy ra khi các chất do con người sử dụng hoặc phát tán, như chất thải công nghiệp, nông nghiệp, sinh hoạt, hạt, tiếng ồn, CO2 dư thừa hoặc sinh vật xâm lấn, đi vào đại dương và gây hại. Ngưỡng cụ thể theo tiêu chuẩn địa phương.
+0010011;ENVIRONMENT;Ô nhiễm tiếng ồn;Tiếng ồn gây phiền toái hoặc không mong muốn có thể gây nguy cơ tiềm ẩn cho sức khỏe con người, động vật và động vật hoang dã.
+0010100;ENVIRONMENT;Dịch côn trùng;Sự xâm nhập của côn trùng hoặc sự gia tăng lan rộng và phát triển của côn trùng hoặc ký sinh trùng ảnh hưởng đến con người, động vật, cây trồng và vật liệu.
+0010101;ENVIRONMENT;Ô nhiễm sông;Nước sông bị ô nhiễm, thường do hoạt động của con người, gây ảnh hưởng tiêu cực đến các mục đích sử dụng hợp pháp.
+0010110;ENVIRONMENT;Bụi lơ lửng;Các hạt rắn vi mô lơ lửng trong không khí. Nguồn gốc tự nhiên hoặc nhân tạo gây ảnh hưởng xấu đến sức khỏe. IARC và WHO xếp hạt lơ lửng là tác nhân gây ung thư nhóm 1. Đây là dạng ô nhiễm không khí nguy hiểm nhất vì có thể xâm nhập sâu vào phổi, máu và não, gây các vấn đề sức khỏe.
+0010111;ENVIRONMENT;Tia UV;Ngưỡng cụ thể theo tiêu chuẩn địa phương.
+0011000;FIRE;Hỏa hoạn lớn;Ngọn lửa lớn và phá hủy đe dọa tính mạng, sức khỏe và tài sản.
+0011001;FIRE;Triển khai lực lượng cứu hỏa;Hoạt động của lính cứu hỏa để ứng phó với báo cháy hoặc tình huống khẩn cấp. Lưu ý: định nghĩa có thể khác nhau tùy trách nhiệm lực lượng cứu hỏa ở từng quốc gia.
+0011010;FIRE;Khí từ đám cháy;Khí nguy hiểm tiềm ẩn phát ra từ đám cháy.
+0011011;FIRE;Cháy rừng;Một loại cháy rừng trong khu vực có cây cối.
+0011100;FIRE;Khói;Hỗn hợp các hạt trong không khí, thường độc hại.
+0011101;FIRE;Mùi khó chịu;Mùi kéo dài, khó chịu ảnh hưởng đến sức khỏe con người theo thời gian.
+0011110;FIRE;Nguy cơ cháy;Khả năng xảy ra cháy ngoài ý muốn tăng lên.
+0011111;FIRE;Cháy công trình/Cháy công nghiệp;Cháy ảnh hưởng đến cấu trúc tòa nhà hoặc khu công nghiệp.
+0100000;GEO;Tro núi lửa rơi;Mảnh vụn núi lửa mịn (<4mm) bị thổi vào khí quyển trong vụ phun trào; có thể tồn tại lâu và lan xa.
+0100001;GEO;Nguy cơ tuyết lở;Khối lớn đất, tuyết hoặc băng trượt nhanh xuống sườn núi dưới lực hấp dẫn. Tuyết lở: di chuyển nhanh hỗn hợp tuyết và băng. Vật liệu lở: di chuyển nhanh khối đá và đất không phân loại. Có hai loại chính: lở lạnh do sườn không ổn định sụp đổ đột ngột, lở nóng do núi lửa gây sụp đổ.
+0100010;GEO;Nứt đất/ổ trũng;Sụp đổ bề mặt đất do hòa tan đá nền như đá vôi hoặc carbonate bởi nước.
+0100011;GEO;Dòng chảy mảnh vụn;Các loại sạt lở xảy ra khi mưa nặng hoặc tan băng/tuyết nhanh làm trôi cây, bùn, đá xuống sườn núi.
+0100100;GEO;Động đất;Chuyển động đột ngột khối vỏ Trái đất dọc theo đứt gãy địa chất kèm rung lắc mặt đất.
+0100101;GEO;Bão từ hoặc bão mặt trời;Nguy cơ ngoài Trái đất do sóng xung gió Mặt trời làm rối tạm thời từ trường Trái đất. Gây gián đoạn lưới điện, hoạt động tàu vũ trụ và liên lạc vệ tinh.
+0100110;GEO;Tuyết lở băng;Sự rơi băng tại đầu sông băng.
+0100111;GEO;Lở đất;Không phụ thuộc nước, có thể do động đất kích hoạt.
+0101000;GEO;Dòng chảy dung nham;Dung nham phun ra di chuyển như khối lỏng xuống núi lửa trong phun trào.
+0101001;GEO;Dòng pyroclastic;Khí nóng, tro và vật liệu >1000°C chảy nhanh xuống sườn núi lửa (>700 km/h) khi phun trào.
+0101010;GEO;Đống tuyết;Tuyết chất đống do gió, tích tụ dọc chướng ngại vật hoặc địa hình không đều.
+0101011;GEO;Sóng thần;Sóng nông do tương tác hấp dẫn Mặt Trời, Mặt Trăng, Trái đất.
+0101100;GEO;Sóng thần;Chuỗi sóng (dài) gây ra bởi dịch chuyển khối nước lớn do động đất dưới nước, núi lửa hoặc lở đất. Sóng thần đi nhanh trên đại dương, nhưng chậm lại khi tới nước nông.
+0101101;GEO;Dòng bùn núi lửa;Dòng bùn do núi lửa, nóng hoặc lạnh, tràn sườn núi.
+0101110;GEO;Phun trào núi lửa;Hiện tượng núi lửa gần miệng/hố đất, bao gồm dung nham, tro, hơi nóng, khí và vật liệu pyroclastic.
+0101111;GEO;Sóng gió/bão/thủy triều;Mực nước biển tăng bất thường do bão nhiệt đới hoặc bão mạnh khác.
+0110000;HEALTH;Dịch bệnh động vật;Bùng phát dịch trong quần thể động vật, có thể lan sang con người.
+0110001;HEALTH;Cảnh báo an toàn thực phẩm;Thực phẩm không an toàn chứa vi khuẩn, virus, ký sinh hoặc hóa chất nguy hại sức khỏe con người, động vật, thực vật hoặc môi trường.
+0110010;HEALTH;Nguy cơ sức khỏe;Nguồn nguy hiểm tiềm ẩn đối với sức khỏe cá nhân.
+0110011;HEALTH;Đại dịch;Dịch bệnh lan rộng khắp khu vực lớn, nhiều châu lục hoặc toàn cầu, ảnh hưởng số lượng lớn người. Các dịch bệnh cố định với số người nhiễm ổn định không tính là đại dịch.
+0110100;HEALTH;Dịch hại;Sự xuất hiện của loài gây hại ở mức độ không chấp nhận được.
+0110101;HEALTH;Nguy cơ lây nhiễm;Sự hiện diện tác nhân gây nhiễm tiềm ẩn nguy cơ cho sức khỏe con người, động vật, thực vật hoặc môi trường.
+0110110;INFRASTRUCTURE;Sập công trình;Sự cố đột ngột phá hủy một phần hoặc toàn bộ cấu trúc tòa nhà.
+0110111;INFRASTRUCTURE;Mất số khẩn cấp;Ngắt hoặc sự cố dịch vụ số khẩn cấp.
+0111000;INFRASTRUCTURE;Mất cung cấp khí;Ngắt hoặc sự cố dịch vụ cung cấp khí.
+0111001;INFRASTRUCTURE;Mất hệ thống CNTT;Ngắt hoặc sự cố dịch vụ hệ thống CNTT.
+0111010;INFRASTRUCTURE;Mất điện;Ngắt hoặc sự cố dịch vụ điện.
+0111011;INFRASTRUCTURE;Nước thải chưa xử lý;Thải ra môi trường nước thải chưa xử lý.
+0111100;INFRASTRUCTURE;Mất đường điện thoại;Ngắt hoặc sự cố dịch vụ điện thoại.
+0111101;MET;Băng đen;Băng mỏng, mới trên nước ngọt hoặc nước mặn, xuất hiện màu tối do trong suốt. Trên hồ, băng đen thường phủ băng trắng từ tuyết tan lại.
+0111110;MET;Ngập đất ven biển;Khi đất khô, thấp bị ngập nước biển.
+0111111;MET;Đợt lạnh;Nhiệt độ cực thấp.
+1000000;MET;Gió mạnh Derecho;Bão gió rộng, nhanh, thường đi kèm gió thẳng. Thiệt hại từ Derecho thường nhầm với lốc xoáy.
+1000001;MET;Hạn hán;Thời gian dài lượng mưa thấp, thiếu nước cho con người, động vật và cây trồng.
+1000010;MET;Bão bụi;Gió mạnh mang cát, thường dưới 15 m. Phổ biến ở vùng khô.
+1000011;MET;Băng trôi/Tảng băng;Băng trôi trên sông hoặc tảng băng trên biển mở.
+1000100;MET;Lũ;Tràn nước từ kênh, sông ra đất khô, ven biển, hồ hoặc bể chứa.
+1000101;MET;Sương mù;Hơi nước nhỏ lơ lửng trong không khí làm giảm tầm nhìn.
+1000110;MET;Mưa đá;Mưa đóng thành viên không đều, >5 mm.
+1000111;MET;Đợt nóng;Nhiệt độ cực cao.
+1001000;MET;Sét;Phóng điện cao áp, nhìn thấy, kèm tiếng sấm.
+1001001;MET;Phấn hoa;Phấn hoa gây dị ứng từ cây nhờ gió.
+1001010;MET;Mưa;Mưa ≥50 mm/24h. Ngưỡng theo tiêu chuẩn địa phương.
+1001011;MET;Bão tuyết;Hệ thống áp suất thấp mùa đông với tuyết, mưa đông, mưa đá. Bão tuyết: gió >56 km/h ≥3h, tầm nhìn <400 m.
+1001100;MET;Tuyết rơi;Tuyết rơi ≥50 mm/24h. Ngưỡng theo tiêu chuẩn địa phương.
+1001101;MET;Bão/thunderstorm;Gió ≥10 theo thang Beaufort.
+1001110;MET;Tan băng;Đất tan băng, có thể làm sụp bề mặt.
+1001111;MET;Lốc xoáy;Cột không khí xoay mạnh chạm đất hoặc nước mở.
+1010000;MET;Bão nhiệt đới (hurricane);Bắt nguồn từ vùng nước nhiệt đới hoặc cận nhiệt đới, tâm ấm, không lạnh, gió mạnh, mưa xoắn.
+1010001;MET;Cảm giác lạnh/Giáng sương;Băng hình thành do làm mát bức xạ, xuất hiện trên mặt đất hoặc vật thể khi nhiệt độ ≤0°C.
+1010010;MET;Bão nhiệt đới (typhoon);Bắt nguồn từ vùng nước nhiệt đới hoặc cận nhiệt đới, tâm ấm, không lạnh, gió mạnh, mưa xoắn.
+1010011;RESCUE;Vỡ đập;Sự cố đập, giải phóng nước không kiểm soát.
+1010100;RESCUE;Vỡ đê;Sự cố đê, giải phóng nước không kiểm soát.
+1010101;RESCUE;Xử lý vật liệu nổ;Hoạt động làm an toàn các loại vật liệu nổ, hóa học và sinh học. Bao gồm định vị, nhận dạng, làm an toàn và thu hồi.
+1010110;RESCUE;Tai nạn nhà máy;Sự cố tại khu công nghiệp ảnh hưởng khu vực xung quanh.
+1010111;RESCUE;Nguy cơ mỏ;Nguy cơ liên quan khai thác than và khoáng sản: sập đất, nổ khí, ngập nước, tự cháy, hít bụi, khí độc.
+1011000;SAFETY;Phát hiện bom/đạn;Phát hiện bất ngờ bom hoặc đạn.
+1011001;SAFETY;Biểu tình;Diễu hành hoặc tập hợp để phản đối hoặc ủng hộ.
+1011010;SAFETY;Tai nạn vật liệu nguy hiểm;Giải phóng bất ngờ các chất có thể gây hại con người hoặc môi trường.
+1011011;SAFETY;Tình huống nguy hiểm tính mạng;Tình huống khẩn cấp cần can thiệp ngay để cứu mạng người.
+1011100;SAFETY;Sự kiện lớn;Sự kiện có thể gây gián đoạn giao thông hoặc vận tải đáng kể.
+1011101;SAFETY;Người mất tích/bị bắt cóc;Người không xác định được tình trạng sống/chết.
+1011110;SAFETY;Nguy cơ nổ;Sử dụng vật liệu nổ nhằm gây chết hoặc làm hại sức khỏe con người, động vật, thực vật hoặc môi trường.
+1011111;SAFETY;Cảnh báo an toàn;Thông báo tình huống nguy hiểm có thể ảnh hưởng đến an toàn công chúng.
+1100000;SAFETY;Vật thể bay không xác định;Sự xuất hiện của vật thể bay chưa xác định có thể gây nguy cơ sức khỏe.
+1100001;SAFETY;Động vật chưa xác định;Sự xuất hiện động vật chưa xác định có thể gây nguy cơ sức khỏe.
+1100010;SECURITY;Tấn công hóa chất;Sử dụng hóa chất nguy hiểm nhằm gây chết hoặc làm hại sức khỏe.
+1100011;SECURITY;Tấn công du kích;Lực lượng bán quân sự tiến hành hành động bạo lực.
+1100100;SECURITY;Cướp máy bay;Máy bay hoặc phương tiện dưới quyền kiểm soát của kẻ cướp.
+1100101;SECURITY;Bắn súng hoặc nguy cơ vũ khí;Sử dụng vũ khí nguy hiểm ở khu vực đông dân.
+1100110;SECURITY;Tấn công lực lượng đặc nhiệm;Lực lượng vũ trang tiến hành hành động bạo lực.
+1100111;SECURITY;Khủng bố;Hành động khủng bố gây nhiều nạn nhân hoặc thiệt hại lớn.
+1101000;TRANSPORT;Tai nạn máy bay;Tai nạn máy bay.
+1101001;TRANSPORT;Sập cầu;Cầu sập một phần hoặc toàn bộ

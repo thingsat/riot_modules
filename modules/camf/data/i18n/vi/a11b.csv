@@ -1,0 +1,32 @@
+00000;IC-B-01;[trống]
+00001;IC-B-02;Kiểm tra với cơ quan dự báo thời tiết và chính quyền địa phương để biết thêm thông tin
+00010;IC-B-03;Tìm vị trí các điểm thông tin do cơ quan chức năng thiết lập trên các kênh chính thức (radio, internet, TV, mạng xã hội…)
+00011;IC-B-04;Người nhạy cảm hoặc dễ tổn thương không nên ra ngoài trừ khi thật sự cần.
+00100;IC-B-05;Hoạt động cứu hộ đang được lực lượng an ninh và dịch vụ khẩn cấp thực hiện. Tránh di chuyển để tạo điều kiện cho các hành động an ninh và cứu hộ.
+00101;IC-B-06;Bảo vệ những người dễ bị tổn thương nhất và liên lạc với người thân. Nhận biết các nhu cầu đặc biệt của họ và hỗ trợ khi cần. Nếu phát hiện người gặp nguy hiểm hoặc dễ tổn thương, gọi dịch vụ khẩn cấp. Cung cấp sơ cứu nếu cần nhưng không đặt bản thân vào nguy hiểm.
+00110;IC-B-07;Chú ý đến các thông báo của cảnh sát, đội cứu hỏa và các quan chức.
+00111;IC-B-08;Luôn cảnh giác, tiếp tục nghe theo hướng dẫn chính thức được phát trên radio, truyền hình, trang web và mạng xã hội
+01000;IC-B-09;Nếu bạn cần hỗ trợ rời khỏi nhà, gọi dịch vụ khẩn cấp.
+01001;IC-B-10;Chỉ thực hiện các cuộc gọi trong trường hợp khẩn cấp nghiêm trọng để tránh quá tải mạng di động.
+01010;IC-B-11;Dự kiến hiện tượng thời tiết cực đoan. Thời tiết rất nguy hiểm và có mức độ đe dọa cao đối với sức khỏe, thậm chí nguy hiểm đến tính mạng. HÃY CẢNH GIÁC và cập nhật dự báo thời tiết mới nhất.
+01011;IC-B-12;Dự kiến thời tiết khắc nghiệt. HÃY CHUẨN BỊ. Thực hiện các biện pháp phòng ngừa và cập nhật dự báo thời tiết mới nhất. Có thể gây thiệt hại nghiêm trọng cho người và tài sản, đặc biệt là những người dễ tổn thương hoặc ở khu vực nguy hiểm.
+01100;IC-B-13;Dự kiến hiện tượng thời tiết vừa phải. HÃY CẢNH GIÁC, cập nhật dự báo thời tiết mới nhất. Có thể gây thiệt hại vừa phải cho người và tài sản, đặc biệt là những người dễ tổn thương hoặc ở khu vực nguy hiểm.
+01101;IC-B-14;HÃY CHUẨN BỊ để bảo vệ bản thân và tài sản. Dự kiến lũ lụt cho các tài sản và mạng lưới giao thông. Có thể gián đoạn nguồn điện, thông tin liên lạc và cung cấp nước. Có thể yêu cầu sơ tán. Điều kiện lái xe nguy hiểm do tầm nhìn giảm và hiện tượng trơn trượt.
+01110;IC-B-15;Không đến gần hoặc đi vào vùng nước ngập. Không đi bộ hoặc lái xe trên đường ngập nước. Sóng lũ có thể bất ngờ, bờ sông có thể sụp hoặc bạn có thể bị hút vào cống hoặc bị va vào mảnh vỡ nổi. Giữ cống và giếng thông thoáng để nước thoát đi. Bảo vệ và/hoặc di chuyển tài sản ra khỏi khu vực dễ bị tổn thương (xe dọc sông, hầm).
+01111;IC-B-16;Tìm nơi trú ẩn ở phần chắc chắn nhất của tòa nhà cố định, nếu có thể ở nơi trú ẩn của thành phố, và tránh xa cửa sổ. HÃY CẢNH GIÁC với “mắt bão”, vùng yên tĩnh ở trung tâm. Sau đó sẽ là hiện tượng đảo chiều và gió mạnh. Không ra ngoài và không dùng xe. Chờ đến khi cảnh báo kết thúc.
+10000;IC-B-17;THỰC HIỆN BIỆN PHÁP PHÒNG NGỪA, dự kiến nhiệt độ cao. Bảo vệ cơ thể khỏi nóng và tránh hoạt động thể chất, thể thao. Làm ướt cơ thể nhiều lần trong ngày. Uống nhiều nước và ăn thức ăn nhẹ.
+10001;IC-B-18;Nguy cơ cháy rừng. Trong điều kiện này, đám cháy có thể phát triển và lan nhanh gây thiệt hại tài sản và có thể mất mạng người và/hoặc động vật. Không vứt thuốc lá đang cháy hoặc diêm ra môi trường. Không đốt lửa ngoài trời. Không thắp pháo hoa. Không nướng ngoài trời. Thảm thực vật dễ cháy và có thể ảnh hưởng tới diện tích lớn. Tuân theo hướng dẫn của chính quyền địa phương.
+10010;IC-B-19;Nguy cơ cháy. Sử dụng lò lửa cố định khi nướng. Đảm bảo lửa đã tắt hoàn toàn trước khi rời đi. Chỉ đốt pháo hoa khi được phép của chính quyền, giữ khoảng cách an toàn với rừng và có nước sẵn sàng.
+10011;IC-B-20;Giữ khoảng cách tối đa khỏi các khu vực ven biển, bãi biển và sông. Lên ngay vùng đất cao nhất và chờ đến khi cảnh báo kết thúc. Nếu có nguy cơ bị sóng cuốn, trèo lên mái nhà hoặc cây chắc, hoặc bám vào vật nổi theo dòng nước.
+10100;IC-B-21;Không ra biển và giữ khoảng cách tối đa khỏi bờ, chờ đến khi cảnh báo kết thúc. Nếu bạn đang trên biển, đừng trở về cảng. Giữ khoảng cách với bờ. Sóng trên biển ít nguy hiểm hơn nhiều.
+10101;IC-B-22;Rời khỏi khu vực bị ảnh hưởng ngay lập tức và tìm nơi cao hơn hoặc di chuyển lên các phần cao hơn của tòa nhà. Nghe radio hoặc phương tiện truyền thông để biết hướng dẫn và thông tin.
+10110;IC-B-23;Trong nhà: khi động đất, trú gần tường hoặc đồ nội thất chắc chắn. Ngoài trời: tránh xa bất cứ thứ gì có thể sập. Trong xe: dừng càng xa tòa nhà càng tốt. Sau đó, chuẩn bị cho dư chấn. Nếu trong nhà, rời đi bằng cầu thang.
+10111;IC-B-24;Rời khỏi hiện trường ngay lập tức và che miệng, mũi bằng vật liệu bảo vệ tạm thời (vải, quần áo, khẩu trang y tế). Điều này bảo vệ khỏi bụi, nhưng không bảo vệ khỏi chất độc dạng khí. Tìm tòa nhà. Di chuyển theo hướng vuông góc với hướng gió nếu có thể để rời khu vực nguy hiểm nhanh nhất với khả năng có đám mây chất độc.
+11000;IC-B-25;Tắt hệ thống thông gió và điều hòa. Đóng tất cả cửa sổ, cửa ra vào và chấn song. Che miệng và mũi, thở qua khẩu trang hoặc vật liệu bảo vệ tạm thời (vải, quần áo, khẩu trang y tế) nếu không khí đầy khói và tro.
+11001;IC-B-26;Chuẩn bị sẵn viên iod. KHÔNG uống viên iod bây giờ. Nếu cần thiết, chúng tôi sẽ thông báo kịp thời.
+11010;IC-B-27;Uống viên iod NGAY BÂY GIỜ theo hướng dẫn trên bao bì.
+11011;IC-B-28;Tránh tưới cây trong giờ nóng nhất, tránh sử dụng nước cho các mục đích phụ như rửa xe.
+11100;IC-B-29;Tìm nơi trú ẩn nếu không thể rời khỏi khu vực ngay lập tức.
+11101;IC-B-30;dự trữ
+11110;IC-B-31;dự trữ
+11111;IC-B-32;Điều này thay thế cảnh báo trước đây có hiệu lực cho khu vực này
