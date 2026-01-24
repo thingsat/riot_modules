@@ -15,6 +15,12 @@
 //#include "riotbuild.h"
 
 
+// enable to start to gateway
+#ifndef LGW_AUTOSTART_ENABLE
+#define LGW_AUTOSTART_ENABLE 1
+#endif
+
+
 #if ENABLE_WDT_ZTIMER == 1
 #include "wdt_ztimer.h"
 #endif
@@ -147,7 +153,7 @@ int main(void) {
 
 	puts("=========================================");
 	puts("Thingsat :: Basic Mission");
-	puts("Copyright (c) 2021-2025 GINP UGA CSUG LIG");
+	puts("Copyright (c) 2021-2026 GINP UGA CSUG LIG");
 	puts("=========================================");
 
 	puts("\nBOARD:        " RIOT_BOARD "\n");
@@ -159,16 +165,13 @@ int main(void) {
 	puts("INFO: Development mode\n");
 #endif
 
-
 	// TODO : show friends
-
 
 #if ENABLE_WDT_ZTIMER == 1
 	(void)start_wdt_ztimer();
 #else
 	puts("WARNING: No watchdog timer\n");
 #endif
-
 
 #if GPS_UART_ENABLE == 1
 	puts("INFO: Starting the GNSS parsing ...");
@@ -182,25 +185,25 @@ int main(void) {
 
 #if MESHTASTIC_ENABLE == 1
 	puts("INFO: Meshtastic EU868 gateway configuration");
+#elif CHIRPSTACK_MESH_ENABLE == 1
+	puts("INFO: Chirpstack Mesh Relay is enabled");
 #else
 	puts("INFO: LoRaWAN EU868 gateway configuration");
-#endif
-
-#if MESHTASTIC_ENABLE == 1
-	puts("INFO: Chirpstack mesh is enabled");
 #endif
 
 	print_git();
 
 	print_i2c();
 
+// Sensors sections
+
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();
 #endif
 
-
-#if NO_SHELL == 1
+#if LGW_AUTOSTART_ENABLE == 1
 	puts("INFO: Starting the gateway ...");
+
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	lgw_cmd(1, (char*[]){"temp"});
 #endif
@@ -210,6 +213,7 @@ int main(void) {
 
 
 	mission_info_print();
+#endif
 
 
 #ifndef ENDPOINT_DEVADDR
@@ -234,10 +238,24 @@ int main(void) {
 	lgw_cmd(2, (char*[] ) { "lgw", "listen" });
 
 
-#else
+#ifndef NO_SHELL
+
 	/* start the shell */
 	char line_buf[SHELL_DEFAULT_BUFSIZE];
-	shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+
+	// TODO run commands
+	// rtc gettime
+	// saul 
+	// saul read jc42 
+
+	//	shell_handle_input_line(shell_commands,"rtc gettime");
+	shell_handle_input_line(shell_commands,"saul");
+#ifdef BOARD_NUCLEO_L432KC_INISAT
+	//	shell_handle_input_line(shell_commands,"saul read jc42");
 #endif
+	shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+
+#endif
+
 	return 0;
 }

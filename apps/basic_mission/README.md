@@ -6,13 +6,16 @@ This application illustrates a simple mission for the [Thingsat in-orbit gateway
 * [x] LoRaWAN repeater (with devaddr filtering)
 * [ ] add App Clock Sync
 * [ ] add 5.9 DeviceTime commands (DeviceTimeReq, DeviceTimeAns) introduced in lorawan specification v1.0.3
-* [x] Chirpstack Mesk Relay (SHOULD BE TESTED)
+* [x] Chirpstack Mesk Relay (Very simple implementation) (SHOULD BE TESTED)
 * [x] Meshtastic Router (Very simple implementation)
 * [ ] Periodic telemetry (with GNSS position and temperature) using LoRaWAN with Cayenne LPP (and XOR redundancy)
 * [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry and position (protobuf)
 * [ ] Periodic telemetry (with GNSS position and temperature) using APRS format (not fake)
+* [ ] Add shell command for printing GNSS data (position, speed, quality, cog ...)
 * [ ] Periodic two-way ranging with other Thingsat boards
 * [ ] LoRa 2G4 backhaul when the SX1280 module is present
+* [ ] Send [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) messages over LoRa/LoRaWAN/Meshtastic ([see spec](https://www.itu.int/dms_pubrec/itu-r/rec/m/R-REC-M.1371-5-201402-I!!PDF-F.pdf))
+* [ ] Receive and decode [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) messages over LoRa/LoRaWAN/Meshtastic ([see spec](https://www.itu.int/dms_pubrec/itu-r/rec/m/R-REC-M.1371-5-201402-I!!PDF-F.pdf))
 
 ## Setup
 
@@ -72,7 +75,7 @@ Nucleo L432KC With RAK5146 on INISAT board with [OpenLog](https://github.com/Cam
 ```bash
 export PROD=1
 export BOARD=nucleo-l432kc-inisat
-gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 PROD=$PROD GPS_UART_ENABLE=0 GPS_UART_ENABLE_TRACE=0 NO_SHELL=1 -j 8 flash term
+gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 PROD=$PROD GPS_UART_ENABLE=0 GPS_UART_ENABLE_TRACE=0 -j 8 flash term
 ```
 
 > Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
@@ -81,9 +84,24 @@ gmake BOARD=$BOARD OPENLOG_BAUDRATE=9600 PROD=$PROD GPS_UART_ENABLE=0 GPS_UART_E
 
 ```bash
 export BOARD=nucleo-l432kc-inisat
-gmake BOARD=$BOARD MESHTASTIC=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 NO_SHELL=1 -j 8 flash term
+gmake BOARD=$BOARD MESHTASTIC_ENABLE=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 -j 8 flash term
 ```
 > Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
+
+### Setup for [Chirpstach Mesh Relay](https://www.chirpstack.io/docs/chirpstack-gateway-mesh/index.html)
+
+```bash
+export BOARD=nucleo-l432kc-inisat
+gmake BOARD=$BOARD CHIRPSTACK_MESH_ENABLE=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 -j 8 flash term
+```
+
+## Disable the gateway autostart 
+
+Add `LGW_AUTOSTART_ENABLE=0` into the arguments list of the `make` command in order to disable the gateway at boot time.
+
+## Disable the shell 
+
+Add `NO_SHELL=1` into the arguments list of the `make` command in order to disable the shell.
 
 ## Console
 ```bash

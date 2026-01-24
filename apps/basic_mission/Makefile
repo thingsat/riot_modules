@@ -154,6 +154,11 @@ USEMODULE += i2c_scan_utils
 # -----------------------------
 # Sx1302 Module
 # -----------------------------
+
+# Gateway autostart is the default mode
+LGW_AUTOSTART_ENABLE ?= 1
+CFLAGS += -DLGW_AUTOSTART_ENABLE=$(LGW_AUTOSTART_ENABLE)
+
 include Makefile.lgw.mk
 
 # -----------------------------
@@ -218,10 +223,8 @@ CFLAGS += -DSTDIO_UART_BAUDRATE=$(OPENLOG_BAUDRATE)
 CFLAGS_DBG = 
 
 # -----------------------------
-# No interactive
+# Shell can be disabled
 # -----------------------------
-
-# Gateway is started after reboot and listens LoRa messages an run mission
 
 ifeq ($(NO_SHELL),1)
 CFLAGS += -DNO_SHELL=1
@@ -229,7 +232,6 @@ endif
 
 # include and auto-initialize all available sensors
 #USEMODULE += saul_default
-
 
 # -----------------------------
 # Flags 
