@@ -17,7 +17,8 @@
 #define APRS_LORAWAN_PAYLOAD	2
 #define APRS_AX25_PAYLOAD		3
 #define EWSS_PAYLOAD			4
-#define STAT_PAYLOAD			5
+#define GNSS_PAYLOAD			5
+#define STAT_PAYLOAD			6
 // TOOD secure time distribution with ED25519 signature
 
 #include "loragw_hal.h"

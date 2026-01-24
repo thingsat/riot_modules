@@ -209,6 +209,20 @@ static bool _set_phy_payload_ewss(uint8_t *phypayload, uint8_t *phypayload_size)
 	return true;
 }
 
+// TODO
+static bool _set_phy_payload_gnss(uint8_t *phypayload, uint8_t *phypayload_size) {
+	*phypayload_size = 0;
+	(void)phypayload;
+
+	//const uint32_t devaddr = lgw_sx130x_endpoint->devaddr;
+	//const uint8_t fPort = FPORT_GNSS_PAYLOAD;
+	
+	printf("ERROR: building payload for gnss not implemented\n");
+
+	return false;
+}
+
+
 static bool _set_phy_payload_stat(uint8_t *phypayload, uint8_t *phypayload_size) {
 
 	const uint32_t devaddr = lgw_sx130x_endpoint->devaddr;

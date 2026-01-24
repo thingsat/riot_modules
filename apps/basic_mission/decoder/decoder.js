@@ -186,6 +186,31 @@ function decode_common_location(bytes, res, idx, len) {
 	return idx;
 }
 
+function decode_common_location_extra(bytes, res, idx, len) {
+
+	if(idx+2 > len) { return idx; }
+	res.seconds_since_last_fix = readUInt16LE(bytes,idx);
+	idx += 2;
+
+	if(idx+1 > len) { return idx; }
+	res.satellites_tracked = readUInt8(bytes,idx);
+	idx += 1;
+
+	if(idx+1 > len) { return idx; }
+	res.fix_quality = readUInt8(bytes,idx);
+	idx += 1;
+
+	if(idx+2 > len) { return idx; }
+	res.speed_kph = readUInt16LE(bytes,idx);
+	idx += 2;
+
+	if(idx+2 > len) { return idx; }
+	res.true_track_degrees = readInt16LE(bytes,idx);
+	idx += 2;
+
+	return idx;
+}
+
 function decode_common_packed_location(bytes, res, idx, len) {
 
 	if(idx+3 > len) { return idx; }
@@ -596,13 +621,11 @@ function decodeTelemetry(fPort, bytes) {
 	return res;
 }
 
-function decodeGNSS(fPort, bytes) {
-
-// TODO SHOULD BE TESTED
+function decodeGNSSTelemetry(fPort, bytes) {
 
 	var len = bytes.length;
 	
-	if(len < 8) {
+	if(len < 10) {
 		return { "error": "invalid_size" };
 	}
 
@@ -610,50 +633,15 @@ function decodeGNSS(fPort, bytes) {
 	
 	var idx = 0;
 	
-	if(idx+4 > len) { return res; }
-	res.tx_uscount = readUInt32LE(bytes,idx);
-	idx += 4;
+	idx = decode_common_tx(bytes, res, idx, len);
+	if(idx > len) { return res; }
 
-	// TODO decode status --> tx mode, fix, ftime
-	if(idx+1 > len) { return res; }
-	res.status = readUInt8(bytes,idx);
-	idx += 1;
+	idx = decode_common_location(bytes, res, idx, len);
+	if(idx > len) { return res; }
 
-	if(idx+1 > len) { return res; }
-	res.txpower = readUInt8(bytes,idx);
-	idx += 1;
-
-	if(idx+4 > len) { return res; }
-	res.latitude = decodeFloat32(readUInt32LE(bytes,idx));
-	idx += 4;
-
-	if(idx+4 > len) { return res; }
-	res.longitude = decodeFloat32(readUInt32LE(bytes,idx));
-	idx += 4;
-
-	if(idx+2 > len) { return res; }
-	res.altitude = readUInt16LE(bytes,idx);
-	idx += 2;
-
-	if(idx+2 > len) { return res; }
-	res.seconds_since_last_fix = readUInt16LE(bytes,idx);
-	idx += 2;
-
-	if(idx+1 > len) { return res; }
-	res.satellites_tracked = readUInt8(bytes,idx);
-	idx += 1;    
-
-	if(idx+1 > len) { return res; }
-	res.fix_quality = readUInt8(bytes,idx);
-	idx += 1;    
-
-	if(idx+2 > len) { return res; }
-	res.speed_kph = readUInt16LE(bytes,idx);
-	idx += 2;
-
-	if(idx+2 > len) { return res; }
-	res.true_track_degrees = readInt16LE(bytes,idx);
-	idx += 2;
+	// TODO
+	idx = decode_common_location_extra(bytes, res, idx, len);
+	if(idx > len) { return res; }
 
 	return res;
 }
@@ -880,7 +868,7 @@ function decodePayload(fPort, bytes) {
 	    data = decodeTelemetry(fPort, bytes);
 		break;
 	  case 5:
-	    data = decodeGNSS(fPort, bytes);
+	    data = decodeGNSSTelemetry(fPort, bytes);
 		break;
 	  case 6:
 	    data = decodeStat(fPort, bytes);
