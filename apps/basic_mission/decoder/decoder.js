@@ -307,6 +307,8 @@ function getPayloadType(fPort) {
 	    return 'aprs';
 	  case 17:
 	    return 'ewss';
+	  case 18:
+	    return 'ais';
 	  case 202:
 	    return 'app_clock';
 	  case 33:
@@ -858,6 +860,10 @@ function decodeEwss(fPort, bytes) {
 	return { buf: bytes };
 }
 
+function decodeAis(fPort, bytes) {
+	return { buf: bytes };
+}
+
 function decodePayload(fPort, bytes) {
 	var data = undefined;
 	switch (fPort) {
@@ -890,6 +896,9 @@ function decodePayload(fPort, bytes) {
 		break;
 	  case 17:
 	    data = decodeEwss(fPort, bytes);	    
+		break;
+	  case 18:
+	    data = decodeAis(fPort, bytes);	    
 		break;
       case 100:
 	    data = decodePlainText(fPort, bytes);
