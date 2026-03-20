@@ -314,7 +314,20 @@ void lorawan_printf_payload(const uint8_t *frame_buffer, const uint8_t size) {
 		return;
 
 	const uint8_t frame_version = lorawan_get_version(frame_buffer, size);
+
 	if (frame_version != 0) {
+		if(size > 12) {
+			uint32_t to;
+			uint32_t from;
+			uint32_t id;
+			memcpy(&to,frame_buffer,sizeof(uint32_t));
+			memcpy(&from,frame_buffer+4,sizeof(uint32_t));
+			memcpy(&id,frame_buffer+8,sizeof(uint32_t));
+			if(to==0xffffffff) {
+				printf("PROPRIETARY: probably a broadcasted Meshtastic frame by !%08lx (id=%08lx)\n", from, id);
+				return;
+			}
+		}
 		printf("PROPRIETARY: Version = %02X\n", frame_version);
 		return;
 	}
@@ -361,6 +374,7 @@ void lorawan_printf_payload(const uint8_t *frame_buffer, const uint8_t size) {
 		break;
 	default:
 		printf("PROPRIETARY:\n");
+		break;
 	}
 }
 
