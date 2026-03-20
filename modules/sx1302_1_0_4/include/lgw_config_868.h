@@ -32,7 +32,7 @@
 /*
 static lgw_config_t _lorawan_lgw_config = {
 	// single_input_mode
-	true,
+	false,
 	// fa
 	867500000UL, // Radio A
 	// fb
@@ -70,10 +70,10 @@ static lgw_config_t _lorawan_lgw_config = {
 };
  */
 
-
+// Remark: single_input_mode should be false since SX1250 is differential
 #define LGW_CONFIG_FOR_LORAWAN_EU868_WITH_SX1250 \
 { \
-	true, \
+	false, \
 	867500000UL, \
 	868500000UL, \
 	{ \
