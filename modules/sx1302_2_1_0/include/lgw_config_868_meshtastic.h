@@ -80,15 +80,16 @@ static lgw_config_t _lorawan_lgw_config = {
 /*
 https://meshtastic.org/docs/overview/radio-settings/#europe-frequency-bands
 Long Moderate SF11 BW125
-Slot 1 : 869.462500
-Slot 2 : 869.587500
+Slot 1 : 869462500  = 869525000-62500 for Gaulix
+Slot 2 : 869587500
 */
 
+// Remark: single_input_mode should be false since SX1250 is differential
 #define LGW_CONFIG_FOR_LORAWAN_EU868_WITH_SX1250 \
 { \
-	.single_input_mode = true, \
+	.single_input_mode = false, \
 	.fa = 867500000UL, \
-	.fb = 869587500UL, \
+	.fb = 869462500UL, \
 	.channel_if = { \
 			-250000, \
 			-125000, \
@@ -98,8 +99,8 @@ Slot 2 : 869.587500
 			0,       \
 			200000,  \
 			400000,  \
-			-62500, \
-			-62500 \
+			62500, \
+			62500 \
 			}, \
 	.channel_rfchain = { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1 }, \
 	.pa_gain = {LGW_PA_GAIN}, \
