@@ -233,7 +233,7 @@ with CN1 being the 40 pins connector, starting with 1 in top left:
 * [x] add SAUL temperature into the SX1302 driver (see ).
 * [ ] print map of rssi correction (temp versus rssi)
 * [ ] improve stats (rx_ok, ...).
-* [ ] what is single_input_mode ?
+* [x] what is single_input_mode ? --> should be false when SX1250 are differential
 * [ ] add command for sending beacons
 * [ ] find the minimal size for THREAD_STACKSIZE_MAIN and LGW_LISTEN_STACKSIZE
 * [ ] add command for repeater with filtering (lgw repeater) --> Thingsat mission scenario
