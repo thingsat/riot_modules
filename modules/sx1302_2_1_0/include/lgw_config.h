@@ -36,7 +36,7 @@
 
 struct lgw_config {
 
-	// TODO what is single_input_mode ?
+	// Remark: single_input_mode should be false since SX1250 is differential
 	bool single_input_mode;
 
 	uint32_t fa; // Frequency Radio A
