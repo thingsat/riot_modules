@@ -1,7 +1,10 @@
 
-# Chirpstack Mesh
+# Repeat config parameters
 
+REPEAT_FILTER_SNR_THRESHOLD ?= 15
+ifeq ($(REPEAT_FILTER_SNR_THRESHOLD),0)
 REPEAT_FILTER_SNR_THRESHOLD ?= 0
+endif
 
 # All
 #REPEAT_FILTER_DEVADDR_SUBNET ?= 0x00000000U

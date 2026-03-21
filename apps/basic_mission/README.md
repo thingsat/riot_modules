@@ -60,6 +60,13 @@ For  Arduino Nano ESP32 (With RAK5146)
 gmake BUILD_IN_DOCKER=1 BOARD=esp32-nano -j 8 flash term
 ```
 
+### Setup for [Thingsat ProtoSEED](https://gricad-gitlab.univ-grenoble-alpes.fr/thingsat/seed/-/tree/main/seed_thingsat_protoseed) 📡📡📡📡📡🎈🎈🎈🎈🎈🎈
+
+For Nucleo L432KC With RAK5146 on ProtoSEED board
+```bash
+export BOARD=nucleo-l432kc-protoseed
+gmake BOARD=$BOARD -j 8 flash term
+```
 ### Setup for [Thingsat INISAT](https://github.com/csu-grenoble/flatsat/tree/main/Hardware/Thingsat_INISAT#carte-thingsat--inisat----obc--communication-avec-nucleo-l432kc--gateway-rak5146) 📡📡📡📡📡🎈🎈🎈🎈🎈🎈
 
 For Nucleo L432KC With RAK5146 on INISAT board

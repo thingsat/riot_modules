@@ -8,7 +8,7 @@ APPLICATION=thingsat_basic_mission
 BOARD ?= nucleo-l432kc-inisat
 EXTERNAL_BOARD_DIRS ?= ../../boards
 
-BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
+BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l432kc-protoseed nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
 
 EXTERNAL_MODULE_DIRS += ../../modules
 EXTERNAL_MODULE_DIRS += ../../public_modules
@@ -67,7 +67,12 @@ endif
 
 ifeq ($(BOARD),nucleo-l432kc-inisat)
 # MCU board for OBC Thingsat board designed for INISAT
-RAK5146_ON_INISAT=yes
+RAK5146_ON_NUCLEO32=yes
+endif
+
+ifeq ($(BOARD),nucleo-l432kc-protoseed)
+# MCU board for OBC Thingsat board designed for SEED
+RAK5146_ON_NUCLEO32=yes
 endif
 
 ifeq ($(BOARD),esp32-wroom-32)
