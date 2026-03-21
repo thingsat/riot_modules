@@ -1,0 +1,10 @@
+include $(RIOTBOARD)/common/nucleo32/Makefile.dep
+
+# MCP9808 sensor is a JC42 compatible temperature sensor
+
+ifneq (,$(filter saul_default,$(USEMODULE)))
+  USEMODULE += saul_gpio
+  USEMODULE += bme680_i2c
+  USEMODULE += jc42
+#  USEMODULE += lsm303agr Required RUST
+endif
