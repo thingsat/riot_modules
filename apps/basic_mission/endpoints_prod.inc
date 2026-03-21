@@ -1,6 +1,6 @@
 /*
  Basic Mission
- Copyright (c) 2021-2025 UGA CSUG LIG
+ Copyright (c) 2021-2026 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -79,6 +79,17 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				// CAFEBABE12345678CAFEBABE12345678
 				.appskey = DEFAULT_APPSKEY,
 				.fcntup = 300,
+		},
+
+		{
+				// Thingsat ProtoSEED
+				.label = "THINGSAT ProtoSEED 193E63",
+				.module = RAK5146_SPI_GNSS,
+				.devaddr = 0xfc00ada4,
+				.deveui = 0x0016c001ff193e63U,
+				.nwkskey = DEFAULT_NWKSKEY,
+				.appskey = DEFAULT_APPSKEY,
+				.fcntup = 0,
 		},
 
 		// Entries of gateways sending ranging1 messages

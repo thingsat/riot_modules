@@ -1,6 +1,6 @@
 /*
  Basic Mission
- Copyright (c) 2021-2025 UGA CSUG LIG
+ Copyright (c) 2021-2026 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -57,6 +57,28 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.fcntup = 0,
 		},
 		{
+				// Thingsat ProtoSEED
+				.label = "THINGSAT ProtoSEED 193E63",
+				.module = RAK5146_SPI_GNSS,
+				.devaddr = 0xfc00ada4,
+				.deveui = 0x0016c001ff193e63U,
+				.nwkskey = DEFAULT_NWKSKEY,
+				.appskey = DEFAULT_APPSKEY,
+				.fcntup = 0,
+		},
+		{
+				// iM880a  Label 6F75
+				.label = "IMM880A_BALLOON_746F75",
+				.module = RAK5146_SPI_GNSS,
+				.devaddr = 0xfc00afeb,
+				.deveui = 0x3238353500746f75U,
+				.nwkskey = DEFAULT_NWKSKEY,
+				.appskey = DEFAULT_APPSKEY,
+				.fcntup = 0,
+		},
+
+/*
+		{
 				// Flight model
 				.label = "THINGSAT @ STORK1 FM 1",
 				.module = THINGSAT_SX1302_BOARD,
@@ -76,6 +98,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.appskey = DEFAULT_APPSKEY,
 				.fcntup = 0,
 		},
+*/
 
 		// TODO add 00016c001ff18596 (Thingsat FM aboard Stork - Burn after returning to Earth)
 
