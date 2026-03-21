@@ -1,6 +1,6 @@
 /*
  Thingsat Mission
- Copyright (c) 2021-2024 UGA CSUG LIG
+ Copyright (c) 2021-2026 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -127,10 +127,21 @@ static const i2c_dev_info_t known_i2c_dev[] = {
     //{M24C01_I2C_ADDRESS,			"1Mbit EEPROM Memory (M24C01)"},
 #endif
 };
-
 #elif defined(BOARD_NUCLEO_L432KC_INISAT)
 static const i2c_dev_info_t known_i2c_dev[] = {
     {MCP9808_I2C_ADDRESS,	    "Temperature sensor (MCP9808)"},
+};
+
+
+#elif defined(BOARD_NUCLEO_L432KC_PROTOSEED)
+static const i2c_dev_info_t known_i2c_dev[] = {
+	{BME680_I2C_ADDR,	    		"Temperature sensor (BME680)"},
+    {MCP9808_I2C_ADDR,	        "Temperature sensor (MCP9808)"},
+
+	//{LSM303AGRTR_ACC_I2C_ADDR_READ,	"Accelerometer (LSM303AGRTR) Read"},
+    //{LSM303AGRTR_ACC_I2C_ADDR_WRITE,"Accelerometer (LSM303AGRTR) Write"},
+    //{LSM303AGRTR_MAG_I2C_ADDR_READ,	"Magnetometer (LSM303AGRTR) Read"},
+    //{LSM303AGRTR_MAG_I2C_ADDR_WRITE,"Magnetometer (LSM303AGRTR) Write"},
 };
 
 #else
