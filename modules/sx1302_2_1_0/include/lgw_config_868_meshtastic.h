@@ -19,7 +19,7 @@
 /*
 static lgw_config_t _lorawan_lgw_config = {
 	// single_input_mode
-	true,
+	false,
 	// fa
 	867500000UL, // Radio A
 	// fb
