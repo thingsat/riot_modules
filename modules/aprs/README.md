@@ -12,6 +12,7 @@ https://github.com/jgromes/RadioLib/blob/master/src/protocols/APRS/APRS.h
 
 https://github.com/jgromes/RadioLib/blob/master/examples/APRS/APRS_Position_LoRa/APRS_Position_LoRa.ino
 
+https://github.com/kevinmpoulton/APRS.JS/
 
 ```
 GPSC700DL5UY yDB0RO pHB9XC tDB0TN p p$GPGGA,101553.000,4847.8237,N,00829.8219,E,2,10,0.8,712.4,M,47.9,M,1.8,0000*786 ~
