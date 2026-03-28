@@ -49,6 +49,7 @@ extern "C" {
  * --- PUBLIC MACROS -----------------------------------------------------------
  */
 
+#if 0 // DEFAULT PARAMETERS ARE DISABLED - DOES NOT MAKE SENSE IN A MODULE
 #ifndef SX1280_PARAM_SPI
 #define SX1280_PARAM_SPI (SPI_DEV(0))
 #endif
@@ -80,6 +81,7 @@ extern "C" {
 
 #ifndef SX1280_PARAM_DIO3
 #define SX1280_PARAM_DIO3 GPIO_UNDEF
+#endif
 #endif
 
 

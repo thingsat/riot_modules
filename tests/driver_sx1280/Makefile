@@ -4,6 +4,7 @@
 
 APPLICATION=driver_sx1280_shell
 
+EXTERNAL_BOARD_DIRS ?= ../../boards
 BOARD_WHITELIST := thingsat-l0 nucleo-l053r8 nucleo-l073rz nucleo-l432kc nucleo-f411re nucleo-f401re nucleo-f446re nucleo-f446ze nucleo-f103rb olimexino-stm32
 # BOARD_WHITELIST += esp32-wroom-32 lora-e5-dev bluepill bluepill-128kib
 
@@ -17,12 +18,27 @@ USEMODULE += hashes
 USEMODULE += crypto
 
 USEMODULE += shell
-
 USEMODULE += fmt
 USEMODULE += printf_float
 
 USEMODULE += xtimer
 USEMODULE += random
+
+# -----------------------------
+# Debug
+# -----------------------------
+
+USEMODULE += shell_cmds_default
+USEMODULE += ps
+USEMODULE += git
+
+# Set this to 1 to enable code in RIOT that does safety checking
+# which is not needed in a production environment but helps in the
+# development process:
+DEVELHELP ?= 1
+
+#CFLAGS += -DENABLE_DEBUG=1
+CFLAGS += -DDEBUG_ASSERT_VERBOSE=1
 
 
 # -----------------------------
