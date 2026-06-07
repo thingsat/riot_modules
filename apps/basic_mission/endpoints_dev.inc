@@ -60,7 +60,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				// Thingsat ProtoSEED (ex BALLOON_1_RANGING)
 				.label = "THINGSAT_ProtoSEED_193E63",
 				.module = RAK5146_SPI_GNSS,
-				.devaddr = 0xfc00aee2,
+				.devaddr = 0xfc00ad15,
 				.deveui = 0x0016c001ff193e63U,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
