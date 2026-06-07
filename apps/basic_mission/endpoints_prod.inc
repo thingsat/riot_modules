@@ -69,6 +69,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.appskey = DEFAULT_APPSKEY,
 				.fcntup = 100,
 		},
+
 		{
 				.label = "GROUND 1 (INISAT F136EFFD)",
 				.module = RAK5146_SPI_GNSS,
@@ -82,14 +83,14 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 		},
 
 		{
-				// Thingsat ProtoSEED
+				// Thingsat ProtoSEED (ex BALLOON_1_RANGING) ORANGE
 				.label = "THINGSAT ProtoSEED 193E63",
 				.module = RAK5146_SPI_GNSS,
 				.devaddr = 0xfc00ada4,
 				.deveui = 0x0016c001ff193e63U,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 0,
+				.fcntup = 10000,
 		},
 
 		// Entries of gateways sending ranging1 messages
@@ -101,7 +102,7 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.deveui = 0x7076ff0056080da1,
 				.nwkskey = POC_NWKSKEY,
 				.appskey = POC_APPSKEY,
-				.fcntup = 1,
+				.fcntup = 10000,
 		},
 
 		{
@@ -111,38 +112,26 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.deveui = 0x0000024b080602d9,
 				.nwkskey = POC_NWKSKEY,
 				.appskey = POC_APPSKEY,
-				.fcntup = 1,
+				.fcntup = 10000,
 		},
 
 		{
-				.label = "MTCDTIP2_021E9B_MONT_AIGOUAL",
+				.label = "LORIX_AIRE_ADOUR",
 				.module = FIX_GATEWAY,
-				.devaddr = 0xfc00ad53,
-				.deveui = 0x0080000000021e9b,
+				.devaddr = 0xfc00ac45,
+				.deveui = 0x0016c001ff10d6bb,
 				.nwkskey = POC_NWKSKEY,
 				.appskey = POC_APPSKEY,
-				.fcntup = 1,
+				.fcntup = 10000,
 		},
 
 		{
-				.label = "MTCDT67_AIRE_ADOUR",
+				.label = "MTCDTIP67_0001DBB_AIGOUAL",
 				.module = FIX_GATEWAY,
-				.devaddr = 0xfc00af2f,
-				.deveui = 0x00800000a00064e9,
+				.devaddr = 0xfc00ad32,
+				.deveui = 0x00800000d0001dbb,
 				.nwkskey = POC_NWKSKEY,
 				.appskey = POC_APPSKEY,
-				.fcntup = 1,
+				.fcntup = 10000,
 		},
-
-
-		{
-				.label = "MTCDT67_MONT_AIGOUAL",
-				.module = FIX_GATEWAY,
-				.devaddr = 0xfc00ad42,
-				.deveui = 0x00800000a000e605,
-				.nwkskey = POC_NWKSKEY,
-				.appskey = POC_APPSKEY,
-				.fcntup = 1,
-		},
-
 };

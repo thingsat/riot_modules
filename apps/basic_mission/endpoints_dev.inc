@@ -57,19 +57,22 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.fcntup = 0,
 		},
 		{
-				// Thingsat ProtoSEED
-				.label = "THINGSAT ProtoSEED 193E63",
+				// Thingsat ProtoSEED (ex BALLOON_1_RANGING)
+				.label = "THINGSAT_ProtoSEED_193E63",
 				.module = RAK5146_SPI_GNSS,
-				.devaddr = 0xfc00ada4,
+				.devaddr = 0xfc00aee2,
 				.deveui = 0x0016c001ff193e63U,
 				.nwkskey = DEFAULT_NWKSKEY,
 				.appskey = DEFAULT_APPSKEY,
 				.fcntup = 0,
 		},
+
+		// TODO add WM1302 for Thingsat ProtoSEED (AMI CMA COMETES WP4 Summer Workshop)
+
 		{
 				// iM880a  Label 6F75
-				.label = "IMM880A_BALLOON_746F75",
-				.module = RAK5146_SPI_GNSS,
+				.label = "IMM880A BALLOON 746F75",
+				.module = ENDPOINT_SX12xx,
 				.devaddr = 0xfc00afeb,
 				.deveui = 0x3238353500746f75U,
 				.nwkskey = DEFAULT_NWKSKEY,
@@ -77,34 +80,46 @@ static lorawan_endpoint_t lorawan_endpoints[] = {
 				.fcntup = 0,
 		},
 
-/*
-		{
-				// Flight model
-				.label = "THINGSAT @ STORK1 FM 1",
-				.module = THINGSAT_SX1302_BOARD,
-				.devaddr = 0xfc00ae69,
-				.deveui = 0x0016C001FF1848AEU,
-				.nwkskey = DEFAULT_NWKSKEY,
-				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 0,
-		},
-		{
-				// Engineering model
-				.label = "THINGSAT @ STORK1 EM 1",
-				.module = THINGSAT_SX1302_BOARD,
-				.devaddr = 0xfc00ac2c,
-				.deveui = 0x0016c001ff1858ccU,
-				.nwkskey = DEFAULT_NWKSKEY,
-				.appskey = DEFAULT_APPSKEY,
-				.fcntup = 0,
-		},
-*/
-
-		// TODO add 00016c001ff18596 (Thingsat FM aboard Stork - Burn after returning to Earth)
-
-		// TODO add Thingsat EM and FM @ SatRev SOWA
-		// TODO add Thingsat EM and FM @ CSUT Nimph
-
-
 		// Entries of gateways sending ranging1 messages
+
+		{
+				.label = "ISTATION_0DA1_AIGUILLE_MIDI",
+				.module = FIX_GATEWAY,
+				.devaddr = 0xfc00acfd,
+				.deveui = 0x7076ff0056080da1,
+				.nwkskey = POC_NWKSKEY,
+				.appskey = POC_APPSKEY,
+				.fcntup = 10000,
+		},
+
+		{
+				.label = "KER110_LAUTARET",
+				.module = FIX_GATEWAY,
+				.devaddr = 0xfc00ae69,
+				.deveui = 0x0000024b080602d9,
+				.nwkskey = POC_NWKSKEY,
+				.appskey = POC_APPSKEY,
+				.fcntup = 10000,
+		},
+
+		{
+				.label = "LORIX_AIRE_ADOUR",
+				.module = FIX_GATEWAY,
+				.devaddr = 0xfc00ac45,
+				.deveui = 0x0016c001ff10d6bb,
+				.nwkskey = POC_NWKSKEY,
+				.appskey = POC_APPSKEY,
+				.fcntup = 10000,
+		},
+
+		{
+				.label = "MTCDTIP67_0001DBB_AIGOUAL",
+				.module = FIX_GATEWAY,
+				.devaddr = 0xfc00ad32,
+				.deveui = 0x00800000d0001dbb,
+				.nwkskey = POC_NWKSKEY,
+				.appskey = POC_APPSKEY,
+				.fcntup = 10000,
+		},
+
 };
