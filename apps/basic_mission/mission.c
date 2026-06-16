@@ -452,7 +452,7 @@ void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		return;
 	}
 
-	printf("INFO: %08lx is a friend's devaddr\n", rx_devaddr);
+	printf("INFO: %08lx is a friend's devaddr (%s)\n", rx_devaddr, rx_endpoint->label /*, rx_endpoint->module*/);
 
 	stat_lgw.rx_friends++;
 
@@ -465,12 +465,12 @@ void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 	if (!lorawan_check_mic_up(rx_devaddr, fCnt, rx_endpoint->nwkskey, payload,
 			payload_size)) {
 		stat_lgw.rx_bad_mic++;
-		printf("INFO: Bad MIC for devaddr %08lx\n", rx_devaddr);
+		printf("INFO: Bad MIC for devaddr %08lx (%s)\n", rx_devaddr, rx_endpoint->label);
 		return;
 	}
 
 	// Try to process for ranging (Ranging1, Ranging2, Ranging3)
-	printf("INFO: try to process ranging for devaddr %08lx\n", rx_devaddr);
+	printf("INFO: try to process ranging for devaddr %08lx (%s)\n", rx_devaddr, rx_endpoint->label);
 	if (basic_mission_ranging_process(pkt_rx, pkt_tx, rx_endpoint, _fCntUp)) {
 		if (pkt_tx->size > 0) {
 			_fCntUp++;
@@ -479,7 +479,7 @@ void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 	}
 
 	// Try to process for repeating
-	printf("INFO: try to process repeat for devaddr %08lx\n", rx_devaddr);
+	printf("INFO: try to process repeat for devaddr %08lx (%s)\n", rx_devaddr, rx_endpoint->label);
 	if (basic_mission_repeat_process(pkt_rx, pkt_tx, rx_endpoint)) {
 		/*		if(pkt_tx->size > 0) {
 		 _fCntUp++;
