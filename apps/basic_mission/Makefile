@@ -160,9 +160,11 @@ USEMODULE += i2c_scan_utils
 # Zone of Interest Module
 # -----------------------------
 
-#ifeq ($(ZOI_ENABLE),1)
+ZOI_ENABLE ?= 1
+
+ifeq ($(ZOI_ENABLE),1)
 include Makefile.zoi.mk
-#endif
+endif
 
 # -----------------------------
 # Sx1302 Module

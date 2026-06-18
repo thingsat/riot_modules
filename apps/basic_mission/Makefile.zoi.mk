@@ -1,3 +1,6 @@
+# -----------------------------
+# Zone of Interest (ZoI) Module
+# -----------------------------
 
 CFLAGS += -DZOI_ENABLE=$(ZOI_ENABLE)
 
