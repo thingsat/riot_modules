@@ -68,9 +68,9 @@ int8_t check_geofence(float lat, float lon) {
 int8_t print_geofence(float lat, float lng) {
 	int8_t area_idx = check_geofence(lat,lng);
 	if(area_idx == -1) {
-	 	printf("INFO: %f,%f is not into a geofence area\n", lat, lng);
+	 	printf("INFO: Position %f,%f is not into a geofence area\n", lat, lng);
 	} else {
-	 	printf("WARNING: %f,%f is into the geofence area : %d\n", lat, lng, area_idx);
+	 	printf("INFO: Position %f,%f is into the geofence area : %d\n", lat, lng, area_idx);
 	}
 	return area_idx;
 }

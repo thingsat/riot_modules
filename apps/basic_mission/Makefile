@@ -1,14 +1,14 @@
 #
-# Copyright (C) 2021-2025 Université Grenoble Alpes
+# Copyright (C) 2021-2026 Université Grenoble Alpes
 #
 RIOTBASE ?= ${HOME}/github/RIOT-OS/RIOT
 
 APPLICATION=thingsat_basic_mission
 
-BOARD ?= nucleo-l432kc-inisat
+BOARD ?= nucleo-l432kc-protoseed
 EXTERNAL_BOARD_DIRS ?= ../../boards
 
-BOARD_WHITELIST := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l432kc-protoseed nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
+BOARDS_SUPPORTED := esp32-nano thingsat-up4-v2 thingsat-up4 thingsat-up1-f4 rpi-pico-w rpi-pico esp32-wroom-32 nucleo-l432kc nucleo-l432kc-inisat nucleo-l432kc-protoseed nucleo-l476rg nucleo-f411re nucleo-f446re nucleo-f446ze nucleo-f429zi nucleo-f746zg nucleo-f767zi nucleo-f722ze stm32f746g-disco
 
 EXTERNAL_MODULE_DIRS += ../../modules
 EXTERNAL_MODULE_DIRS += ../../public_modules
@@ -155,6 +155,14 @@ USEMODULE += printf_float
 
 USEMODULE += git
 USEMODULE += i2c_scan_utils
+
+# -----------------------------
+# Zone of Interest Module
+# -----------------------------
+
+#ifeq ($(ZOI_ENABLE),1)
+include Makefile.zoi.mk
+#endif
 
 # -----------------------------
 # Sx1302 Module

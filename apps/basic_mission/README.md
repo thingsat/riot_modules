@@ -110,6 +110,10 @@ Add `LGW_AUTOSTART_ENABLE=0` into the arguments list of the `make` command in or
 
 Add `NO_SHELL=1` into the arguments list of the `make` command in order to disable the shell.
 
+## Enable ZoI (Zone of Interest)
+
+Add `ZOI_ENABLE=1` into the arguments list of the `make` command in order to identify the zone of interest (ZoI) from the satelitte position computed/predicted from TLE.
+
 ## Console
 ```bash
 tio -L

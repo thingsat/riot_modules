@@ -53,6 +53,12 @@
 #include "aprs.h"
 #include "ewss.h"
 
+
+#if ZOI_ENABLE == 1
+#include "zoi.h"
+#endif
+
+
 // For lgw_bench
 static uint32_t _fCntUp = 0;
 
@@ -416,6 +422,8 @@ void mission_rx_cb(const struct lgw_pkt_rx_s *pkt_rx,
 #if ENABLE_DEBUG_MISSION == 1
 	mission_inst_cnt_print();
 	mission_gnss_print();
+#else
+	mission_gnss_print_short();
 #endif
 
 	if (!basic_mission_check_pkt_rx(pkt_rx)) {
@@ -549,9 +557,16 @@ void mission_gnss_print(void) {
 #else
 
 void mission_gnss_print_short(void) {
+#if ZOI_ENABLE == 1
+	zoi_exec();
+#endif
+
 }
 
 void mission_gnss_print(void) {
+#if ZOI_ENABLE == 1
+	zoi_exec();
+#endif
 }
 
 #endif

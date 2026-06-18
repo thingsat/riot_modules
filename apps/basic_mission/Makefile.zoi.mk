@@ -1,0 +1,29 @@
+
+CFLAGS += -DZOI_ENABLE=$(ZOI_ENABLE)
+
+USEMODULE += xtimer
+FEATURES_REQUIRED += periph_rtc
+
+USEMODULE += aiop13
+USEMODULE += geofence
+EXTERNAL_MODULE_DIRS += ../../modules/
+
+
+# Features required
+FEATURES_REQUIRED += cpp # basic C++ support
+FEATURES_REQUIRED += libstdcpp # libstdc++ support (for #include <cstdio>)
+
+
+# https://celestrak.com/NORAD/elements/gp.php?CATNR=51087
+TLE_NAME ?= "STORK-1"
+TLE_LINE1 ?= "1 51087U 22002DH  22109.45450769  .00008886  00000+0  50878-3 0  9991"
+TLE_LINE2 ?= "2 51087  97.4971 177.4889 0011957 274.8199 207.1507 15.12799091 14480"
+
+# 22/06/2026 12:00:00
+TLE_EPOCH_INIT ?= 1782122400
+
+
+#CFLAGS += -DTLE_NAME=\"$(TLE_NAME)\"
+#CFLAGS += -DTLE_LINE1=\"$(TLE_LINE1)\"
+#CFLAGS += -DTLE_LINE2=\"$(TLE_LINE2)\" 
+CFLAGS += -DTLE_EPOCH_INIT=$(TLE_EPOCH_INIT)

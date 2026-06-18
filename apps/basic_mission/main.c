@@ -41,6 +41,10 @@
 #include "board.h"
 #include "i2c_scan.h"
 
+#if ZOI_ENABLE == 1
+#include "zoi.h"
+#endif
+
 //#define NO_SHELL 1
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
@@ -158,14 +162,11 @@ int main(void) {
 
 	puts("\nBOARD:        " RIOT_BOARD "\n");
 
-
 #if PROD == 1
 	puts("INFO: Production mode\n");
 #else
 	puts("INFO: Development mode\n");
 #endif
-
-	// TODO : show friends
 
 #if ENABLE_WDT_ZTIMER == 1
 	(void)start_wdt_ztimer();
@@ -201,6 +202,11 @@ int main(void) {
 	sensors_init_all();
 #endif
 
+
+#if ZOI_ENABLE == 1
+	zoi_init();
+#endif
+
 #if LGW_AUTOSTART_ENABLE == 1
 	puts("INFO: Starting the gateway ...");
 
@@ -210,7 +216,6 @@ int main(void) {
 	lgw_cmd(2, (char*[] ) { "lgw", "start" });
 	lgw_cmd(2, (char*[] ) { "lgw", "eui" });
 	lgw_cmd(2, (char*[] ) { "lgw", "freq_plan" });
-
 
 	mission_info_print();
 #endif
@@ -247,6 +252,7 @@ int main(void) {
 	// rtc gettime
 	// saul 
 	// saul read jc42 
+	// tle
 
 	//	shell_handle_input_line(shell_commands,"rtc gettime");
 	shell_handle_input_line(shell_commands,"saul");
