@@ -3,10 +3,8 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {
-        "name": "europe"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -30,17 +28,17 @@
               35.3411736875491
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "europe"
       },
       "id": 0
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "svalbard"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -64,17 +62,17 @@
               81.76716659127663
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "svalbard"
       },
       "id": 1
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "cameroon"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -98,17 +96,17 @@
               2.0418946244897285
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "cameroon"
       },
       "id": 2
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "french guiana"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -132,17 +130,17 @@
               6.928318362299564
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "french guiana"
       },
       "id": 3
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "french antillas"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -166,17 +164,17 @@
               19.36791099553946
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "french antillas"
       },
       "id": 4
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "wallis and futuna"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -200,17 +198,17 @@
               -10.557311384661148
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "wallis and futuna"
       },
       "id": 5
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "french polynesia"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -234,17 +232,17 @@
               -12.011547744429151
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "french polynesia"
       },
       "id": 6
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "french southern and antartic lands"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -268,17 +266,17 @@
               -40.05333183175086
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "french southern and antartic lands"
       },
       "id": 7
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "antartica"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -302,15 +300,17 @@
               -90
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "antartica"
       },
       "id": 8
     },
     {
       "type": "Feature",
-      "properties": {},
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -334,16 +334,14 @@
               11.158929203489024
             ]
           ]
-        ],
-        "type": "Polygon"
-      }
+        ]
+      },
+      "properties": {}
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "clipperton islands"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -367,17 +365,17 @@
               14.298850962740929
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "clipperton islands"
       },
       "id": 10
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "la reunion"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -401,17 +399,17 @@
               -19.300394597197354
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "la reunion"
       },
       "id": 11
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "new caledonia"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -435,17 +433,17 @@
               -18.175690696835773
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "new caledonia"
       },
       "id": 12
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "artic polar"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -469,17 +467,17 @@
               84
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "artic polar"
       },
       "id": 13
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "saint pierre et miquelon"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -503,17 +501,17 @@
               47.19447758003585
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "saint pierre et miquelon"
       },
       "id": 14
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "canaria islands"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -537,17 +535,17 @@
               30.71454595074306
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "canaria islands"
       },
       "id": 15
     },
     {
       "type": "Feature",
-      "properties": {
-        "name": "madere island"
-      },
       "geometry": {
+        "type": "Polygon",
         "coordinates": [
           [
             [
@@ -571,10 +569,111 @@
               35.30410747096391
             ]
           ]
-        ],
-        "type": "Polygon"
+        ]
+      },
+      "properties": {
+        "name": "madere island"
       },
       "id": 16
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "laos"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              100.72786642600306,
+              21.599549028342295
+            ],
+            [
+              104.25388375434414,
+              21.599549028342295
+            ],
+            [
+              104.25388375434414,
+              18.09376951346924
+            ],
+            [
+              100.72786642600306,
+              18.09376951346924
+            ],
+            [
+              100.72786642600306,
+              21.599549028342295
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "senegal"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -11.599250787225287,
+              12.539721739923294
+            ],
+            [
+              -17.17475360419664,
+              12.539721739923294
+            ],
+            [
+              -17.17475360419664,
+              17.279435516456132
+            ],
+            [
+              -11.599250787225287,
+              17.279435516456132
+            ],
+            [
+              -11.599250787225287,
+              12.539721739923294
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "gabon"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.37272204733776,
+              -4.424547443747855
+            ],
+            [
+              15.11694526442301,
+              -4.424547443747855
+            ],
+            [
+              15.11694526442301,
+              2.0298797181990267
+            ],
+            [
+              8.37272204733776,
+              2.0298797181990267
+            ],
+            [
+              8.37272204733776,
+              -4.424547443747855
+            ]
+          ]
+        ]
+      }
     }
   ]
 }
