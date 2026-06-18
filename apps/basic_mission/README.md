@@ -7,15 +7,21 @@ This application illustrates a simple mission for the [Thingsat in-orbit gateway
 * [ ] add App Clock Sync
 * [ ] add 5.9 DeviceTime commands (DeviceTimeReq, DeviceTimeAns) introduced in lorawan specification v1.0.3
 * [x] Chirpstack Mesk Relay (Very simple implementation) (SHOULD BE TESTED)
-* [x] Meshtastic Router (Very simple implementation)
+* [x] Meshtastic Router (Very simple implementation --> uplink only)
+* [ ] Meshcore Repeater
+* [ ] Meshtastic Routeur / Client / Tracker
 * [ ] Periodic telemetry (with GNSS position and temperature) using LoRaWAN with Cayenne LPP (and XOR redundancy)
 * [ ] Periodic telemetry (with GNSS position and temperature) using Meshtastic telemetry and position (protobuf)
 * [ ] Periodic telemetry (with GNSS position and temperature) using APRS format (not fake)
 * [ ] Add shell command for printing GNSS data (position, speed, quality, cog ...)
 * [ ] Periodic two-way ranging with other Thingsat boards
+* [ ] add spectral scan when SX1262 is present
 * [ ] LoRa 2G4 backhaul when the SX1280 module is present
 * [ ] Send [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) messages over LoRa/LoRaWAN/Meshtastic ([see spec](https://www.itu.int/dms_pubrec/itu-r/rec/m/R-REC-M.1371-5-201402-I!!PDF-F.pdf))
 * [ ] Receive and decode [AIS](https://en.wikipedia.org/wiki/Automatic_identification_system) messages over LoRa/LoRaWAN/Meshtastic ([see spec](https://www.itu.int/dms_pubrec/itu-r/rec/m/R-REC-M.1371-5-201402-I!!PDF-F.pdf))
+* [x] add zone of interest (ZoI) with rectangles
+  * [ ] print the name of the zone
+* [ ] add zone of interest (ZoI) with polylines
 
 ## Setup
 
@@ -110,7 +116,7 @@ Add `LGW_AUTOSTART_ENABLE=0` into the arguments list of the `make` command in or
 
 Add `NO_SHELL=1` into the arguments list of the `make` command in order to disable the shell.
 
-## Enable ZoI (Zone of Interest)
+## Zone of Interest
 
 Add `ZOI_ENABLE=1` into the arguments list of the `make` command in order to identify the zone of interest (ZoI) from the satelitte position computed/predicted from TLE.
 
