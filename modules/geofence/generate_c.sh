@@ -1,8 +1,8 @@
 #!/bin/bash
 
-QUERY='[.features[] | { lat1:.geometry.coordinates[0][0][0], lon1:.geometry.coordinates[0][0][1],  lat2:.geometry.coordinates[0][2][0], lon2:.geometry.coordinates[0][2][1]} ]'
+QUERY='[.features[] | { name:.properties.name, lat1:.geometry.coordinates[0][0][1], lon1:.geometry.coordinates[0][0][0],  lat2:.geometry.coordinates[0][2][1], lon2:.geometry.coordinates[0][2][0]} ]'
 
-jq "$QUERY" geofence.geosjon | json2csv --no-header > geofence.csv
+jq "$QUERY" geofence.geojson | json2csv --no-header --flatten > geofence.csv
 echo "" >> geofence.csv
 
 csv2c() {

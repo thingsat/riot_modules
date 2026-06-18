@@ -10,10 +10,11 @@
 // REMARK: lon is before lat in GeoJSON, CSV and C file
 
 struct Area {
-	float lon1;
+	char* name;
 	float lat1;
-	float lon2;
+	float lon1;
 	float lat2;
+	float lon2;
 };
 
 typedef struct Area Area_t;
@@ -70,7 +71,7 @@ int8_t print_geofence(float lat, float lng) {
 	if(area_idx == -1) {
 	 	printf("INFO: Position %f,%f is not into a geofence area\n", lat, lng);
 	} else {
-	 	printf("INFO: Position %f,%f is into the geofence area : %d\n", lat, lng, area_idx);
+	 	printf("INFO: Position %f,%f is into the geofence area : %s (%d)\n", lat, lng, geofence_retangles[area_idx].name, area_idx );
 	}
 	return area_idx;
 }

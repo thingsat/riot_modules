@@ -336,7 +336,10 @@
           ]
         ]
       },
-      "properties": {}
+      "properties": {
+        "name": "somewhere"
+      },
+      "id": 9
     },
     {
       "type": "Feature",
