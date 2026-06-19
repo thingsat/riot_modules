@@ -69,22 +69,30 @@ void zoi_exec(void) {
 
 	double dlat;
 	double dlon;
-	predict_gps_from_tle_at_epoch(get_time_since_epoch(), &dlat, &dlon);
+	const uint32_t epoch = get_time_since_epoch();
+	predict_gps_from_tle_at_epoch(epoch, &dlat, &dlon);
 
 	printf("INFO: ");
 	print_rtc();
-	printf("INFO: Position predicted from TLE (%s): lat=%0.9f, lon=%0.9f\n",
-			TLE_NAME, dlat, dlon);
+	printf("INFO: Position predicted from TLE (%s): lat=%0.9f, lon=%0.9f at %ld\n",
+			TLE_NAME, dlat, dlon, epoch);
+	printf("INFO: Position %s,%0.9f,%0.9f,%ld\n",
+			TLE_NAME, dlat, dlon, epoch);
 
 	(void) print_geofence((float)dlat, (float)dlon);
 
-
-	if (previous)
+	if (previous) {
 		printf("INFO: Distance from last predict : %0.1f kms\n",
 				haversine(dlat, dlon, previous_dlat, previous_dlon));
+	}
 	previous = true;
 	previous_dlat = dlat;
 	previous_dlon = dlon;
+
+	// TODO Print night / day
+	// TODO Print time to night / time to day
+	// TODO Print Sun elevation and azimuth
+	// TODO Print Moon elevation and azimuth
 }
 
 
