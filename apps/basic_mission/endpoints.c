@@ -36,7 +36,7 @@ bool set_endpoint(void) {
 	uint64_t gweui;
 	int err = lgw_get_eui(&gweui);
 	if (err != 0) {
-		printf("ERROR: failed to get SX130x EUI\n");
+		printf("ERROR: failed to get SX130x EUI \n");
 		return false;
 	}
 	lgw_sx130x_endpoint = NULL;
@@ -48,7 +48,10 @@ bool set_endpoint(void) {
 	}
 
 	if (lgw_sx130x_endpoint == NULL) {
-		printf("ERROR: no endpoint defined for SX130x EUI\n");
+		printf("ERROR: no endpoint defined for SX130x EUI (%08lX%08lX)\n",
+				(uint32_t)(lgw_sx130x_endpoint->deveui>>32),
+				(uint32_t)(lgw_sx130x_endpoint->deveui&0xFFFFFFFF)
+				);
 		return false;
 	} else {
 		printf("INFO: endpoint with devaddr=%08lx \"%s\" defined for SX130x EUI (%08lX%08lX)\n",
@@ -79,10 +82,11 @@ const lorawan_endpoint_t* endpoint_get_endpoint(const uint32_t devaddr) {
 void endpoint_print_all(void) {
 	for (unsigned int i = 0; i < ARRAY_SIZE(lorawan_endpoints); i++) {
 		const lorawan_endpoint_t* e = lorawan_endpoints + i;
-		printf("INFO: friend endpoint with devaddr=%08lx \"%s\" defined for SX130x EUI (%08lX%08lX)",
+		printf("INFO: friend endpoint with devaddr=%08lx \"%s\" defined for EUI (%08lX%08lX)",
 				e->devaddr, e->label,
 				(uint32_t)(e->deveui>>32),
 				(uint32_t)(e->deveui&0xFFFFFFFF)
+				// TODO print device type
 				);
 		printf(" - initial fcntup=%ld\n",
 				e->fcntup);
