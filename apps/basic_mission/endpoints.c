@@ -1,6 +1,6 @@
 /*
  Basic Mission
- Copyright (c) 2021-2025 UGA CSUG LIG
+ Copyright (c) 2021-2026 UGA CSUG LIG
 
  Unless required by applicable law or agreed to in writing, this
  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
