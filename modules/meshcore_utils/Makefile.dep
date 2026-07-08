@@ -1,0 +1,11 @@
+
+# For decoding the Meshcore packet and payload
+
+# For encoding/decoding  payload using AES128-CTR https://doc.riot-os.org/ctr_8h.html#details
+# USEMODULE += crypto
+
+# For Curve25519 (Faster lib)
+# https://api.riot-os.org/group__pkg__libhydrogen.html
+# https://github.com/jedisct1/libhydrogen
+USEPKG += libhydrogen
+
