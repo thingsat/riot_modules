@@ -1,10 +1,19 @@
 
-#ifndef _MESHCORE_UTILS_CONSTANTS_H_
+/*
+ * Copyright (C) 2026 Université Grenoble Alpes - CSUG - LIG
+ */
+
+/*
+ * Utils for MeshCore mesh network
+ */
+
+ #ifndef _MESHCORE_UTILS_CONSTANTS_H_
 #define _MESHCORE_UTILS_CONSTANTS_H_
 
 // From https://github.com/meshcore-dev/MeshCore/blob/main/src/MeshCore.h#L8
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <math.h>
 
@@ -16,6 +25,10 @@
 #define MAX_ADVERT_DATA_SIZE  32
 #define CIPHER_KEY_SIZE     16
 #define CIPHER_BLOCK_SIZE   16
+
+// https://github.com/meshcore-dev/MeshCore/blob/main/src/Utils.cpp#L35
+#define PRV_SHARED_KEY_SIZE     CIPHER_KEY_SIZE
+
 
 // V1
 #define CIPHER_MAC_SIZE      2
