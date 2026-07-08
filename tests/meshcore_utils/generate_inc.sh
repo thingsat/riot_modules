@@ -18,14 +18,15 @@ echo "// $p"
 echo -n "const "
 echo "$p" | xxd -r -p > .packet.tmp
 xxd -i -c 16 -n packet_${LINECNT} .packet.tmp
-LINECNT=`expr $LINECNT + 1`
 echo "{ packet_${LINECNT}_len, packet_${LINECNT}}," >> .packets.inc
+LINECNT=`expr $LINECNT + 1`
 #echo "},"
 done < packets.txt
 } > packets.inc
 
 
 echo "};" >> .packets.inc
+echo "const unsigned int packet_list_len = ${LINECNT};" >> .packets.inc
 
 cat .packets.inc >> packets.inc
 

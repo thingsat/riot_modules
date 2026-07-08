@@ -1,4 +1,4 @@
-/* Generated for at mer.  8 juil. 2026 12:15:51 CEST by donsez */
+/* Generated for at mer.  8 juil. 2026 12:29:14 CEST by donsez */
 // 2E00921DEAC837BDF829C488E0DB5DEC2A20002A1E821A632CCD298E81B446F83AEDEC614091C93D
 const unsigned char packet_0[] = {
   0x2e, 0x00, 0x92, 0x1d, 0xea, 0xc8, 0x37, 0xbd, 0xf8, 0x29, 0xc4, 0x88, 0xe0, 0xdb, 0x5d, 0xec,
@@ -29,7 +29,8 @@ const unsigned char packet_2[] = {
 unsigned int packet_2_len = 134;
 typedef struct packet_list { unsigned int len, unsigned char* packet} packet_list_t;
 const packet_list_t p = {
+{ packet_0_len, packet_0},
 { packet_1_len, packet_1},
 { packet_2_len, packet_2},
-{ packet_3_len, packet_3},
 };
+const unsigned int packet_list_len = 3;
