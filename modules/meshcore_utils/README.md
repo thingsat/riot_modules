@@ -1,6 +1,6 @@
 # MeshCore utils
 
-Functions for encoding/decoding/debugging MeshCore packets and payloads in C with RIOT OS
+Functions for encoding/decoding/debugging (main) MeshCore packets and payloads in C with RIOT OS
 
 * https://github.com/meshcore-dev/MeshCore/blob/main/docs/packet_format.md
 * https://github.com/meshcore-dev/MeshCore/blob/main/docs/payloads.md
