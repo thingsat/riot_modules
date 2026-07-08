@@ -1,3 +1,5 @@
+# Author: Didier DONSEZ
+
 echo Generating packets.inc for including packets
 
 # For generation time
