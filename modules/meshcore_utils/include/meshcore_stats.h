@@ -1,4 +1,12 @@
-#ifndef _MESHCORE_UTILS_STATS_H_
+/*
+ * Copyright (C) 2026 Université Grenoble Alpes - CSUG - LIG
+ */
+
+/*
+ * Utils for MeshCore mesh network
+ */
+
+ #ifndef _MESHCORE_UTILS_STATS_H_
 #define _MESHCORE_UTILS_STATS_H_
 
 #include "meshcore_constants.h"
