@@ -6,6 +6,13 @@ ifeq ($(MESHTASTIC_ENABLE),1)
 include Makefile.meshtastic.mk
 endif
 
+# MeshCore
+MESHCORE_ENABLE ?= 0
+
+ifeq ($(MESHCORE_ENABLE),1)
+include Makefile.meshcore.mk
+endif
+
 # Chirpstack Mesh
 CHIRPSTACK_MESH_ENABLE ?= 0
 

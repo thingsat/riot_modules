@@ -26,6 +26,10 @@
 #include "lora_mesh.h"
 #endif
 
+#ifdef MODULE_MESHCORE_UTILS
+#include "meshcore_utils.h"
+#endif
+
 #ifdef MODULE_MESHTASTIC_UTILS
 #include "meshtastic_utils.h"
 #endif
@@ -238,6 +242,13 @@ void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
 		lorawan_printf_payload(rxpkt->payload,rxpkt->size);
 	}
 #else
+#ifdef MODULE_MESHCORE_UTILS
+	if(meshcore_check_valid_frame(rxpkt->payload, rxpkt->size)) {
+		meshcore_printf(rxpkt->payload, rxpkt->size);
+	} else {
+		printf("INFO:Not a valid MeshCore frame\n");
+	}
+#else
 #ifdef MODULE_MESHTASTIC_UTILS
 	if(meshtastic_check_valid_frame_size(rxpkt->payload, rxpkt->size)) {
 		meshtastic_printf(rxpkt->payload, rxpkt->size);
@@ -246,6 +257,7 @@ void lgw_printf_rxpkt(const struct lgw_pkt_rx_s *rxpkt) {
 	}
 #else
 	lorawan_printf_payload(rxpkt->payload, rxpkt->size);
+#endif
 #endif
 #endif
 

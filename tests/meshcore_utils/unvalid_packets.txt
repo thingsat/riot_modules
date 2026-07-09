@@ -1,0 +1,9 @@
+# Invalid MeshCore frames (must be rejected by meshcore_check_valid_frame)
+# 1-byte frame (shorter than minimal header+path_length)
+FF
+# TRANSPORT_FLOOD header but truncated transport codes
+000102
+# path length 0x41 (65) exceeds MESHCORE_MAX_PATH_SIZE (64)
+1141
+# declares a 2-hop path but the frame is truncated mid-path
+110208

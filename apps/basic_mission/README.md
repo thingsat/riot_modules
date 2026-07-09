@@ -101,6 +101,19 @@ gmake BOARD=$BOARD MESHTASTIC_ENABLE=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 G
 ```
 > Nota Bene: when OPENLOG_BAUDRATE is 9600 (ie slow), the GNSS parsing misses some characters in the ring buffer : `Bad Checksum` traces are then printed into the console
 
+### Setup for [MeshCore](https://meshcore.co.uk)
+
+```bash
+export BOARD=nucleo-l432kc-inisat
+gmake BOARD=$BOARD MESHCORE_ENABLE=1 MESHCORE_SELF_HASH=0xC5U OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 -j 8 flash term
+```
+
+`MESHCORE_SELF_HASH` is the node hash of the repeater (ie the first byte of the node public key). Received flood frames are repeated with the node hash appended to the path (with loop prevention); received direct frames are repeated only when routed through this node (the node hash is popped from the path). Frames with `MESHCORE_MAX_HOP` hops or more are dropped.
+
+The gateway listens on the EU/UK "classic" community preset (869.525 MHz, BW 250 kHz, SF11, CR 4/5, syncword 0x12) on the LoRa Service channel.
+
+> Nota Bene: the SX1302/SX1303 concentrator cannot demodulate 62.5 kHz LoRa : the newer EU preset (869.618 MHz, BW 62.5 kHz, SF8) is not supported.
+
 ### Setup for [Chirpstach Mesh Relay](https://www.chirpstack.io/docs/chirpstack-gateway-mesh/index.html)
 
 ```bash

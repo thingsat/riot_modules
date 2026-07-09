@@ -19,6 +19,8 @@
 #include "lgw_config.h"
 #if MESHTASTIC_ENABLE == 1
 #include "lgw_config_868_meshtastic.h"
+#elif MESHCORE_ENABLE == 1
+#include "lgw_config_868_meshcore.h"
 #else
 #include "lgw_config_868.h"
 #endif
