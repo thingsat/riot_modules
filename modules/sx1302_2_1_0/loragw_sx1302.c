@@ -1182,6 +1182,22 @@ int sx1302_lora_syncword(bool public, uint8_t lora_service_sf) {
 	printf("INFO: configuring LoRa (Service) SF%u with syncword MESHTASTIC (0x2B)\n", lora_service_sf);
     err |= lgw_reg_w(SX1302_REG_RX_TOP_LORA_SERVICE_FSK_FRAME_SYNCH0_PEAK1_POS, 4);
     err |= lgw_reg_w(SX1302_REG_RX_TOP_LORA_SERVICE_FSK_FRAME_SYNCH1_PEAK2_POS, 22);
+#elif MESHCORE_ENABLE == 1
+    (void) public;
+    // MeshCore uses the RadioLib private syncword (0x12) for all spreading factors
+    printf("INFO: configuring LoRa (Multi-SF) SF5->SF6 with syncword MESHCORE (0x12)\n");
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF5_PEAK1_POS_SF5, 2);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF5_PEAK2_POS_SF5, 4);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF6_PEAK1_POS_SF6, 2);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF6_PEAK2_POS_SF6, 4);
+
+	printf("INFO: configuring LoRa (Multi-SF) SF7->SF12 with syncword MESHCORE (0x12)\n");
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH0_SF7TO12_PEAK1_POS_SF7TO12, 2);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_FRAME_SYNCH1_SF7TO12_PEAK2_POS_SF7TO12, 4);
+
+	printf("INFO: configuring LoRa (Service) SF%u with syncword MESHCORE (0x12)\n", lora_service_sf);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_LORA_SERVICE_FSK_FRAME_SYNCH0_PEAK1_POS, 2);
+    err |= lgw_reg_w(SX1302_REG_RX_TOP_LORA_SERVICE_FSK_FRAME_SYNCH1_PEAK2_POS, 4);
 #else
     /* Multi-SF modem configuration */
     printf("INFO: configuring LoRa (Multi-SF) SF5->SF6 with syncword PRIVATE (0x12)\n");
@@ -2793,6 +2809,13 @@ int sx1302_send(lgw_radio_type_t radio_type, struct lgw_tx_gain_lut_s * tx_lut, 
 			err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_0_PEAK1_POS(pkt_data->rf_chain), 4);
 			CHECK_ERR(err);
 			err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_1_PEAK2_POS(pkt_data->rf_chain), 22);
+			CHECK_ERR(err);
+#elif MESHCORE_ENABLE == 1
+            (void) lpwan_public;
+			DEBUG_MSG("Setting LoRa syncword 0x12\n");
+			err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_0_PEAK1_POS(pkt_data->rf_chain), 2);
+			CHECK_ERR(err);
+			err = lgw_reg_w(SX1302_REG_TX_TOP_FRAME_SYNCH_1_PEAK2_POS(pkt_data->rf_chain), 4);
 			CHECK_ERR(err);
 #else
             /* Syncword */

@@ -31,6 +31,10 @@
 #include "lora_mesh.h"
 #endif
 
+#if MESHCORE_ENABLE == 1
+#include "meshcore_utils.h"
+#endif
+
 /**
  * Devaddr to repeat
  */
@@ -100,6 +104,48 @@ bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
 		// check meshtastic_check_valid_frame_size
 		// filter meshtastic_get_srcid
 		// filter meshtastic_get_destid
+#elif MESHCORE_ENABLE == 1
+
+	uint8_t meshcore_tx_size = 0;
+
+	if (!meshcore_check_valid_frame(pkt_rx->payload, pkt_rx->size)) {
+		DEBUG("INFO: frame is not a valid MeshCore frame : skip received frame\n");
+		return false;
+	}
+
+	meshcore_printf(pkt_rx->payload, pkt_rx->size);
+
+	// filter on hop count
+	const uint8_t meshcore_hop_count = meshcore_get_path_hash_count(
+			pkt_rx->payload, pkt_rx->size);
+	if (meshcore_hop_count >= MESHCORE_MAX_HOP) {
+		DEBUG(
+				"INFO: MeshCore frame with hop count too high (%d >= %d) : skip received frame\n",
+				meshcore_hop_count, MESHCORE_MAX_HOP);
+		return false;
+	}
+
+	if (meshcore_is_route_flood(pkt_rx->payload, pkt_rx->size)) {
+		// flood routing : append the node hash to the path
+		if (!meshcore_repeat_flood(pkt_rx->payload, pkt_rx->size,
+				pkt_tx->payload, &meshcore_tx_size, MESHCORE_SELF_HASH)) {
+			DEBUG(
+					"INFO: MeshCore flood frame is not repeated (loop, multi-byte hashes or path full) : skip received frame\n");
+			return false;
+		}
+	} else {
+		// direct routing : pop the node hash from the path
+		if (!meshcore_repeat_direct(pkt_rx->payload, pkt_rx->size,
+				pkt_tx->payload, &meshcore_tx_size, MESHCORE_SELF_HASH)) {
+			DEBUG(
+					"INFO: MeshCore direct frame is not routed through this node (0x%02x) : skip received frame\n",
+					MESHCORE_SELF_HASH);
+			return false;
+		}
+	}
+
+	DEBUG("INFO: Repeat the received MeshCore frame (%d bytes)\n",
+			meshcore_tx_size);
 #else
 
 #if CHIRPSTACK_MESH_ENABLE == 1
@@ -248,6 +294,22 @@ bool basic_mission_repeat_process(const struct lgw_pkt_rx_s *pkt_rx,
 		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
 		pkt_tx->preamble = 16;
 		pkt_tx->coderate = CR_LORA_4_8;
+#elif MESHCORE_ENABLE == 1
+		// mission_set_default_lgw_pkt_tx() has reset pkt_tx->size
+		pkt_tx->size = meshcore_tx_size;
+
+		// MeshCore repeaters retransmit with the received radio settings
+		pkt_tx->datarate = pkt_rx->datarate;
+		pkt_tx->bandwidth = pkt_rx->bandwidth;
+
+		if(pkt_rx->freq_hz == MESHCORE_FREQUENCY) {
+			pkt_tx->rf_power = MESHCORE_RF_POWER;
+		} else {
+			pkt_tx->rf_power = REPEAT_TXPOWER;
+		}
+		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
+		pkt_tx->preamble = MESHCORE_PREAMBLE_LEN;
+		pkt_tx->coderate = MESHCORE_CODING_RATE; // CR 4/5
 #else
 	pkt_tx->rf_power = REPEAT_TXPOWER; //use the single entry of the txlut TODO Should be check
 	pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
