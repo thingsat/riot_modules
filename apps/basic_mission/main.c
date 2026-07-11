@@ -186,6 +186,8 @@ int main(void) {
 
 #if MESHTASTIC_ENABLE == 1
 	puts("INFO: Meshtastic EU868 gateway configuration");
+#elif MESHCORE_ENABLE == 1
+	puts("INFO: MeshCore EU868 gateway configuration");
 #elif CHIRPSTACK_MESH_ENABLE == 1
 	puts("INFO: Chirpstack Mesh Relay is enabled");
 #else
@@ -225,9 +227,11 @@ int main(void) {
 	puts("INFO: Set endpoint");
 	set_endpoint();
 #endif
+#if INVOKE_CALLBACKS == 1
 	puts("INFO: Set callback function for mission");
 	pkt_period_cb = mission_period_cb;
 	pkt_rx_cb = mission_rx_cb;
+#endif
 
 	puts("INFO: Repeating is on");
 	basic_mission_repeat_enable(true);

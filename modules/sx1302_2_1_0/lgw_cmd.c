@@ -37,6 +37,20 @@
 
 #include "lorawan_mac.h"
 #include "lorawan_printf.h"
+
+#if MESHCORE_ENABLE == 1
+#include "meshcore_utils.h"
+
+// Repeater identity : first byte of the node public key (node hash)
+#ifndef MESHCORE_SELF_HASH
+#define MESHCORE_SELF_HASH		(0xC5U)
+#endif
+
+// Frames with a hop count higher or equal are not repeated
+#ifndef MESHCORE_MAX_HOP
+#define MESHCORE_MAX_HOP		(8U)
+#endif
+#endif
 #ifdef MODULE_LORA_MESH
 #include "lora_mesh.h"
 #endif
@@ -1527,6 +1541,19 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		// check meshtastic_check_valid_frame_size
 		// filter meshtastic_get_srcid
 		// filter meshtastic_get_destid
+#elif MESHCORE_ENABLE == 1
+	if (!meshcore_check_valid_frame(pkt_rx->payload, pkt_rx->size)) {
+		printf("INFO: frame is not a valid MeshCore frame : skip received frame\n");
+		return;
+	}
+
+	// filter on hop count
+	if (meshcore_get_path_hash_count(pkt_rx->payload, pkt_rx->size)
+			>= MESHCORE_MAX_HOP) {
+		printf(
+				"INFO: MeshCore frame with hop count too high : skip received frame\n");
+		return;
+	}
 #else
 	// filter on devaddr
 	if (lorawan_check_valid_frame_size(pkt_rx->payload, pkt_rx->size)
@@ -1571,6 +1598,15 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
 		pkt_tx->preamble = 16;
 		pkt_tx->coderate = CR_LORA_4_8;
+#elif MESHCORE_ENABLE == 1
+		if(pkt_rx->freq_hz == 869525000) {
+			pkt_tx->rf_power = 27;
+		} else {
+			pkt_tx->rf_power = 14;
+		}
+		pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
+		pkt_tx->preamble = 16;			// 16 symbols for SF > 8
+		pkt_tx->coderate = CR_LORA_4_5; // 4/5 for MeshCore
 #else
 	pkt_tx->rf_power = 14; //use the single entry of the txlut TODO Should be check
 	pkt_tx->modulation = MOD_LORA;	// ONLY LoRa (No FSK)
@@ -1582,8 +1618,30 @@ static void _lgw_repeat_cb(const struct lgw_pkt_rx_s *pkt_rx,
 	pkt_tx->no_crc = false; 	// LoRaWAN : on for uplink and off for downlink
 	pkt_tx->invert_pol = false;
 
+#if MESHCORE_ENABLE == 1
+	uint8_t meshcore_tx_size = 0;
+	if (meshcore_is_route_flood(pkt_rx->payload, pkt_rx->size)) {
+		// flood routing : append the node hash to the path
+		if (!meshcore_repeat_flood(pkt_rx->payload, pkt_rx->size,
+				pkt_tx->payload, &meshcore_tx_size, MESHCORE_SELF_HASH)) {
+			printf(
+					"INFO: MeshCore flood frame is not repeated (loop, multi-byte hashes or path full) : skip received frame\n");
+			return;
+		}
+	} else {
+		// direct routing : pop the node hash from the path
+		if (!meshcore_repeat_direct(pkt_rx->payload, pkt_rx->size,
+				pkt_tx->payload, &meshcore_tx_size, MESHCORE_SELF_HASH)) {
+			printf(
+					"INFO: MeshCore direct frame is not routed through this node : skip received frame\n");
+			return;
+		}
+	}
+	pkt_tx->size = meshcore_tx_size;
+#else
 	memcpy(pkt_tx->payload, pkt_rx->payload, pkt_rx->size);
 	pkt_tx->size = pkt_rx->size;
+#endif
 }
 
 inline static uint32_t h2d(const char c) {
