@@ -24,3 +24,4 @@ Priority list
 
 * https://github.com/meshcore-dev/MeshCore/blob/main/docs/packet_format.md
 * https://github.com/meshcore-dev/MeshCore/blob/main/docs/payloads.md?plain=1
+* https://github.com/meshcore-dev/MeshCore/blob/main/src/Utils.cpp
