@@ -26,6 +26,10 @@
 #include "gps_uart.h"
 #endif
 
+#if SX1280 == 1
+#include "sx1280_cmd.h"
+#endif
+
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 
 #include "stts751.h"
@@ -122,6 +126,9 @@ static const shell_command_t shell_commands[] = {
 #if ENABLE_GPS == 1
     { "gps", "GPS commands", gps_cmd },
 #endif
+#if SX1280 == 1
+    { "sx1280", "LoRa sx1280 basic commands", sx1280_cmd },
+#endif
 	{ NULL, NULL, NULL }
 };
 #endif
@@ -191,6 +198,9 @@ int main(void) {
 		(void) mission_i2c_scan_and_check(idx);
 	}
 
+#if SX1280 == 1
+	sx1280_init_and_reboot_on_failure();
+#endif
 
 #if defined(MODULE_STTS751) || defined(STTS751_CORECELL_I2C_ADDR)
 	sensors_init_all();
