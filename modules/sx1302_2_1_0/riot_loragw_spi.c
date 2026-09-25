@@ -235,7 +235,7 @@ int lgw_spi_rmw(const void *com_target, uint8_t spi_mux_target, uint16_t address
     DEBUG_PRINTF("[%s:%d] %4x %d %d ", __FUNCTION__, __LINE__, address, offs, leng);
 
     int spi_stat = LGW_SPI_SUCCESS;
-    uint8_t buf[4] = "\x00\x00\x00\x00";
+    uint8_t buf[4] = {0,0,0,0};
 
     /* Read */
     spi_stat += lgw_spi_r(com_target, spi_mux_target, address, &buf[0]);
