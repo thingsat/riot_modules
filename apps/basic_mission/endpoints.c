@@ -10,12 +10,16 @@
 #include <stdio.h>
 #include "endpoints.h"
 
-
+#ifndef ENDPOINTS_INC
 #if PROD == 1
-#include "endpoints_prod.inc"
+#define ENDPOINTS_INC "endpoints_prod.inc"
 #else
-#include "endpoints_dev.inc"
+#define ENDPOINTS_INC "endpoints_prod.inc"
 #endif
+#endif
+
+#include ENDPOINTS_INC
+
 
 lorawan_endpoint_t *lgw_sx130x_endpoint = NULL;
 

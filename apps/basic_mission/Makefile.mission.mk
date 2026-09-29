@@ -1,4 +1,11 @@
 
+ifeq ($(PROD),1)
+ENDPOINTS_INC ?= "endpoints_prod.inc"
+else
+ENDPOINTS_INC ?= "endpoints_dev.inc"
+endif
+CFLAGS += -DENDPOINTS_INC=\"$(ENDPOINTS_INC)\"
+
 
 INVOKE_CALLBACKS ?= 1
 
