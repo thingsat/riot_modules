@@ -27,7 +27,7 @@
 
 //#define CHIRPSTACK_MESH_ENABLE  1
 
-#ifdef CHIRPSTACK_MESH_ENABLE
+#if CHIRPSTACK_MESH_ENABLE == 1
 #include "lora_mesh.h"
 #endif
 
