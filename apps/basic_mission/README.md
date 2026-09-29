@@ -121,6 +121,14 @@ export BOARD=nucleo-l432kc-inisat
 gmake BOARD=$BOARD CHIRPSTACK_MESH_ENABLE=1 OPENLOG_BAUDRATE=9600 GPS_UART_ENABLE=1 GPS_UART_ENABLE_TRACE=0 -j 8 flash term
 ```
 
+### Configure the endpoints include file
+
+Default include file is `endpoints_dev.inc` and `endpoints_prod.inc` when `PROD=1`
+
+```bash
+gmake BOARD=$BOARD ENDPOINTS_INC='"endpoints_cometes-workshop.inc"' -j 8
+```
+
 ## Disable the gateway autostart 
 
 Add `LGW_AUTOSTART_ENABLE=0` into the arguments list of the `make` command in order to disable the gateway at boot time.
